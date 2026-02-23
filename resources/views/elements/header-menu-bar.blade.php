@@ -3,12 +3,12 @@
     <div class="header-menu-bar-inner">
         <ul class="all-menu">
             <li>
-                <a href="{{ url('/') }}">
+                <a href="{{ site_url('/') }}">
                     {{ $language_name == 'french' ? 'Accueil' : 'Home' }}
                 </a>
             </li>
             <li>
-                <a href="{{ url('Products') }}" id="products">
+                <a href="{{ site_url('Products') }}" id="products">
                     {{ $language_name == 'french' ? 'Des produits' : 'Products' }}
                 </a>
                 <div class="product-dropdown">
@@ -21,7 +21,7 @@
                                             @foreach($categories['categories'] as $key => $category)
                                                 @php
                                                     $count = count($category['sub_categories'] ?? []);
-                                                    $url = url('Products?category_id=' . base64_encode($category['id']));
+                                                    $url = site_url('Products?category_id=' . base64_encode($category['id']));
                                                     $urlmain = $url;
                                                     $data_toggle = '';
                                                     if (!empty($count)) {
@@ -58,7 +58,7 @@
                                                 @if(isset($category['sub_categories']))
                                                     @foreach($category['sub_categories'] as $key => $subCategory)
                                                         @php
-                                                            $url = url('Products?category_id=' . base64_encode($category['id']) . '&sub_category_id=' . base64_encode($subCategory['id']));
+                                                            $url = site_url('Products?category_id=' . base64_encode($category['id']) . '&sub_category_id=' . base64_encode($subCategory['id']));
                                                         @endphp
                                                         <div class="col-md-6 col-lg-4 col-xl-4">
                                                             <div class="menus-section">
@@ -88,7 +88,7 @@
                 @foreach($pages as $key => $page)
                     @php
                         $slug = $page['slug'];
-                        $url = url('Page/' . $slug);
+                        $url = site_url('Page/' . $slug);
                         $pageSlugArray = [
                             'brands' => ['class' => 'Pages', 'action' => 'brands'],
                             'support' => ['class' => 'Pages', 'action' => 'support'],
@@ -103,7 +103,7 @@
                         
                         if (array_key_exists($slug, $pageSlugArray)) {
                             $dataUrl = $pageSlugArray[$slug];
-                            $url = url($dataUrl['class'] . '/' . $dataUrl['action']);
+                            $url = site_url($dataUrl['class'] . '/' . $dataUrl['action']);
                         }
                     @endphp
                     <li>
@@ -128,12 +128,12 @@
         <div class="mobile-menu-area">
             <ul class="mobile-menu">
                 <li>
-                    <a href="{{ url('/') }}">
+                    <a href="{{ site_url('/') }}">
                         {{ $language_name == 'french' ? 'Accueil' : 'Home' }}
                     </a>
                 </li>
                 <li class="mobile-drop">
-                    <a href="{{ url('Products') }}" id="products">
+                    <a href="{{ site_url('Products') }}" id="products">
                         {{ $language_name == 'french' ? 'Des produits' : 'Products' }}
                     </a>
                     <span class="mob-drop-icon"><i class="las la-angle-down"></i></span>
@@ -145,19 +145,19 @@
                                         $selected = isset($_GET['category_id']) ? base64_decode($_GET['category_id']) : 'selected';
                                         $sub_category_selected = isset($_GET['sub_category_id']) ? base64_decode($_GET['sub_category_id']) : 'selected';
                                     @endphp
-                                    <a href="{{ url('Products') }}" class="{{ $selected }}">
+                                    <a href="{{ site_url('Products') }}" class="{{ $selected }}">
                                         {{ $language_name == 'french' ? 'Toutes catégories' : 'All categories' }}
                                     </a>
                                     @foreach($categories['categories'] as $key => $category)
                                         <div class="single-filter-tab">
-                                            <a href="{{ url('Products?category_id=' . base64_encode($category['id'])) }}" class="{{ $selected == $category['id'] ? 'selected' : '' }}">
+                                            <a href="{{ site_url('Products?category_id=' . base64_encode($category['id'])) }}" class="{{ $selected == $category['id'] ? 'selected' : '' }}">
                                                 {{ $language_name == 'french' ? ucfirst($category['name_french']) : ucfirst($category['name']) }}
                                             </a>
                                             <div class="single-filter-hover">
                                                 @if(isset($category['sub_categories']) && count($category['sub_categories']) > 0)
                                                     @foreach($category['sub_categories'] as $skey => $subcategory)
                                                         <div class="single-filter-hover-inner">
-                                                            <a href="{{ url('Products?category_id=' . base64_encode($category['id']) . '&sub_category_id=' . base64_encode($subcategory['id'])) }}" class="{{ $sub_category_selected == $subcategory['id'] ? 'selected' : '' }}">
+                                                            <a href="{{ site_url('Products?category_id=' . base64_encode($category['id']) . '&sub_category_id=' . base64_encode($subcategory['id'])) }}" class="{{ $sub_category_selected == $subcategory['id'] ? 'selected' : '' }}">
                                                                 {{ $language_name == 'french' ? $subcategory['name_french'] : $subcategory['name'] }}
                                                             </a>
                                                         </div>
@@ -181,7 +181,7 @@
                     @foreach($pages as $key => $page)
                         @php
                             $slug = $page['slug'];
-                            $url = url('Page/' . $slug);
+                            $url = site_url('Page/' . $slug);
                             $pageSlugArray = [
                                 'brands' => ['class' => 'Pages', 'action' => 'brands'],
                                 'support' => ['class' => 'Pages', 'action' => 'support'],
@@ -196,7 +196,7 @@
                             
                             if (array_key_exists($slug, $pageSlugArray)) {
                                 $dataUrl = $pageSlugArray[$slug];
-                                $url = url($dataUrl['class'] . '/' . $dataUrl['action']);
+                                $url = site_url($dataUrl['class'] . '/' . $dataUrl['action']);
                             }
                         @endphp
                         <li>

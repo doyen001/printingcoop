@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/footer-styles.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/slider-styles.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/search-widget-styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/sticky-header.css') }}">
     
     <!-- Page-specific CSS -->
     @stack('styles')
@@ -160,6 +161,9 @@
             }
         });
     </script>
+    
+    <!-- Sticky Header JavaScript -->
+    <script src="{{ asset('assets/js/sticky-header.js') }}"></script>
     
     <!-- Page-specific JavaScript -->
     @stack('scripts')

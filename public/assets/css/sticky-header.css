@@ -1,0 +1,300 @@
+/* Sticky Header Effect */
+.header-menu-bar {
+    background: #f28738;
+    position: relative;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+/* Original header-menu-bar animations (non-sticky) */
+.header-menu-bar .all-menu > li > a {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Make original header buttons same height as sticky header */
+.header-menu-bar .header-menu-bar-inner {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-menu-bar .all-menu {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+}
+
+.header-menu-bar .all-menu > li {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+}
+
+.header-menu-bar .all-menu > li > a {
+    padding: 0 20px;
+    font-size: 14px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-menu-bar .all-menu > li > a:hover {
+    color: #fff;
+}
+
+.header-menu-bar .all-menu > li > a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: #ffffff;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.header-menu-bar .all-menu > li > a:hover::before {
+    width: 100%;
+}
+
+.header-menu-bar .all-menu > li > a:active {
+    color: #fff;
+}
+
+.header-menu-bar .all-menu > li > a:active::before {
+    height: 4px;
+}
+
+/* Sticky state styles */
+.header-menu-bar.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: #f28738;
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    animation: slideDown 0.3s ease;
+}
+
+/* Add space to prevent content jump */
+.header-menu-bar.sticky + * {
+    margin-top: 60px;
+}
+
+/* Smooth slide down animation */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Adjustments for sticky state */
+.header-menu-bar.sticky .header-menu-bar-inner {
+    padding: 0;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-menu-bar.sticky .all-menu {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+}
+
+.header-menu-bar.sticky .all-menu > li {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+}
+
+.header-menu-bar.sticky .all-menu > li > a {
+    padding: 0 20px;
+    font-size: 14px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-menu-bar.sticky .all-menu > li > a:hover {
+    color: #fff;
+}
+
+.header-menu-bar.sticky .all-menu > li > a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: #ffffff;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.header-menu-bar.sticky .all-menu > li > a:hover::before {
+    width: 100%;
+}
+
+.header-menu-bar.sticky .all-menu > li > a:active {
+    color: #fff;
+}
+
+.header-menu-bar.sticky .all-menu > li > a:active::before {
+    height: 4px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .header-menu-bar.sticky {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 9999;
+    }
+    
+    .header-menu-bar.sticky + * {
+        margin-top: 50px;
+    }
+    
+    .header-menu-bar.sticky .header-menu-bar-inner {
+        padding: 0;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .header-menu-bar.sticky .all-menu {
+        display: flex;
+        align-items: stretch;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+    }
+    
+    .header-menu-bar.sticky .all-menu > li {
+        display: flex;
+        align-items: stretch;
+        height: 100%;
+    }
+    
+    .header-menu-bar.sticky .all-menu > li > a {
+        padding: 0 15px;
+        font-size: 12px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .header-menu-bar.sticky .all-menu > li > a:hover {
+        color: #fff;
+    }
+    
+    .header-menu-bar.sticky .all-menu > li > a::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: #ffffff;
+        transform: translateX(-50%);
+        transition: width 0.25s ease;
+    }
+    
+    .header-menu-bar.sticky .all-menu > li > a:hover::before {
+        width: 100%;
+    }
+    
+    .header-menu-bar.sticky .all-menu > li > a:active {
+        color: #fff;
+    }
+    
+    .header-menu-bar.sticky .all-menu > li > a:active::before {
+        height: 3px;
+    }
+}
+
+/* Ensure dropdowns work properly with sticky header */
+.header-menu-bar.sticky .product-dropdown {
+    margin-top: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+}
+
+/* Ensure dropdown trigger works with full-height buttons */
+.header-menu-bar.sticky .all-menu > li:hover .product-dropdown {
+    display: block;
+}
+
+/* Add active state for better visual feedback */
+.header-menu-bar.sticky .all-menu > li > a:active,
+.header-menu-bar.sticky .all-menu > li > a:focus {
+    background: rgba(255, 255, 255, 0.15);
+    outline: none;
+}
+
+/* Ensure proper text alignment and spacing */
+.header-menu-bar.sticky .all-menu > li > a {
+    white-space: nowrap;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.header-menu-bar.sticky .all-menu > li > a span {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.header-menu-bar.sticky .all-menu > li > a:hover span {
+    transform: translateY(-1px);
+}
+
+/* Mobile menu adjustments for sticky state */
+@media (max-width: 992px) {
+    .header-menu-bar.sticky .mobile-menu-area {
+        max-height: calc(100vh - 60px);
+        overflow-y: auto;
+    }
+}
