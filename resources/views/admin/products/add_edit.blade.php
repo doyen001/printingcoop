@@ -965,7 +965,7 @@ function showValue($val)
                                                   value="{{ $sub_category_id }}"
                                                   name="sub_category_id_{{ $category_id }}_{{ $sub_category_id }}"
                                                   id="sub_category_id_{{ $category_id }}_{{ $sub_category_id }}"
-                                                  @if(in_array($sub_category_id, $ProductSubCategory)) checked @endif>
+                                                  @if(is_array($ProductSubCategory) && in_array($sub_category_id, $ProductSubCategory)) checked @endif>
                                                 {{ $sub_category_name }}
                                               </label>
                                             </div>
@@ -1063,23 +1063,6 @@ function showValue($val)
 @push('scripts')
 <script src="https://cdn.ckeditor.com/4.6.2/standard-all/ckeditor.js"></script>
 <script>
-$(document).ready(function() {
-function isNumber(evt) {
-  var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-  if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-    return false;
-
-  return true;
-}
-
-function addActiveClass(id) {
-  if ($('#attribute_id_' + id).prop('checked') == true) {
-    $('#attribute_id_' + id).parents('.attribute').find('.attribute-inner').addClass('active');
-  } else {
-    $('#attribute_id_' + id).parents('.attribute').find('.attribute-inner').removeClass('active');
-  }
-}
-
 var default_url_image = '{{ asset('assets/images/no-image.png') }}'
 
 $('#menu_id').on('change', function(e) {
@@ -1188,10 +1171,26 @@ function remove_image(id, image_name) {
       $('#submitBtn').attr("disabled", false);
     }
   });
-});
+}
 
 function bntInActive(id) {
   $('#' + id).attr("disabled", true);
+}
+
+function isNumber(evt) {
+  var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+  if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+    return false;
+
+  return true;
+}
+
+function addActiveClass(id) {
+  if ($('#attribute_id_' + id).prop('checked') == true) {
+    $('#attribute_id_' + id).parents('.attribute').find('.attribute-inner').addClass('active');
+  } else {
+    $('#attribute_id_' + id).parents('.attribute').find('.attribute-inner').removeClass('active');
+  }
 }
 </script>
 <script>
@@ -1244,7 +1243,7 @@ $(document).on('click', '.dbtn-add', function(e) {
     height: 300,
     filebrowserUploadUrl: "{{ url('upload.php') }}",
     allowedContent: true,
-    extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
+    extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
   });
   CKEDITOR.dtd.$removeEmpty.i = 0;
 
@@ -1252,7 +1251,7 @@ $(document).on('click', '.dbtn-add', function(e) {
     height: 300,
     filebrowserUploadUrl: "{{ url('upload.php') }}",
     allowedContent: true,
-    extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
+    extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
   });
   CKEDITOR.dtd.$removeEmpty.i = 0;
 
@@ -1278,7 +1277,6 @@ $(document).on('click', '.dbtn-add', function(e) {
   return false;
 });
 
-$(document).ready(function() {
 function AddRow(cr, id) {
   var controlForm = $('.' + id + 'SizeQuantity:first'),
     currentEntry = cr.parents('.' + id + 'sqddata:first'),
@@ -1365,8 +1363,27 @@ function addActiveClass(id) {
   }
 }
 
-function showWidthAndLength(id) {
+// Temporarily disabled category validation for testing
+$('form.form-horizontal').submit(function(e) {
+  var numberOfChecked = $('.Category-Ids:checked').length;
+  if (numberOfChecked == 0) {
+    alert('Please selected at least one product category');
+    return false;
+  } else {
+    $('#PagePhoneSection').hide();
+  }
+});
+
+function pageShowCall(id) {
   if ($(id).prop('checked') == true) {
+    $('#PagePhoneSection').show();
+  } else {
+    $('#PagePhoneSection').hide();
+  }
+}
+
+function showWidthAndLength(id) {
+  if ($('#' + id).prop('checked') == true) {
     $('#WidthAndLengthSection').show();
   } else {
     $('#WidthAndLengthSection').hide();
@@ -1374,7 +1391,7 @@ function showWidthAndLength(id) {
 }
 
 function showDepthWidthAndLength(id) {
-  if ($(id).prop('checked') == true) {
+  if ($('#' + id).prop('checked') == true) {
     $('#DepthWidthAndLengthSection').show();
   } else {
     $('#DepthWidthAndLengthSection').hide();
@@ -1382,18 +1399,10 @@ function showDepthWidthAndLength(id) {
 }
 
 function pageShowWidthAndLength(id) {
-  if ($(id).prop('checked') == true) {
+  if ($('#' + id).prop('checked') == true) {
     $('#PageWidthAndLengthSection').show();
   } else {
     $('#PageWidthAndLengthSection').hide();
-  }
-}
-
-function pageShowCall(id) {
-  if ($(id).prop('checked') == true) {
-    $('#PagePhoneSection').show();
-  } else {
-    $('#PagePhoneSection').hide();
   }
 }
 
@@ -1406,7 +1415,7 @@ function setAttributesetItemId(id) {
 }
 
 function RectoVersoSection(id) {
-  if ($(id).prop('checked') == true) {
+  if ($('#' + id).prop('checked') == true) {
     $('#RectoVersoSection').show();
   } else {
     $('#RectoVersoSection').hide();
@@ -1420,22 +1429,12 @@ function addActiveCategory(id) {
     $('#quantity_attribute_id_div_' + id).hide();
   }
 }
-// Temporarily disabled category validation for testing
-/*$('form.form-horizontal').submit(function(e) {
-  var numberOfChecked = $('.Category-Ids:checked').length;
-  if (numberOfChecked == 0) {
-    alert('Please selected at least one product category');
-    return false;
-  }
-});*/
-});
-</script>
-<script>
+
 CKEDITOR.replace('content', {
   height: 300,
   filebrowserUploadUrl: "{{ url('upload.php') }}",
   allowedContent: true,
-  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
+  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
 });
 CKEDITOR.dtd.$removeEmpty.i = 0;
 
@@ -1443,7 +1442,7 @@ CKEDITOR.replace('content1', {
   height: 300,
   filebrowserUploadUrl: "{{ url('upload.php') }}",
   allowedContent: true,
-  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
+  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
 });
 CKEDITOR.dtd.$removeEmpty.i = 0;
 
@@ -1454,6 +1453,7 @@ CKEDITOR.replace('editor{{ $i }}', {
   height: 300,
   filebrowserUploadUrl: "{{ url('upload.php') }}",
   allowedContent: true,
+  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
   extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
 });
 CKEDITOR.dtd.$removeEmpty.i = 0;

@@ -115,7 +115,7 @@
                                                         @if($list->product_image)
                                                             <img src="{{ asset('uploads/products/' . $list->product_image) }}" width="auto" height="80">
                                                         @else
-                                                            <img src="{{ asset('images/no-image.png') }}" width="auto" height="80">
+                                                            <img src="{{ asset('defaults/product-no-image.png') }}" width="auto" height="80">
                                                         @endif
                                                     </td>
                                                     <td>

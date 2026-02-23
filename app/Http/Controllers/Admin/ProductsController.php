@@ -126,6 +126,7 @@ class ProductsController extends Controller
             $ProductDescriptions = [];
             $ProductTemplates = [];
             $ProductCategory = [];
+            $ProductSubCategory = [];
 
             // Load existing data if editing (CI equivalent)
             if ($id) {
@@ -138,7 +139,37 @@ class ProductsController extends Controller
                 $ProductImages = DB::table('product_images')->where('product_id', $id)->get();
                 $ProductDescriptions = DB::table('product_descriptions')->where('product_id', $id)->get();
                 $ProductTemplates = DB::table('product_templates')->where('product_id', $id)->get();
-                $ProductCategory = $product->getProductMultipalCategoriesAndSubCategories($id);
+                
+                // Get product categories and subcategories
+                $categoryData = $product->getProductMultipalCategoriesAndSubCategories($id);
+                
+                // Debug: Log the category data structure
+                Log::info('Category data structure', [
+                    'categoryData' => $categoryData,
+                    'categories' => $categoryData['categories'] ?? 'missing',
+                    'sub_categories' => $categoryData['sub_categories'] ?? 'missing'
+                ]);
+                
+                // Transform categories for blade template compatibility
+                $ProductCategory = [];
+                if (isset($categoryData['categories'])) {
+                    foreach ($categoryData['categories'] as $categoryId) {
+                        $ProductCategory[$categoryId] = $categoryId;
+                    }
+                }
+                
+                // Transform subcategories for blade template compatibility  
+                $ProductSubCategory = $categoryData['sub_categories'] ?? [];
+                
+                // Debug: Log the final arrays
+                Log::info('Final category arrays', [
+                    'ProductCategory' => $ProductCategory,
+                    'ProductSubCategory' => $ProductSubCategory,
+                    'is_subcategory_array' => is_array($ProductSubCategory)
+                ]);
+            } else {
+                $ProductCategory = [];
+                $ProductSubCategory = [];
             }
 
             // Handle POST request with validation
@@ -146,15 +177,30 @@ class ProductsController extends Controller
                 // Debug: Log form submission
                 Log::info('Form submitted', ['all_data' => $request->all()]);
                 
+                // Extract categories from checkbox inputs
+                $selectedCategories = [];
+                foreach ($request->all() as $key => $value) {
+                    if (strpos($key, 'category_id_') === 0 && $value) {
+                        $categoryId = str_replace('category_id_', '', $key);
+                        $selectedCategories[] = $categoryId;
+                    }
+                }
+                
                 // Basic validation like CI project
                 $rules = [
                     'name' => 'required|string|max:255',
                     'name_french' => 'required|string|max:255',
                     'price' => 'required|numeric|min:0',
-                    'category_id' => 'required|exists:categories,id',
                 ];
                 
-                $validator = Validator::make($request->all(), $rules);
+                // Add category validation if no categories selected
+                if (empty($selectedCategories)) {
+                    $rules['category_validation'] = 'required';
+                }
+                
+                $validator = Validator::make($request->all(), $rules, [
+                    'category_validation.required' => 'Please select at least one product category'
+                ]);
                 
                 if ($validator->fails()) {
                     Log::error('Validation failed', ['errors' => $validator->errors()->toArray()]);
@@ -192,10 +238,10 @@ class ProductsController extends Controller
                 // Status and stock
                 $postData['is_stock'] = $request->input('is_stock', 0);
                 $postData['status'] = $request->input('status', 1);
-                $postData['featured'] = $request->input('featured', 0);
-                $postData['bestseller'] = $request->input('bestseller', 0);
-                $postData['today_deal'] = $request->input('today_deal', 0);
-                $postData['special'] = $request->input('special', 0);
+                $postData['is_featured'] = $request->input('featured', 0);
+                $postData['is_bestseller'] = $request->input('bestseller', 0);
+                $postData['is_today_deal'] = $request->input('today_deal', 0);
+                $postData['is_special'] = $request->input('special', 0);
                 
                 // Product tags
                 $product_tag = $request->input('product_tag', []);
@@ -204,16 +250,66 @@ class ProductsController extends Controller
                 }
                 $postData['product_tag'] = $product_tag;
                 
-                // Categories
-                $postData['category_id'] = $request->input('category_id');
+                // Categories - use first selected category as main category_id
+                $postData['category_id'] = !empty($selectedCategories) ? $selectedCategories[0] : null;
                 $postData['sub_category_id'] = $request->input('sub_category_id');
+                
+                // Required fields from CI database
+                $postData['min_order_quantity'] = $request->input('min_order_quantity', 25);
+                $postData['menu_id'] = $request->input('menu_id', 0);
+                $postData['total_stock'] = $request->input('total_stock', 0);
+                $postData['discount'] = $request->input('discount', 0);
+                $postData['reviews'] = $request->input('reviews', 0);
+                $postData['rating'] = $request->input('rating', 0);
+                $postData['total_visited'] = $request->input('total_visited', 0);
+                $postData['delivery_charge'] = $request->input('delivery_charge', 0);
+                $postData['product_type'] = $request->input('product_type', 2);
+                $postData['discount_id'] = $request->input('discount_id', 0);
+                $postData['free_shipping'] = $request->input('free_shipping', 1);
+                $postData['store_id'] = $request->input('store_id', '1,2');
+                $postData['poster_plans'] = $request->input('poster_plans', 0);
+                $postData['banners_frames'] = $request->input('banners_frames', 0);
+                $postData['cards_invites'] = $request->input('cards_invites', 0);
+                $postData['photo_gifts'] = $request->input('photo_gifts', 0);
+                $postData['cart_name'] = $request->input('cart_name', 0);
+                $postData['catalog'] = $request->input('catalog', 0);
+                $postData['brochure'] = $request->input('brochure', 0);
+                $postData['is_printed_product'] = $request->input('is_printed_product', 0);
+                $postData['is_bestdeal'] = $request->input('is_bestdeal', 0);
+                $postData['add_length_width'] = $request->input('add_length_width', 0);
+                $postData['length_width_pages_type'] = $request->input('length_width_pages_type', 'dropdown');
+                $postData['length_width_min_quantity'] = $request->input('length_width_min_quantity', 25);
+                $postData['length_width_max_quantity'] = $request->input('length_width_max_quantity', 5000);
+                $postData['length_width_quantity_show'] = $request->input('length_width_quantity_show', 1);
+                $postData['length_width_color_show'] = $request->input('length_width_color_show', 0);
+                $postData['votre_text'] = $request->input('votre_text', 0);
+                $postData['recto_verso'] = $request->input('recto_verso', 0);
+                $postData['recto_verso_price'] = $request->input('recto_verso_price', 0);
+                $postData['page_add_length_width'] = $request->input('page_add_length_width', 0);
+                $postData['page_length_width_pages_type'] = $request->input('page_length_width_pages_type', 'dropdown');
+                $postData['page_length_width_pages_show'] = $request->input('page_length_width_pages_show', 1);
+                $postData['page_length_width_sheets_type'] = $request->input('page_length_width_sheets_type', 'dropdown');
+                $postData['page_length_width_quantity_type'] = $request->input('page_length_width_quantity_type', 'input');
+                $postData['page_length_width_sheets_show'] = $request->input('page_length_width_sheets_show', 0);
+                $postData['page_length_width_color_show'] = $request->input('page_length_width_color_show', 0);
+                $postData['page_length_width_min_quantity'] = $request->input('page_length_width_min_quantity', 25);
+                $postData['page_length_width_max_quantity'] = $request->input('page_length_width_max_quantity', 5000);
+                $postData['page_length_width_quantity_show'] = $request->input('page_length_width_quantity_show', 1);
+                $postData['call'] = $request->input('call', 0);
+                $postData['depth_add_length_width'] = $request->input('depth_add_length_width', 0);
+                $postData['depth_width_length_type'] = $request->input('depth_width_length_type', 'input');
+                $postData['depth_width_length_quantity_show'] = $request->input('depth_width_length_quantity_show', '1');
+                $postData['depth_min_quantity'] = $request->input('depth_min_quantity', 25);
+                $postData['depth_max_quantity'] = $request->input('depth_max_quantity', 5000);
+                $postData['depth_color_show'] = $request->input('depth_color_show', 0);
+                $postData['use_custom_size'] = $request->input('use_custom_size', 0);
                 
                 // Generate slug like CI
                 $postData['product_slug'] = $this->createSlug($postData['name'], 'products', 'product_slug', $id);
                 
                 Log::info('Calling saveProduct', ['postData' => $postData]);
                 
-                return $this->saveProduct($postData, $id);
+                return $this->saveProduct($postData, $id, $selectedCategories);
             }
 
             // Get dropdown data (CI equivalent)
@@ -234,6 +330,7 @@ class ProductsController extends Controller
                 'ProductDescriptions' => $ProductDescriptions,
                 'ProductTemplates' => $ProductTemplates,
                 'ProductCategory' => $ProductCategory,
+                'ProductSubCategory' => $ProductSubCategory,
                 'quantity' => $quantity,
                 'StoreList' => $StoreList,
                 'Categoty' => $Categoty,
@@ -255,6 +352,79 @@ class ProductsController extends Controller
      * Save product (create or update) with enhanced validation and error handling
      * CI: Products->addEdit() POST handling lines 119-600
      */
+    /**
+     * Delete product with associated images and data
+     * CI: Products->deleteProduct() lines 1291-1329
+     */
+    public function deleteProduct($id = null)
+    {
+        try {
+            if (empty($id)) {
+                return redirect()->route('admin.products.index')
+                    ->with('message_error', 'Missing information.');
+            }
+
+            $page_title = 'Product Delete';
+            
+            // Get product images before deletion for file cleanup
+            $productImages = DB::table('product_images')->where('product_id', $id)->get();
+            
+            // Delete the product using the model method
+            $product = new Product();
+            if ($product->deleteProduct($id)) {
+                // Delete associated product images from database
+                DB::table('product_images')->where('product_id', $id)->delete();
+                
+                // Delete associated product descriptions
+                DB::table('product_descriptions')->where('product_id', $id)->delete();
+                
+                // Delete associated product templates
+                DB::table('product_templates')->where('product_id', $id)->delete();
+                
+                // Delete associated product categories
+                DB::table('product_category')->where('product_id', $id)->delete();
+                
+                // Delete associated product subcategories
+                DB::table('product_subcategory')->where('product_id', $id)->delete();
+                
+                // Clean up image files
+                foreach ($productImages as $image) {
+                    $imageName = $image->image;
+                    if (!empty($imageName)) {
+                        $imagePaths = [
+                            public_path('uploads/products/small/' . $imageName),
+                            public_path('uploads/products/medium/' . $imageName),
+                            public_path('uploads/products/large/' . $imageName),
+                            public_path('uploads/products/' . $imageName),
+                        ];
+                        
+                        foreach ($imagePaths as $imagePath) {
+                            if (file_exists($imagePath)) {
+                                unlink($imagePath);
+                            }
+                        }
+                    }
+                }
+                
+                Log::info('Product deleted successfully', ['product_id' => $id]);
+                
+                return redirect()->route('admin.products.index')
+                    ->with('message_success', $page_title . ' Successfully.');
+            } else {
+                Log::error('Failed to delete product', ['product_id' => $id]);
+                
+                return redirect()->route('admin.products.index')
+                    ->with('message_error', $page_title . ' Unsuccessfully.');
+            }
+            
+        } catch (Exception $e) {
+            Log::error('Error deleting product: ' . $e->getMessage(), ['product_id' => $id]);
+            
+            return redirect()->route('admin.products.index')
+                ->with('message_error', 'Error deleting product: ' . $e->getMessage());
+        }
+    }
+    
     /**
      * Create slug from name (CI equivalent)
      */
@@ -282,7 +452,7 @@ class ProductsController extends Controller
         return $slug;
     }
     
-    protected function saveProduct(array $postData, $id = null)
+    protected function saveProduct(array $postData, $id = null, $selectedCategories = [])
     {
         try {
             Log::info('saveProduct called', ['postData' => $postData, 'id' => $id]);
@@ -298,10 +468,50 @@ class ProductsController extends Controller
             $now = now();
             
             if ($id) {
-                // Update existing product
-                $postData['updated'] = $now;
-                Log::info('Updating product', ['id' => $id, 'data' => $postData]);
-                $result = DB::table('products')->where('id', $id)->update($postData);
+                // Update existing product - only include valid database columns
+                $updateData = [];
+                $validColumns = [
+                    'name', 'name_french', 'price', 'price_euro', 'price_gbp', 'price_usd',
+                    'short_description', 'short_description_french', 'full_description', 'full_description_french',
+                    'is_today_deal', 'is_today_deal_date', 'status', 'created', 'updated',
+                    'menu_id', 'category_id', 'sub_category_id', 'is_featured', 'is_bestseller',
+                    'is_special', 'is_stock', 'poster_plans', 'banners_frames', 'cards_invites',
+                    'photo_gifts', 'cart_name', 'catalog', 'brochure', 'is_printed_product',
+                    'total_stock', 'discount', 'product_image', 'code', 'code_french', 'brand',
+                    'reviews', 'rating', 'total_visited', 'delivery_charge', 'is_bestdeal',
+                    'product_type', 'min_order_quantity', 'discount_id', 'free_shipping',
+                    'store_id', 'product_tag', 'add_length_width', 'min_length', 'max_length',
+                    'min_width', 'max_width', 'min_length_min_width_price', 'length_width_pages_type',
+                    'length_width_min_quantity', 'length_width_max_quantity', 'length_width_quantity_show',
+                    'length_width_unit_price_black', 'length_width_price_color', 'length_width_color_show',
+                    'votre_text', 'recto_verso', 'recto_verso_price', 'page_add_length_width',
+                    'page_min_length', 'page_max_length', 'page_min_width', 'page_max_width',
+                    'page_min_length_min_width_price', 'page_length_width_pages_type',
+                    'page_length_width_pages_show', 'page_length_width_sheets_type',
+                    'page_length_width_quantity_type', 'page_length_width_sheets_show',
+                    'page_length_width_color_show', 'page_length_width_price_color',
+                    'page_length_width_price_black', 'page_length_width_min_quantity',
+                    'page_length_width_max_quantity', 'page_length_width_quantity_show',
+                    'call', 'phone_number', 'shipping_box_length', 'shipping_box_width',
+                    'shipping_box_height', 'shipping_box_weight', 'use_custom_size',
+                    'depth_add_length_width', 'min_depth', 'max_depth', 'depth_min_length',
+                    'depth_max_length', 'depth_min_width', 'depth_max_width',
+                    'depth_width_length_price', 'depth_unit_price_black', 'depth_price_color',
+                    'depth_color_show', 'depth_width_length_type', 'depth_width_length_quantity_show',
+                    'depth_min_quantity', 'depth_max_quantity', 'page_title', 'page_title_french',
+                    'meta_description_content', 'meta_description_content_french',
+                    'meta_keywords_content', 'meta_keywords_content_french', 'product_slug'
+                ];
+                
+                foreach ($validColumns as $column) {
+                    if (array_key_exists($column, $postData)) {
+                        $updateData[$column] = $postData[$column];
+                    }
+                }
+                
+                $updateData['updated'] = $now;
+                Log::info('Updating product', ['id' => $id, 'data' => $updateData]);
+                $result = DB::table('products')->where('id', $id)->update($updateData);
                 $product_id = $id;
                 $message = 'Product updated successfully';
                 Log::info('Product updated successfully', ['product_id' => $product_id]);
@@ -343,7 +553,7 @@ class ProductsController extends Controller
             }
             
             // Handle categories and subcategories
-            $this->saveProductCategories(request(), $product_id);
+            $this->saveProductCategoriesWithCategories($product_id, $selectedCategories);
             
             DB::commit();
             
@@ -2165,6 +2375,61 @@ public function copy($id)
     }
 
     /**
+     * Get Attributes Map for Kendo Grid (CI: Product_Model->getAttributesMap)
+     */
+    protected function getAttributesMap($q, $take, $skip, &$data, &$total)
+    {
+        try {
+            // Get total count
+            $totalQuery = DB::table('attributes');
+            if (!empty($q)) {
+                $totalQuery->where('name', 'LIKE', '%' . $q . '%');
+            }
+            $total = $totalQuery->count();
+            
+            // Get data with item counts
+            $query = DB::table('attributes')
+                ->select('attributes.*', DB::raw('COUNT(DISTINCT attribute_items.id) AS item_count'))
+                ->leftJoin('attribute_items', 'attribute_items.attribute_id', '=', 'attributes.id')
+                ->groupBy('attributes.id')
+                ->orderBy('attributes.type')
+                ->orderBy('attributes.name');
+            
+            if (!empty($q)) {
+                $query->where('attributes.name', 'LIKE', '%' . $q . '%');
+            }
+            
+            $take = $take > 0 ? $take : 0;
+            $skip = $skip > 0 ? $skip : 0;
+            
+            if ($take > 0) {
+                $query->limit($take)->offset($skip);
+            } else {
+                $query->offset($skip);
+            }
+            
+            $data = $query->get()->toArray();
+            
+            Log::info('getAttributesMap results', [
+                'q' => $q,
+                'take' => $take,
+                'skip' => $skip,
+                'total' => $total,
+                'data_count' => count($data)
+            ]);
+            
+        } catch (Exception $e) {
+            Log::error('getAttributesMap error: ' . $e->getMessage(), [
+                'q' => $q,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            $data = [];
+            $total = 0;
+        }
+    }
+    
+    /**
      * Attributes Map (CI: Products->AttributesMap)
      */
     public function attributesMap(Request $request)
@@ -2221,46 +2486,6 @@ public function copy($id)
         } else {
             return response()->json(['success' => true]);
         }
-    }
-
-    /**
-     * Get Attributes Map (CI: Product_Model->getAttributesMap)
-     */
-    protected function getAttributesMap($q, $take, $skip, &$data, &$total)
-    {
-        // Build query using DB (matching CI equivalent: Product_Model->getAttributesMap)
-        $query = DB::table('attributes')
-            ->selectRaw('attributes.*, COUNT(DISTINCT(attribute_items.id)) AS item_count')
-            ->leftJoin('attribute_items', 'attribute_items.attribute_id', '=', 'attributes.id')
-            ->groupBy('attributes.id')
-            ->orderBy('attributes.type')
-            ->orderBy('attributes.name');
-        
-        // Add search filter if provided
-        if (!empty($q)) {
-            $query->where('attributes.name', 'like', '%' . $q . '%');
-        }
-        
-        // Get total count
-        $totalQuery = DB::table('attributes')
-            ->when(!empty($q), function($query) use ($q) {
-                $query->where('name', 'like', '%' . $q . '%');
-            });
-        $total = $totalQuery->count();
-        
-        // Get paginated data
-        $take = $take > 0 ? $take : 0;
-        $skip = $skip > 0 ? $skip : 0;
-        
-        if ($take > 0) {
-            $query->limit($take)->offset($skip);
-        } else {
-            $query->offset($skip);
-        }
-        
-        $data = $query->get()->map(function($item) {
-            return (array) $item;
-        })->toArray();
     }
 
     /**
@@ -3713,7 +3938,7 @@ public function copy($id)
                 'page_title' => 'Product Attributes - ' . $product->name,
             ];
             
-            return view('admin.products.product_attributes', $data);
+            return view('admin.products.attributes', $data);
             
         } elseif (request()->isMethod('POST')) {
             // Handle Kendo Grid data request
@@ -3731,16 +3956,84 @@ public function copy($id)
             $skip = $pageSize * ($page - 1);
             
             // Get product attributes with pagination using CI project table structure
-            $query = DB::table('product_attribute_map')
-                ->join('attributes', 'attributes.id', '=', 'product_attribute_map.attribute_id')
-                ->where('product_attribute_map.product_id', $product_id);
-            
-            if (!empty($q)) {
-                $query->where('attributes.name', 'LIKE', '%' . $q . '%');
+            try {
+                // First check if product exists
+                $productExists = DB::table('products')->where('id', $product_id)->exists();
+                if (!$productExists) {
+                    Log::warning('Product not found', ['product_id' => $product_id]);
+                    $gridModel = [
+                        'extra_data' => null,
+                        'data' => [],
+                        'errors' => 'Product not found',
+                        'total' => 0,
+                    ];
+                    return response()->json($gridModel);
+                }
+                
+                // Check if tables exist
+                $tablesExist = DB::select("SHOW TABLES LIKE 'product_attribute_map'");
+                if (empty($tablesExist)) {
+                    Log::error('product_attribute_map table does not exist');
+                    $gridModel = [
+                        'extra_data' => null,
+                        'data' => [],
+                        'errors' => 'Database table product_attribute_map not found',
+                        'total' => 0,
+                    ];
+                    return response()->json($gridModel);
+                }
+                
+                $query = DB::table('product_attribute_map')
+                    ->select('product_attribute_map.id', 'product_attribute_map.product_id', 'product_attribute_map.attribute_id', 
+                            'product_attribute_map.show_order', 'attributes.name', 'attributes.label', 'attributes.label_fr', 'attributes.type', 
+                            DB::raw('COUNT(DISTINCT product_attribute_item_map.attribute_item_id) AS item_count'))
+                    ->join('attributes', 'attributes.id', '=', 'product_attribute_map.attribute_id')
+                    ->leftJoin('product_attribute_item_map', function($join) use ($product_id) {
+                        $join->on('product_attribute_item_map.attribute_id', '=', 'product_attribute_map.attribute_id')
+                             ->where('product_attribute_item_map.product_id', '=', $product_id);
+                    })
+                    ->where('product_attribute_map.product_id', $product_id)
+                    ->groupBy('product_attribute_map.id', 'product_attribute_map.product_id', 'product_attribute_map.attribute_id', 
+                              'product_attribute_map.show_order', 'attributes.name', 'attributes.label', 'attributes.label_fr', 'attributes.type')
+                    ->orderBy('product_attribute_map.show_order');
+                
+                if (!empty($q)) {
+                    $query->where('attributes.name', 'LIKE', '%' . $q . '%');
+                }
+                
+                // Debug: Log the query
+                Log::info('ProductAttributes query', [
+                    'product_id' => $product_id,
+                    'query' => $query->toSql(),
+                    'bindings' => $query->getBindings()
+                ]);
+                
+                $total = $query->count();
+                $data = $query->offset($skip)->limit($take)->get();
+                
+                Log::info('ProductAttributes results', [
+                    'product_id' => $product_id,
+                    'total' => $total,
+                    'data_count' => $data->count(),
+                    'sample_data' => $data->take(3)->toArray()
+                ]);
+                
+            } catch (Exception $e) {
+                Log::error('ProductAttributes query error: ' . $e->getMessage(), [
+                    'product_id' => $product_id,
+                    'trace' => $e->getTraceAsString()
+                ]);
+                
+                // Return empty result on error
+                $gridModel = [
+                    'extra_data' => null,
+                    'data' => [],
+                    'errors' => $e->getMessage(),
+                    'total' => 0,
+                ];
+                
+                return response()->json($gridModel);
             }
-            
-            $total = $query->count();
-            $data = $query->offset($skip)->limit($take)->get();
             
             // Transform data to match CI structure
             $transformedData = [];
@@ -4357,6 +4650,255 @@ public function copy($id)
             ];
 
             return response()->json($gridModel);
+        }
+    }
+    
+    /**
+     * Save product categories and subcategories with selected categories array
+     * CI: Products->addEdit() category handling
+     */
+    protected function saveProductCategoriesWithCategories($product_id, $selectedCategories)
+    {
+        try {
+            Log::info('Saving product categories with array', ['product_id' => $product_id, 'categories' => $selectedCategories]);
+            
+            // Clear existing categories
+            DB::table('product_category')->where('product_id', $product_id)->delete();
+            DB::table('product_subcategory')->where('product_id', $product_id)->delete();
+            
+            // Extract subcategories from request
+            $selectedSubCategories = [];
+            foreach (request()->all() as $key => $value) {
+                if (strpos($key, 'sub_category_id_') === 0 && $value) {
+                    $parts = explode('_', $key);
+                    if (count($parts) >= 4) {
+                        $subCategoryId = end($parts);
+                        $selectedSubCategories[] = $subCategoryId;
+                    }
+                }
+            }
+            
+            // Save categories
+            if (!empty($selectedCategories)) {
+                $categoryInserts = [];
+                foreach ($selectedCategories as $categoryId) {
+                    $categoryInserts[] = [
+                        'product_id' => $product_id,
+                        'category_id' => $categoryId
+                    ];
+                }
+                DB::table('product_category')->insert($categoryInserts);
+            }
+            
+            // Save subcategories
+            if (!empty($selectedSubCategories)) {
+                $subCategoryInserts = [];
+                foreach ($selectedSubCategories as $subCategoryId) {
+                    $subCategoryInserts[] = [
+                        'product_id' => $product_id,
+                        'sub_category_id' => $subCategoryId
+                    ];
+                }
+                DB::table('product_subcategory')->insert($subCategoryInserts);
+            }
+            
+            Log::info('Product categories saved successfully', [
+                'product_id' => $product_id,
+                'categories_count' => count($selectedCategories),
+                'subcategories_count' => count($selectedSubCategories)
+            ]);
+            
+        } catch (Exception $e) {
+            Log::error('Error saving product categories: ' . $e->getMessage(), [
+                'product_id' => $product_id
+            ]);
+            throw $e;
+        }
+    }
+    
+    /**
+     * Save product categories and subcategories
+     * CI: Products->addEdit() category handling
+     */
+    protected function saveProductCategories(Request $request, $product_id)
+    {
+        try {
+            Log::info('Saving product categories', ['product_id' => $product_id]);
+            
+            // Clear existing categories
+            DB::table('product_category')->where('product_id', $product_id)->delete();
+            DB::table('product_subcategory')->where('product_id', $product_id)->delete();
+            
+            // Extract categories from checkbox inputs
+            $selectedCategories = [];
+            $selectedSubCategories = [];
+            
+            foreach ($request->all() as $key => $value) {
+                if (strpos($key, 'category_id_') === 0 && $value) {
+                    $categoryId = str_replace('category_id_', '', $key);
+                    $selectedCategories[] = $categoryId;
+                    
+                    // Check for subcategories of this category
+                    foreach ($request->all() as $subKey => $subValue) {
+                        if (strpos($subKey, 'sub_category_id_' . $categoryId . '_') === 0 && $subValue) {
+                            $subCategoryId = str_replace('sub_category_id_' . $categoryId . '_', '', $subKey);
+                            $selectedSubCategories[] = $subCategoryId;
+                        }
+                    }
+                }
+            }
+            
+            // Save categories
+            if (!empty($selectedCategories)) {
+                $categoryInserts = [];
+                foreach ($selectedCategories as $categoryId) {
+                    $categoryInserts[] = [
+                        'product_id' => $product_id,
+                        'category_id' => $categoryId
+                    ];
+                }
+                DB::table('product_category')->insert($categoryInserts);
+            }
+            
+            // Save subcategories
+            if (!empty($selectedSubCategories)) {
+                $subCategoryInserts = [];
+                foreach ($selectedSubCategories as $subCategoryId) {
+                    $subCategoryInserts[] = [
+                        'product_id' => $product_id,
+                        'sub_category_id' => $subCategoryId
+                    ];
+                }
+                DB::table('product_subcategory')->insert($subCategoryInserts);
+            }
+            
+            Log::info('Product categories saved successfully', [
+                'product_id' => $product_id,
+                'categories_count' => count($selectedCategories),
+                'subcategories_count' => count($selectedSubCategories)
+            ]);
+            
+        } catch (Exception $e) {
+            Log::error('Error saving product categories: ' . $e->getMessage(), [
+                'product_id' => $product_id
+            ]);
+            throw $e;
+        }
+    }
+    
+    /**
+     * Save product descriptions
+     * CI: Products->addEdit() description handling
+     */
+    protected function saveProductDescriptions(Request $request, $product_id)
+    {
+        try {
+            Log::info('Saving product descriptions', ['product_id' => $product_id]);
+            
+            // Clear existing descriptions
+            DB::table('product_descriptions')->where('product_id', $product_id)->delete();
+            
+            $titles = $request->input('title', []);
+            $descriptions = $request->input('description', []);
+            
+            if (!empty($titles)) {
+                $descriptionInserts = [];
+                foreach ($titles as $key => $title) {
+                    if (!empty($title)) {
+                        $descriptionInserts[] = [
+                            'product_id' => $product_id,
+                            'title' => $title,
+                            'description' => $descriptions[$key] ?? '',
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                    }
+                }
+                
+                if (!empty($descriptionInserts)) {
+                    DB::table('product_descriptions')->insert($descriptionInserts);
+                }
+            }
+            
+            Log::info('Product descriptions saved successfully', [
+                'product_id' => $product_id,
+                'descriptions_count' => count($descriptionInserts ?? [])
+            ]);
+            
+        } catch (Exception $e) {
+            Log::error('Error saving product descriptions: ' . $e->getMessage(), [
+                'product_id' => $product_id
+            ]);
+            throw $e;
+        }
+    }
+    
+    /**
+     * Save product templates
+     * CI: Products->addEdit() template handling
+     */
+    protected function saveProductTemplates(Request $request, $product_id)
+    {
+        try {
+            Log::info('Saving product templates', ['product_id' => $product_id]);
+            
+            // Clear existing templates
+            DB::table('product_templates')->where('product_id', $product_id)->delete();
+            
+            $finalDimensions = $request->input('final_dimensions', []);
+            $finalDimensionsAfterCut = $request->input('final_dimensions_after_cut', []);
+            $bleed = $request->input('bleed', []);
+            $safeArea = $request->input('safe_area', []);
+            
+            if (!empty($finalDimensions)) {
+                $templateInserts = [];
+                foreach ($finalDimensions as $key => $dimension) {
+                    if (!empty($dimension)) {
+                        $templateInserts[] = [
+                            'product_id' => $product_id,
+                            'final_dimensions' => $dimension,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                    }
+                }
+                
+                if (!empty($templateInserts)) {
+                    DB::table('product_templates')->insert($templateInserts);
+                }
+            }
+            
+            Log::info('Product templates saved successfully', [
+                'product_id' => $product_id,
+                'templates_count' => count($templateInserts ?? [])
+            ]);
+            
+        } catch (Exception $e) {
+            Log::error('Error saving product templates: ' . $e->getMessage(), [
+                'product_id' => $product_id
+            ]);
+            throw $e;
+        }
+    }
+    
+    /**
+     * Resize image to different sizes (CI equivalent)
+     */
+    protected function resizeImage($filename, $size)
+    {
+        try {
+            // For now, just log the resize request
+            // In a real implementation, you would use Intervention Image or similar
+            Log::info('Image resize requested', ['filename' => $filename, 'size' => $size]);
+            
+            // TODO: Implement actual image resizing using Intervention Image
+            // This would typically create different sized versions of the image
+            
+        } catch (Exception $e) {
+            Log::error('Error resizing image: ' . $e->getMessage(), [
+                'filename' => $filename,
+                'size' => $size
+            ]);
         }
     }
 }

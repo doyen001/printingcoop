@@ -9,6 +9,9 @@
         $tabname = 'attributes-view';
     @endphp
     <section class="content">
+        @if(isset($product['name']))
+            <h3>{{ $product['name'] }}</h3>
+        @endif
         @include('admin.shared.tabscript', ['tabname' => $tabname, 'position' => 'top'])
         <div id="{{ $tabname }}" style="display:none">
             <ul>
@@ -21,7 +24,7 @@
             </ul>
 
             <div tab-index="0">
-                <form id="attribute-search-form" method="post" action="{{ route('admin.products.attributesMap') }}">
+                <form id="attribute-search-form" method="post" action="{{ isset($product_id) ? route('admin.products.ProductAttributes', $product_id) : route('admin.products.attributesMap') }}">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
@@ -178,7 +181,7 @@
                 </span>
             </div>
         </form>
-
+    </section>
 <script>
     $(document).ready(function() {
         // Ensure the correct tab is selected after Kendo TabStrip initialization
@@ -205,7 +208,7 @@ $(document).ready(function() {
         dataSource: {
             transport: {
                 read: {
-                    url: '{{ route("admin.products.attributesMap") }}',
+                    url: '{{ isset($product_id) ? route("admin.products.ProductAttributes", $product_id) : route("admin.products.attributesMap") }}',
                     type: 'POST',
                     dataType: 'json',
                     data: additionalDataAttribute,

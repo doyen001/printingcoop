@@ -46,10 +46,6 @@ $tabname = 'provider-view';
             }
         }, 100);
     });
-</script>
-@endpush
-@push('scripts')
-<script>
     // Product Grid JavaScript
     var record = 0;
     $(document).ready(function () {

@@ -994,5 +994,3 @@ function attributeItemCreate(e) {
 
     $('#attribute-item-create-attribute_item_id').data('kendoDropDownList').dataSource.read();
 }
-</script>
-@endpush

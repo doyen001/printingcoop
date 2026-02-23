@@ -90,7 +90,7 @@ Route::prefix('admin')->middleware(['web', 'admin.auth'])->group(function () {
         
         // Product Attributes Management
         Route::get('/SetMultipleAttributes/{id}', [ProductsController::class, 'SetMultipleAttributes'])->name('attributes.index');
-        Route::match(['get', 'post'], '/ProductAttributes/{product_id}', [ProductsController::class, 'ProductAttributes'])->name('attributes.list');
+        Route::match(['get', 'post'], '/ProductAttributes/{product_id}', [ProductsController::class, 'ProductAttributes'])->name('ProductAttributes');
         
         // Multiple Attributes Management (CI: MultipleAttributes)
         Route::get('/multipleAttributes', [ProductsController::class, 'multipleAttributes'])->name('multipleAttributes.index');
