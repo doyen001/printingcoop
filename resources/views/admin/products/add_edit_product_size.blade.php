@@ -1,0 +1,86 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="content-wrapper" style="min-height: 687px;">
+  <section class="content">
+    <div class="row" style="display: flex;justify-content: center;align-items: center;">
+      <div class="col-md-12 col-xs-12">
+        <div class="box box-success box-solid">
+          <div class="box-body">
+            <div class="inner-head-section">
+              <div class="inner-title">
+                <span>{{ $page_title }}</span>
+              </div>
+            </div>
+            <div class="inner-content-area">
+              <div class="row justify-content-center">
+                <div class="col-md-7">
+                  <div class="text-center" style="color:red">
+                    {{ session('message_error') }}
+                  </div>
+                  @if ($errors->any())
+                    <div class="alert alert-danger">
+                      <ul>
+                        @foreach ($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                        @endforeach
+                      </ul>
+                    </div>
+                  @endif
+                  
+                  <form method="POST" action="{{ route('MultipleAttributes.sizes.addEdit', $id ?? 0) }}" class="form-horizontal" enctype="multipart/form-data">
+                   @csrf
+                   <input class="form-control" name="id" type="hidden" value="{{ $postData['id'] ?? '' }}" id="id">
+                   <div class="form-role-area">
+                    <div class="control-group info">
+                      <div class="row align-items-center">
+                        <div class="col-md-4">
+                          <label class="span2" for="size_name">Size Name</label>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="controls">
+                            <input class="form-control" name="size_name" id="size_name" type="text" placeholder="Size Name"
+                              value="{{ old('size_name', $postData['size_name'] ?? '') }}" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="control-group info">
+                      <div class="row align-items-center">
+                        <div class="col-md-4">
+                          <label class="span2" for="size_name_french">French Size Name</label>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="controls">
+                            <input class="form-control" name="size_name_french" id="size_name_french" type="text" placeholder="French Size Name" value="{{ old('size_name_french', $postData['size_name_french'] ?? '') }}" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="control-group info">
+                      <div class="row align-items-center">
+                        <div class="col-md-4">
+                          <label class="span2" for="set_order">Set Order</label>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="controls">
+                            <input class="form-control" name="set_order" id="set_order" type="number" placeholder="Set Order" value="{{ old('set_order', $postData['set_order'] ?? 0) }}">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <button type="submit" class="btn btn-success" id="submitBtn">Submit</button>
+                      <a href="{{ route('MultipleAttributes.sizes') }}" class="btn btn-success">Back</a>
+                    </div>
+                  </div>
+                  </form>
+                 </div>
+               </div>
+          </div>
+        </div><!-- /.box -->
+      </div><!-- /.col-->
+    </div><!-- ./row -->
+  </section><!-- /.content -->
+ </div>
+@endsection

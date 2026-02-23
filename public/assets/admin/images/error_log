@@ -1,0 +1,6 @@
+[12-Dec-2018 23:34:33 America/Chicago] PHP Warning:  include(header.php): failed to open stream: No such file or directory in /home2/bashir/public_html/demo/employers/admin/images/EditSbProfile.php on line 1
+[12-Dec-2018 23:34:33 America/Chicago] PHP Warning:  include(header.php): failed to open stream: No such file or directory in /home2/bashir/public_html/demo/employers/admin/images/EditSbProfile.php on line 1
+[12-Dec-2018 23:34:33 America/Chicago] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/php56/lib/php') in /home2/bashir/public_html/demo/employers/admin/images/EditSbProfile.php on line 1
+[12-Dec-2018 23:34:33 America/Chicago] PHP Warning:  include(footer.php): failed to open stream: No such file or directory in /home2/bashir/public_html/demo/employers/admin/images/EditSbProfile.php on line 205
+[12-Dec-2018 23:34:33 America/Chicago] PHP Warning:  include(footer.php): failed to open stream: No such file or directory in /home2/bashir/public_html/demo/employers/admin/images/EditSbProfile.php on line 205
+[12-Dec-2018 23:34:33 America/Chicago] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/php56/lib/php') in /home2/bashir/public_html/demo/employers/admin/images/EditSbProfile.php on line 205

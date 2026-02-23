@@ -1,0 +1,433 @@
+/* Footer Custom Styles */
+/* Extracted from CI master_footer_view.php */
+
+:root {
+    --primary-color: #ff6b35;
+    --primary-hover: #ff5a1f;
+    --dark-bg: #1a1a1a;
+    --dark-text: #ffffff;
+    --light-bg: #ffffff;
+    --light-text: #1a1a1a;
+    --muted-text: #888888;
+    --border-color: #333333;
+    --hover-color: #ff6b35;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    background: var(--light-bg);
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.newsletter-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23ffffff" fill-opacity="0.03" width="100" height="100"/></svg>') repeat;
+    opacity: 0.1;
+}
+
+.newsletter-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.newsletter-subtitle {
+    color: var(--muted-text);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.newsletter-form {
+    position: relative;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.subscription-form .input-group {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem;
+    border-radius: 50px;
+}
+
+.subscription-form .form-control {
+    height: 50px;
+    border-radius: 25px;
+    border: 2px solid;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+    background: var(--light-bg);
+    color: var(--dark-bg);
+    transition: all 0.3s ease;
+}
+
+.subscription-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+}
+
+.subscription-form .form-control::placeholder {
+    color: #999;
+    opacity: 0.8;
+}
+
+.subscription-form .btn-primary {
+    height: 50px;
+    min-width: 140px;
+    border-radius: 25px;
+    background: var(--primary-color);
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0 1.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.subscription-form .btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+}
+
+.subscription-form .btn-primary i {
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+.subscription-form .btn-primary:hover i {
+    transform: translateX(3px);
+}
+
+/* Main Footer */
+.main-footer {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+}
+
+.footer-heading {
+    color: var(--dark-text);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a,
+.footer-category-link {
+    color: var(--muted-text);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.footer-links a::after,
+.footer-category-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease-in-out;
+    transform-origin: left;
+}
+
+.footer-links a:hover,
+.footer-category-link:hover {
+    color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.footer-links a:hover::after,
+.footer-category-link:hover::after {
+    width: 100%;
+}
+
+/* Contact Section */
+.footer-contact {
+    margin-bottom: 2rem;
+}
+
+.contact-location {
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.location-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 107, 53, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.location-icon i {
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.location-details {
+    flex-grow: 1;
+}
+
+.location-details h6 {
+    color: var(--muted-text);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.location-details p {
+    color: var(--muted-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
+}
+
+.location-details a {
+    color: var(--muted-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    display: inline-block;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.location-details a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease-in-out;
+    transform-origin: left;
+}
+
+.location-details a:hover {
+    color: var(--primary-color);
+    opacity: 1;
+}
+
+.location-details a:hover::after {
+    width: 100%;
+}
+
+.location-details .toll-free {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Business Hours */
+.business-hours {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hours-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 107, 53, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hours-icon i {
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.hours-details {
+    color: var(--muted-text);
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+/* Social Media Section */
+.social-icons-wrapper {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-title {
+    color: var(--muted-text);
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+}
+
+.social-icons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.social-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 107, 53, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background: var(--primary-color);
+    color: var(--light-bg);
+    transform: translateY(-3px);
+}
+
+/* Bottom Footer */
+.bottom-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+    margin-top: 3rem;
+}
+
+.copyright {
+    color: var(--muted-text);
+}
+
+.payment-methods {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.payment-methods img {
+    max-height: 30px;
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.payment-methods:hover img {
+    opacity: 1;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: var(--light-bg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .newsletter-section {
+        padding: 3rem 0;
+    }
+
+    .newsletter-title {
+        font-size: 1.8rem;
+    }
+
+    .newsletter-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .subscription-form .input-group {
+        flex-direction: column;
+        background: transparent;
+        padding: 0;
+        gap: 1rem;
+    }
+
+    .subscription-form .form-control,
+    .subscription-form .btn-primary {
+        width: 100%;
+        border-radius: 25px;
+    }
+
+    .contact-location {
+        margin-bottom: 1.5rem;
+    }
+
+    .location-details h6 {
+        font-size: 0.95rem;
+    }
+
+    .location-details p,
+    .location-details a {
+        font-size: 0.9rem;
+    }
+
+    .business-hours {
+        margin-top: 1.25rem;
+        padding-top: 1.25rem;
+    }
+
+    .footer-heading {
+        margin-top: 2rem;
+    }
+}

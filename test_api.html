@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Attributes API</title>
+</head>
+<body>
+    <h1>Test Attributes API</h1>
+    <button onclick="testAttributes()">Test Attributes API</button>
+    <div id="result"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function testAttributes() {
+            $.ajax({
+                url: 'http://127.0.0.1:8000/admin/Products/AttributesMap',
+                type: 'POST',
+                data: {
+                    q: '',
+                    page: 1,
+                    pageSize: 10,
+                    _token: 'test'
+                },
+                success: function(data) {
+                    document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                },
+                error: function(xhr, status, error) {
+                    document.getElementById('result').innerHTML = '<pre>Error: ' + xhr.responseText + '</pre>';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

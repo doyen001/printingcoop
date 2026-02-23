@@ -1,0 +1,104 @@
+.controls.small-control {
+    position: relative;
+}
+.entrynew.input-group .form-control {
+	width: 100px;
+}
+.attribute-inner, .attribute-info-inner {
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+.attribute-info .row .col-md-6:nth-child(2) .attribute-info-inner {
+    justify-content: flex-start;
+}
+#WidthAndLengthSection .attribute-info .row .col-md-6:nth-child(2) .attribute-info-inner {
+    justify-content: flex-end;
+}
+.for-att-multi .attribute-info .row .col-md-6:nth-child(2) .attribute-info-inner {
+    justify-content: flex-end;
+}
+.for-att-multi .attribute-info .row .col-md-12 .attribute-info-inner {
+    padding-left: 0px;
+    margin-top: 5px;
+}
+.attribute-inner label, .attribute-info-inner label {
+	margin: 0px !important;
+	padding-right: 5px;
+}
+.control-group .attribute-inner input, .control-group .attribute-info-inner input {
+    height: 30px !important;
+    padding: 5px 5px !important;
+    color: #000;
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    font-size: 13px;
+    width: 80px;
+    text-align: center;
+}
+.control-group .attribute-info-inner select {
+    height: 30px !important;
+    padding: 5px 5px !important;
+    color: #000;
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    font-size: 13px;
+    width: 100%;
+    text-align: left;
+}
+.attribute-info {
+	padding: 0px;
+	background: #f9f9f9;
+	height: 0px;
+	overflow: hidden;
+	margin-bottom: 0px;
+}
+.attribute-info.field-area {
+    padding: 10px 10px 10px 10px;
+    background: #f9f9f9;
+    height: auto;
+}
+.attribute.active .attribute-info {
+	padding: 10px 10px 10px 25px;
+	background: #f9f9f9;
+	height: auto;
+	margin-bottom: 10px;
+}
+.attribute-info {
+    background: #fff;
+    padding: 5px 5px;
+    margin-bottom: 10px;
+    height: auto;
+}
+.attribute-info-inner {
+	padding: 0px 0px 0px 20px;
+}
+.attribute-title {
+	background: #f1f1f1;
+	padding: 5px 10px;
+}
+.attribute {
+	padding-bottom: 10px;
+}
+.controls.small-controls .attribute:last-child {
+	margin: 0px;
+	padding: 0px;
+}
+.control-group .controls.small-controls .attribute-title .span2 {
+	margin-bottom: 0px !important;
+}
+.cus-inner-btn {
+	margin-bottom: 0px;
+}
+.attribute-items {
+    padding: 10px 10px 10px 25px;
+    background: #f5f5f5;
+}
+.hidden {
+    display: none;
+}
