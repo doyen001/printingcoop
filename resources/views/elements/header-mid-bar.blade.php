@@ -36,7 +36,7 @@
                 <div class="col-md-6 col-lg-4 col-xl-5">
                     <div class="mid-search-bar">
                         <span>
-                            <input type="text" placeholder="Search..." onkeyup="searchProduct($(this).val())" id="ToSeachBox">
+                            <input type="text" placeholder="Search..." onkeyup="searchProduct($(this).val())" id="ToSeachBoxes">
                             <i class="las la-search"></i>
                         </span>
                         <div class="open-search-dropdown" style="display:none" id="searchDiv">

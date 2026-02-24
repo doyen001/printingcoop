@@ -99,6 +99,12 @@
     <!-- Footer -->
     @include('elements.footer')
     
+    <!-- Hidden inputs for JavaScript -->
+    <input type="hidden" id="lang_name" value="{{ $language_name ?? 'english' }}">
+    <input type="hidden" id="site_url_foot" value="{{ url('/') }}">
+    <input type="hidden" id="user_id_foot" value="{{ $loginId ?? '' }}">
+    <input type="hidden" id="user_id_covid_msg" value="{{ $showCOVID19MSG ?? 'null' }}">
+    
     <!-- JavaScript Files -->
     <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
@@ -134,7 +140,8 @@
                     type: "POST",
                     url: url,
                     data: {
-                        'searchtext': searchtext
+                        'searchtext': searchtext,
+                        '_token': '{{ csrf_token() }}'
                     },
                     success: function(data) {
                         $('#loader-img').hide();

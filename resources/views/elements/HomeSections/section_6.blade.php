@@ -30,86 +30,75 @@
     }
 
     .service-card {
-        background: #ffffff;
-        border-radius: 20px;
-        padding: 40px 30px;
+        background: #fafafa;
+        border: 1px solid #d4a574;
+        border-radius: 12px;
+        padding: 32px 24px;
+        text-align: center;
         transition: all 0.3s ease;
         position: relative;
-        overflow: hidden;
-        margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        box-shadow: none;
+        margin-bottom: 24px;
     }
 
     .service-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-    }
-
-    .service-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 107, 53, 0) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .service-card:hover::before {
-        opacity: 1;
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(212, 165, 116, 0.15);
+        border-color: #f28738;
     }
 
     .service-icon {
-        width: 80px;
-        height: 80px;
-        background: rgba(255, 107, 53, 0.1);
-        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 24px auto;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        background-color: #ffefe8;
+        border-radius: 18px;
+    }
+
+    .service-icon svg {
+        width: 50%;
+        height: 50%;
+        object-fit: contain;
+        color: #f28738;
         transition: all 0.3s ease;
     }
 
     .service-card:hover .service-icon {
-        transform: scale(1.1);
+        transform: scale(1.05);
+        background-color: #f28738;
     }
 
-    .service-icon i {
-        font-size: 2.5rem;
-        color: var(--primary-color);
+    .service-card:hover .service-icon svg {
+        color: rgb(255 240 234);
     }
 
-    .service-icon img {
-        width: 40px;
-        height: 40px;
-        transition: all 0.3s ease;
-    }
-
-    .service-card:hover .service-icon img {
-        filter: brightness(0) invert(1);
+    .service-card:hover .service-icon svg * {
+        stroke: #f28738 !important;
     }
 
     .service-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 15px;
-        text-transform: uppercase;
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #2d3436;
+        margin-bottom: 12px;
         transition: all 0.3s ease;
+        line-height: 1.4;
     }
 
     .service-card:hover .service-title {
-        color: var(--primary-color);
+        color: #f28738;
     }
 
     .service-description {
-        color: #666;
-        font-size: 1rem;
+        font-size: 0.875rem;
+        color: #6c757d;
         line-height: 1.6;
-        margin: 0;
+        margin-bottom: 0;
     }
 
     /* Dark Theme Version */
@@ -129,6 +118,36 @@
         color: #b2bec3;
     }
 
+    .fa-hand-pointer {
+        color: #f28738;
+        font-size: 1.5rem;
+    }
+
+    .fa-box {
+        color: #f28738;
+        font-size: 1.5rem;
+    }
+
+    .fa-shopping-cart {
+        color: #f28738;
+        font-size: 1.5rem;
+    }
+
+    .service-card:hover .fa-hand-pointer {
+        color: #ffefe8;
+        transform: scale(1.05);
+    }
+
+    .service-card:hover .fa-box {
+        color: #ffefe8;
+        transform: scale(1.05);
+    }
+
+    .service-card:hover .fa-shopping-cart {
+        color: #ffefe8;
+        transform: scale(1.05);
+    }
+
     /* Responsive Styles */
     @media (max-width: 991px) {
         .main-services {
@@ -136,33 +155,30 @@
         }
 
         .service-card {
-            padding: 30px 20px;
+            padding: 24px 20px;
         }
-
+        
         .service-icon {
-            width: 60px;
-            height: 60px;
-        }
-
-        .service-icon img {
-            width: 30px;
-            height: 30px;
+            width: 52px;
+            height: 52px;
+            margin-bottom: 20px;
         }
     }
 
     @media (max-width: 767px) {
         .service-card {
-            margin-bottom: 20px;
+            padding: 20px 16px;
+            margin-bottom: 16px;
         }
-    }
-
-    @media (max-width: 768px) {
-        .service-icon i {
-            font-size: 2rem;
+        
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
         }
-
-        .service-title {
-            font-size: 1.1rem;
+        
+        .main-services {
+            padding: 40px 0;
         }
     }
 </style>

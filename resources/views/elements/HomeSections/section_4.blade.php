@@ -166,16 +166,17 @@
     align-items: center;
     gap: 8px;
     color: white;
-    background: #003f7a;
+    background: #0066c5ff;
     border-radius: 44px;
     padding: 10px 17px 10px 15px;
     text-decoration: none;
     font-size: 0.9rem;
     transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgb(0 102 197 / 30%);
 }
 
 .quick-view-btn:hover {
-    background: #ff6b35;
+    background: #003f7a;
     color: #ffffff;
 }
 

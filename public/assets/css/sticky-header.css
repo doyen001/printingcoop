@@ -2,8 +2,8 @@
 .header-menu-bar {
     background: #f28738;
     position: relative;
-    z-index: 1000;
     transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
 }
 
 /* Original header-menu-bar animations (non-sticky) */
@@ -86,6 +86,7 @@
     right: 0;
     width: 100%;
     background: #f28738;
+    z-index: 1000;
     box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
     animation: slideDown 0.3s ease;
 }

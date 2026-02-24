@@ -228,4 +228,101 @@ class HomeController extends Controller
             ->get()
             ->toArray();
     }
+    
+    /**
+     * Handle PrinterSeries AJAX request (replicate Products->PrinterSeries)
+     */
+    public function printerSeries(Request $request)
+    {
+        $language_name = config('store.language_name', 'English');
+        $label = $language_name == 'French' ? "Sélectionnez une série d'imprimantes" : 'Select a Printer Series';
+        $options = '<option value="">' . $label . '</option>';
+        
+        $name = trim($request->input('brand', ''));
+        $name = str_replace('%20', ' ', $name);
+
+        if (!empty($name)) {
+            $data = $this->getDataByName('printers', $name);
+            if (!empty($data)) {
+                $printer_brand = $data['id'];
+                $printerSeries = $this->getAcctivePrinterSeriesByBrandId($printer_brand);
+                foreach ($printerSeries as $key => $val) {
+                    $options .= '<option value="' . $val['name'] . '">' . $val['name'] . '</option>';
+                }
+            }
+        }
+        
+        return response($options, 200)->header('Content-Type', 'text/html');
+    }
+    
+    /**
+     * Handle PrinterModel AJAX request (replicate Products->PrinterModel)
+     */
+    public function printerModel(Request $request)
+    {
+        $language_name = config('store.language_name', 'English');
+        $label = $language_name == 'French' ? "Sélectionnez un modèle d'imprimante" : 'Select a Printer Model';
+        $options = '<option value="">' . $label . '</option>';
+
+        $printer_series = trim($request->input('series', ''));
+        $printer_series = str_replace('%20', ' ', $printer_series);
+
+        $printer_brand = trim($request->input('brand', ''));
+        $printer_brand = str_replace('%20', ' ', $printer_brand);
+
+        if (!empty($printer_brand) && !empty($printer_series)) {
+            $data = $this->getDataByName('printers', $printer_brand);
+            $sdata = $this->getDataByName('printer_series', $printer_series);
+            
+            if (!empty($data) && !empty($sdata)) {
+                $printer_brand_id = $data['id'];
+                $printer_series_id = $sdata['id'];
+                $printerModel = $this->getAcctiveModelByBrandId($printer_brand_id, $printer_series_id);
+                foreach ($printerModel as $key => $val) {
+                    $options .= '<option value="' . $val['name'] . '">' . $val['name'] . '</option>';
+                }
+            }
+        }
+        
+        return response($options, 200)->header('Content-Type', 'text/html');
+    }
+    
+    /**
+     * Get data by name (replicate Printer_Model->getDataByName)
+     */
+    private function getDataByName($table, $name)
+    {
+        $data = DB::table($table)
+            ->where('name', $name)
+            ->first();
+        
+        return $data ? (array) $data : [];
+    }
+    
+    /**
+     * Get active printer series by brand ID (replicate Printer_Model->getAcctivePrinterSeriesByBrandId)
+     */
+    private function getAcctivePrinterSeriesByBrandId($brand_id)
+    {
+        return DB::table('printer_series')
+            ->where('printer_brand_id', $brand_id)
+            ->where('status', 1)
+            ->orderBy('name', 'asc')
+            ->get()
+            ->toArray();
+    }
+    
+    /**
+     * Get active models by brand and series ID (replicate Printer_Model->getAcctiveModelByBrandId)
+     */
+    private function getAcctiveModelByBrandId($brand_id, $series_id)
+    {
+        return DB::table('printer_models')
+            ->where('printer_brand_id', $brand_id)
+            ->where('printer_series_id', $series_id)
+            ->where('status', 1)
+            ->orderBy('name', 'asc')
+            ->get()
+            ->toArray();
+    }
 }

@@ -29,6 +29,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/Homes', [HomeController::class, 'index']);
 Route::get('/Homes/index', [HomeController::class, 'index']);
 
+// Home AJAX Routes for printer search
+Route::prefix('Home')->group(function () {
+    Route::post('/PrinterSeries', [HomeController::class, 'printerSeries']);
+    Route::post('/PrinterModel', [HomeController::class, 'printerModel']);
+});
+
 // Authentication Routes (Logins controller)
 Route::prefix('Logins')->group(function () {
     Route::match(['get', 'post'], '/', [LoginsController::class, 'index'])->name('login');
@@ -60,6 +66,7 @@ Route::prefix('Products')->group(function () {
     Route::post('/calculate-price', [ProductsController::class, 'calculatePrice']);
     Route::post('/saveEstimate', [ProductsController::class, 'saveEstimate']);
     Route::post('/refreshCaptcha', [ProductsController::class, 'refreshCaptcha']);
+    Route::post('/searchProduct', [ProductsController::class, 'searchProduct']);
 });
 
 // ShoppingCarts Routes
