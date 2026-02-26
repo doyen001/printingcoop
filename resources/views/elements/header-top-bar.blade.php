@@ -1,4 +1,287 @@
 {{-- CI: application/views/elements/header-top-bar.php --}}
+<style>
+    :root {
+        --primary-color: #f28738;
+        --secondary-color: #ff6b00;
+        --text-dark: #2d3436;
+        --text-light: #636e72;
+        --border-color: #e9ecef;
+        --bg-light: #f8f9fa;
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Header Top Bar Container */
+    .header-top-bar {
+        background: #163368;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        z-index: 1000;
+    }
+
+    .top-inner-bar {
+        padding: 0.75rem 0;
+    }
+
+    /* Top Bar Menu */
+    .top-bar-menu {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .top-bar-menu ul {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .top-bar-menu ul li {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Left Menu (Contact Info) */
+    .left-menu ul {
+        flex-wrap: wrap;
+    }
+
+    .left-menu ul li span {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.2s ease;
+    }
+
+    .left-menu ul li span:hover {
+        color: var(--primary-color);
+    }
+
+    .left-menu ul li span strong {
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .left-menu ul li:first-child span::before {
+        content: '\f095';
+        font-family: 'Line Awesome Free';
+        font-weight: 900;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+    }
+
+    .left-menu ul li:last-child span::before {
+        content: '\f017';
+        font-family: 'Line Awesome Free';
+        font-weight: 900;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+    }
+
+    /* Right Menu */
+    .right-menu {
+        justify-content: flex-end;
+    }
+
+    .right-menu ul {
+        gap: 1.25rem;
+        align-items: center;
+    }
+
+    .right-menu ul li a {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        position: relative;
+    }
+
+    .right-menu ul li a:hover {
+        color: white;
+        background: rgba(242, 135, 56, 0.2);
+        transform: translateY(-1px);
+    }
+
+    .right-menu ul li a strong {
+        color: var(--primary-color);
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    /* Language Selector */
+    .language-selector {
+        position: relative;
+    }
+
+    .language-selector-box {
+        position: relative;
+    }
+
+    .language-selector-box > a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.375rem 0.75rem !important;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+
+    .language-selector-box > a:hover {
+        background: rgba(242, 135, 56, 0.2) !important;
+        color: white !important;
+    }
+
+    .language-selector-box > a i {
+        font-size: 0.8rem;
+        transition: transform 0.2s ease;
+    }
+
+    .language-selector:hover .language-selector-box > a i {
+        transform: rotate(180deg);
+    }
+
+    .language-selector-content {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.5rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow-lg);
+        min-width: 150px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 1001;
+    }
+
+    .language-selector:hover .language-selector-content {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .upward-arrow {
+        position: absolute;
+        top: 0px;
+        right: 20px;
+        width: 16px;
+        height: 16px;
+    }
+
+    .upward-arrow div {
+        width: 100%;
+        height: 100%;
+        background: white;
+        transform: rotate(45deg);
+        box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .language-selector-content a {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: var(--text-dark) !important;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border-radius: 0;
+        background: transparent !important;
+    }
+
+    .language-selector-content a:hover {
+        background: var(--bg-light) !important;
+        color: var(--primary-color) !important;
+        transform: none;
+    }
+
+    .language-selector-content a:first-child {
+        border-radius: 8px 8px 0 0;
+    }
+
+    .language-selector-content a:last-child {
+        border-radius: 0 0 8px 8px;
+    }
+
+    /* Wishlist Link */
+    .right-menu ul li:nth-child(2) a::before {
+        content: '\f004';
+        font-family: 'Line Awesome Free';
+        font-weight: 900;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+    }
+
+    /* Login/Logout Links */
+    .right-menu ul li:last-child a::before {
+        content: '\f2bd';
+        font-family: 'Line Awesome Free';
+        font-weight: 900;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .top-inner-bar {
+            padding: 0.625rem 0;
+        }
+
+        .top-bar-menu ul {
+            gap: 1rem;
+        }
+
+        .left-menu ul {
+            gap: 1rem;
+        }
+
+        .left-menu ul li span {
+            font-size: 0.8rem;
+        }
+
+        .right-menu ul {
+            gap: 0.875rem;
+        }
+
+        .right-menu ul li a {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .language-selector-content {
+            min-width: 130px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .header-top-bar {
+            display: none;
+        }
+    }
+</style>
+
 <div class="header-top-bar">
     <div class="top-inner-bar">
         <div class="container">

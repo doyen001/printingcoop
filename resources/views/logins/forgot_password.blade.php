@@ -5,99 +5,107 @@
 
 @section('content')
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<div class="login-section universal-spacing universal-bg-white">
-    <div class="container">
-        <div class="login-section-inner">
-            <div class="row justify-content-center">
-                <div class="col-md-5">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="bg-white shadow-2xl rounded-2xl p-8 border border-gray-100">
                     @if($language_name == 'french')
-                        <div class="login-area">
-                            <div class="universal-dark-title">
-                                <span>Récupérez votre mot de passe</span>
+                        <div class="space-y-6">
+                            <div class="text-center">
+                                <h2 class="text-3xl font-bold text-gray-900 mb-2">Récupérez votre mot de passe</h2>
+                                <p class="text-gray-600 text-sm leading-relaxed">Saisissez votre email ci-dessous. Nous vous enverrons un lien pour réinitialiser votre mot de passe.</p>
                             </div>
-                            <div class="universal-dark-info">
-                                <span>Saisissez votre email ci-dessous. Nous vous enverrons un lien pour réinitialiser votre mot de passe.</span>
-                            </div>
-                            <form id="password-form" method="post">
+                            <form id="password-form" method="post" class="space-y-6">
                                 @csrf
-                                <div class="customer-fields pad-for-span" style="min-height: initial;">
-                                    <div id="forgot_msg" class="col-md-12 text-center"></div>
-                                </div>
-                                <div class="shipping-form">
-                                    <div class="single-review">
-                                        <label>Adresse électronique:</label>
-                                        <input type="email" name="account_email" id="account-email">
-                                        <label id="account-email-error" style="color:red"></label>
+                                <div id="forgot_msg" class="text-center text-sm font-medium"></div>
+                                <div class="space-y-5">
+                                    <div>
+                                        <label for="account-email" class="block text-sm font-medium text-gray-700 mb-2">Adresse électronique:</label>
+                                        <input type="email" name="account_email" id="account-email" 
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder-gray-400"
+                                               placeholder="votre@email.com">
+                                        <label id="account-email-error" class="text-red-500 text-sm mt-1 block"></label>
                                         <input type="hidden" name="send_otp" id="send-otp" value="">
                                     </div>
-                                    <div class="single-review">
+                                    <div>
                                         <div class="g-recaptcha" data-sitekey="6LcXjt4UAAAAAMf-gtro8dDUsHGFBOtpfePKAifa"></div>
-                                        <label id="g-recaptcha-error" style="color:red"></label>
+                                        <label id="g-recaptcha-error" class="text-red-500 text-sm mt-1 block"></label>
                                     </div>
-                                    <div class="change-pswd-field-show" style="display: none;" id="otp-container">
-                                        <div class="resend-otp">
-                                            <span style="padding-top: 0px;">OTP envoyé au mobile</span>
-                                            <span style="padding-top: 0px;" class="for-resend-otp" onclick="sendOptToEmail()">Renvoyer?</span>
+                                    <div id="otp-container" class="hidden space-y-5 p-5 bg-gray-50 rounded-lg border border-gray-200">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm text-gray-600">OTP envoyé au mobile</span>
+                                            <button type="button" class="text-sm text-blue-600 hover:text-blue-800 font-medium transition duration-200" onclick="sendOptToEmail()">Renvoyer?</button>
                                         </div>
-                                        <div class="single-review">
-                                            <label>Entrez OTP</label>
-                                            <input type="text" name="input_otp" id="input-otp" maxlength="6">
-                                            <label id="input-otp-error" style="color:red"></label>
+                                        <div>
+                                            <label for="input-otp" class="block text-sm font-medium text-gray-700 mb-2">Entrez OTP</label>
+                                            <input type="text" name="input_otp" id="input-otp" maxlength="6"
+                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-center text-lg font-mono"
+                                                   placeholder="000000">
+                                            <label id="input-otp-error" class="text-red-500 text-sm mt-1 block"></label>
                                         </div>
-                                        <div class="single-review">
-                                            <label>Définir le mot de passe</label>
-                                            <input type="password" name="new_password" id="new-password" maxlength="20" minlength="8">
-                                            <label id="new-password-error" style="color:red"></label>
+                                        <div>
+                                            <label for="new-password" class="block text-sm font-medium text-gray-700 mb-2">Définir le mot de passe</label>
+                                            <input type="password" name="new_password" id="new-password" maxlength="20" minlength="8"
+                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                                                   placeholder="••••••••">
+                                            <label id="new-password-error" class="text-red-500 text-sm mt-1 block"></label>
                                         </div>
                                     </div>
-                                    <div class="login-btn">
-                                        <button type="button" id="account-change-pswd" onclick="sendOptToEmail()">Continuer</button>
+                                    <div>
+                                        <button type="button" id="account-change-pswd" onclick="sendOptToEmail()"
+                                                class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 transform hover:scale-[1.02]">
+                                            Continuer
+                                        </button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     @else
-                        <div class="login-area">
-                            <div class="universal-dark-title">
-                                <span>Retrieve your password here</span>
+                        <div class="space-y-6">
+                            <div class="text-center">
+                                <h2 class="text-3xl font-bold text-gray-900 mb-2">Retrieve your password here</h2>
+                                <p class="text-gray-600 text-sm leading-relaxed">Please enter your email address below. You will receive a link to reset your password.</p>
                             </div>
-                            <div class="universal-dark-info">
-                                <span>Please enter your email address below. You will receive a link to reset your password.</span>
-                            </div>
-                            <form id="password-form" method="post">
+                            <form id="password-form" method="post" class="space-y-6">
                                 @csrf
-                                <div class="customer-fields pad-for-span" style="min-height: initial;">
-                                    <div id="forgot_msg" class="col-md-12 text-center"></div>
-                                </div>
-                                <div class="shipping-form">
-                                    <div class="single-review">
-                                        <label>Email Address:</label>
-                                        <input type="email" name="account_email" id="account-email">
-                                        <label id="account-email-error" style="color:red"></label>
+                                <div id="forgot_msg" class="text-center text-sm font-medium"></div>
+                                <div class="space-y-5">
+                                    <div>
+                                        <label for="account-email" class="block text-sm font-medium text-gray-700 mb-2">Email Address:</label>
+                                        <input type="email" name="account_email" id="account-email"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder-gray-400"
+                                               placeholder="your@email.com">
+                                        <label id="account-email-error" class="text-red-500 text-sm mt-1 block"></label>
                                         <input type="hidden" name="send_otp" id="send-otp" value="">
                                     </div>
-                                    <div class="single-review">
+                                    <div>
                                         <div class="g-recaptcha" data-sitekey="6LcXjt4UAAAAAMf-gtro8dDUsHGFBOtpfePKAifa"></div>
-                                        <label id="g-recaptcha-error" style="color:red"></label>
+                                        <label id="g-recaptcha-error" class="text-red-500 text-sm mt-1 block"></label>
                                     </div>
-                                    <div class="change-pswd-field-show" style="display: none;" id="otp-container">
-                                        <div class="resend-otp">
-                                            <span style="padding-top: 0px;">OTP sent to Mobile</span>
-                                            <span style="padding-top: 0px;" class="for-resend-otp" onclick="sendOptToEmail()">Resend?</span>
+                                    <div id="otp-container" class="hidden space-y-5 p-5 bg-gray-50 rounded-lg border border-gray-200">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm text-gray-600">OTP sent to Mobile</span>
+                                            <button type="button" class="text-sm text-blue-600 hover:text-blue-800 font-medium transition duration-200" onclick="sendOptToEmail()">Resend?</button>
                                         </div>
-                                        <div class="single-review">
-                                            <label>Enter OTP</label>
-                                            <input type="text" name="input_otp" id="input-otp" maxlength="6">
-                                            <label id="input-otp-error" style="color:red"></label>
+                                        <div>
+                                            <label for="input-otp" class="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
+                                            <input type="text" name="input_otp" id="input-otp" maxlength="6"
+                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-center text-lg font-mono"
+                                                   placeholder="000000">
+                                            <label id="input-otp-error" class="text-red-500 text-sm mt-1 block"></label>
                                         </div>
-                                        <div class="single-review">
-                                            <label>Set Password</label>
-                                            <input type="password" name="new_password" id="new-password" maxlength="20" minlength="8">
-                                            <label id="new-password-error" style="color:red"></label>
+                                        <div>
+                                            <label for="new-password" class="block text-sm font-medium text-gray-700 mb-2">Set Password</label>
+                                            <input type="password" name="new_password" id="new-password" maxlength="20" minlength="8"
+                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                                                   placeholder="••••••••">
+                                            <label id="new-password-error" class="text-red-500 text-sm mt-1 block"></label>
                                         </div>
                                     </div>
-                                    <div class="login-btn">
-                                        <button type="button" id="account-change-pswd" onclick="sendOptToEmail()">Continue</button>
+                                    <div>
+                                        <button type="button" id="account-change-pswd" onclick="sendOptToEmail()"
+                                                class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 transform hover:scale-[1.02]">
+                                            Continue
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -164,16 +172,16 @@ function sendOptToEmail() {
                     otpSent = response.otp;
                     $('#send-otp').val(response.otp);
                     $('#otp-container').show();
-                    $('#forgot_msg').html('<span style="color:green">' + response.msg + '</span>');
+                    $('#forgot_msg').html('<span class="text-green-600">' + response.msg + '</span>');
                     $('#account-change-pswd').attr('onclick', 'resetPassword()');
                 } else {
-                    $('#forgot_msg').html('<span style="color:red">' + response.msg + '</span>');
+                    $('#forgot_msg').html('<span class="text-red-600">' + response.msg + '</span>');
                 }
             },
             error: function() {
                 $('#account-change-pswd').prop('disabled', false);
                 $('#account-change-pswd').html('{{ $language_name == "french" ? "Continuer" : "Continue" }}');
-                $('#forgot_msg').html('<span style="color:red">{{ $language_name == "french" ? "Une erreur s\'est produite. Veuillez réessayer." : "An error occurred. Please try again." }}</span>');
+                $('#forgot_msg').html('<span class="text-red-600">{{ $language_name == "french" ? "Une erreur s\'est produite. Veuillez réessayer." : "An error occurred. Please try again." }}</span>');
             }
         });
     } else {
@@ -232,18 +240,18 @@ function resetPassword() {
             $('#account-change-pswd').html('{{ $language_name == "french" ? "Réinitialiser le mot de passe" : "Reset Password" }}');
             
             if (response.status == 1) {
-                $('#forgot_msg').html('<span style="color:green">' + response.msg + '</span>');
+                $('#forgot_msg').html('<span class="text-green-600">' + response.msg + '</span>');
                 setTimeout(function() {
                     window.location.href = '{{ url("Logins") }}';
                 }, 2000);
             } else {
-                $('#forgot_msg').html('<span style="color:red">' + response.msg + '</span>');
+                $('#forgot_msg').html('<span class="text-red-600">' + response.msg + '</span>');
             }
         },
         error: function() {
             $('#account-change-pswd').prop('disabled', false);
             $('#account-change-pswd').html('{{ $language_name == "french" ? "Réinitialiser le mot de passe" : "Reset Password" }}');
-            $('#forgot_msg').html('<span style="color:red">{{ $language_name == "french" ? "Une erreur s\'est produite. Veuillez réessayer." : "An error occurred. Please try again." }}</span>');
+            $('#forgot_msg').html('<span class="text-red-600">{{ $language_name == "french" ? "Une erreur s\'est produite. Veuillez réessayer." : "An error occurred. Please try again." }}</span>');
         }
     });
 }

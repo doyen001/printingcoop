@@ -22,6 +22,7 @@
     right: 0;
     bottom: 0;
     z-index: 1;
+    background-color: #f6f7f8;
 }
 
 .book-printing-section .container {
@@ -95,7 +96,7 @@
 
 .book-printing-section .product-card {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
+    border-radius: 30px;
     overflow: hidden;
     transition: all 0.3s ease;
 }
@@ -133,7 +134,7 @@
 }
 
 .book-printing-section .category a {
-    color: #ff6b35;
+    color: #e0e0e0ff;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
@@ -155,18 +156,18 @@
 }
 
 .book-printing-section .price {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #ff6b35;
-    margin-bottom: 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 12px;
 }
 
 .quick-view-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: white;
-    background: #0066c5ff;
+    color: #2d3436;
+    background: white;
     border-radius: 44px;
     padding: 10px 17px 10px 15px;
     text-decoration: none;
@@ -176,7 +177,7 @@
 }
 
 .quick-view-btn:hover {
-    background: #003f7a;
+    background: #0066c5ff;
     color: #ffffff;
 }
 
@@ -329,26 +330,26 @@
                                         <a href="{{ $productUrl }}">
                                             <img src="{{ $imageurl }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
                                         </a>
-                                    </div>
-                                    <div class="product-info">
-                                        <div class="category">
-                                            <a href="{{ $productUrl }}">
-                                                {{ $cartNameProduct->category_name }}
-                                            </a>
-                                        </div>
-                                        <h3 class="product-title">
-                                            <a href="{{ $productUrl }}">
-                                                {{ $cartNameProduct->name }}
-                                            </a>
-                                        </h3>
-                                        <div class="price">
-                                            <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($cartNameProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
-                                        </div>
-                                        <div>
-                                            <a href="{{ $productUrl }}" class="quick-view-btn">
-                                                <i class="las la-search"></i>
-                                                <span>{{ $language_name == 'french' ? 'Aperçu rapide' : 'Quick View' }}</span>
-                                            </a>
+                                        <div class="product-info">
+                                            <div class="category">
+                                                <a href="{{ $productUrl }}">
+                                                    {{ $cartNameProduct->category_name }}
+                                                </a>
+                                            </div>
+                                            <h3 class="product-title">
+                                                <a href="{{ $productUrl }}">
+                                                    {{ $cartNameProduct->name }}
+                                                </a>
+                                            </h3>
+                                            <div class="price">
+                                                <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($cartNameProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
+                                            </div>
+                                            <div>
+                                                <a href="{{ $productUrl }}" class="quick-view-btn">
+                                                    <i class="las la-search"></i>
+                                                    <span>{{ $language_name == 'french' ? 'Aperçu rapide' : 'Quick View' }}</span>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

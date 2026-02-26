@@ -7,6 +7,7 @@
   
   {{-- Dynamic Attribute Form Fields --}}
   @foreach($attributes as $attribute)
+
     <div class="single-review attribute-{{ str_replace(' ', '-', $attribute['attribute_id']) }} {{ ($attribute['type'] == 2) ? 'size' : '' }}">
       <label>{{ ucfirst($language_name == 'French' ? $attribute['label_fr'] : $attribute['label']) }} <span class="required">*</span></label>
       

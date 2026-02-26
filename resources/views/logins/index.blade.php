@@ -5,8 +5,199 @@
 
 @section('content')
 <style>
-    #login-password{
-        -webkit-text-security:disc;
+    /* Simple and Clean Login Page Styles */
+    .login-section {
+        padding: 60px 0;
+        background: #f8f9fa;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .login-section-inner {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        border: 1px solid #e9ecef;
+    }
+
+    .login-area, .register-area {
+        padding: 40px;
+    }
+
+    .login-area {
+        border-right: 1px solid #e9ecef;
+        background: #fafbfc;
+        height: 100% !important;
+    }
+
+    .universal-dark-title {
+        margin-bottom: 12px;
+    }
+
+    .universal-dark-title span {
+        font-size: 24px;
+        font-weight: 600;
+        color: #2c3e50;
+        display: block;
+        line-height: 1.3;
+        text-align: center;
+    }
+
+    .universal-dark-info {
+        margin-bottom: 24px;
+    }
+
+    .universal-dark-info span {
+        font-size: 14px;
+        color: #6c757d;
+        line-height: 1.5;
+        display: block;
+    }
+
+    /* Form Styles */
+    .shipping-form {
+        margin-top: 20px;
+    }
+
+    .single-review {
+        margin-bottom: 20px;
+    }
+
+    .single-review label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #495057;
+        line-height: 1.4;
+    }
+
+    .single-review input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #495057;
+        background: #ffffff;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .single-review input:focus {
+        outline: none;
+    }
+
+    .single-review input::placeholder {
+        color: #adb5bd;
+    }
+
+    /* Button Styles */
+    .login-btn {
+        margin-top: 8px;
+    }
+
+    .login-btn button {
+        width: 100%;
+        padding: 12px 24px;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .login-btn button:hover {
+        transform: translateY(-1px);
+    }
+
+    .login-btn button:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Forgot Password Link */
+    .forgot-password {
+        text-align: right;
+        margin-top: 8px;
+    }
+
+    .forgot-password a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.2s ease;
+    }
+
+    .forgot-password a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    /* Message Styles */
+    #login-msg, #signup-msg {
+        margin-bottom: 16px;
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    #login-msg label, #signup-msg label {
+        margin: 0;
+        font-weight: 400;
+    }
+
+    /* .text-center[style*="color:green"] {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        font-size: 14px;
+    } */
+
+    /* Responsive Design */
+    @media (max-width: 767px) {
+        .login-section {
+            padding: 30px 0;
+        }
+
+        .login-area, .register-area {
+            padding: 30px 20px;
+        }
+
+        .login-area {
+            border-right: none;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .universal-dark-title span {
+            font-size: 20px;
+        }
+
+        .single-review input {
+            padding: 10px 14px;
+        }
+
+        .login-btn button {
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+    }
+
+    /* Password field security */
+    #login-password {
+        -webkit-text-security: disc;
     }
 </style>
 

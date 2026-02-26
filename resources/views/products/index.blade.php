@@ -42,30 +42,31 @@
 
 /* Category Sidebar Styles */
 .categories-sidebar {
-    background: white;
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.25rem;
     position: sticky;
     top: 20px;
+    box-shadow: var(--card-shadow);
 }
 
 .sidebar-title {
-    color: #f28738;
-    font-size: 1.25rem;
+    color: #2d3436;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     padding: 0.75rem 1rem;
-    background: rgba(24, 62, 115, 0.05);
-    border-radius: 10px;
+    background: white;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-title i {
-    color: var(--secondary-color);
-    font-size: 1.1em;
+    color: #636e72;
+    font-size: 1em;
 }
 
 .category-list {
@@ -78,52 +79,99 @@
     margin-bottom: 0.5rem;
 }
 
+.category-item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.category-item-wrapper:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.toggle-subcategories {
+    background: none;
+    border: none;
+    padding: 0.875rem 0.75rem;
+    cursor: pointer;
+    color: #95a5a6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    outline: none;
+    flex-shrink: 0;
+}
+
+.toggle-subcategories:hover {
+    color: #636e72;
+}
+
+.toggle-subcategories i {
+    font-size: 0.875rem;
+    transition: transform 0.2s ease;
+}
+
+.category-item.expanded .toggle-subcategories i {
+    transform: rotate(180deg);
+}
+
 .category-link {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1rem;
-    color: #183e73;
+    padding: 0.875rem 1rem;
+    color: #2d3436;
     text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    background: transparent;
+    transition: all 0.2s ease;
     flex-grow: 1;
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
-.category-link:hover,
-.category-link.selected {
-    background: linear-gradient(45deg, rgba(24, 62, 115, 0.08), rgba(255, 107, 0, 0.08));
+.category-link:hover {
     color: #f28738;
-    transform: translateX(5px);
+}
+
+.category-link.selected {
+    color: #f28738;
+    background: rgba(242, 135, 56, 0.05);
 }
 
 .category-link span:first-child {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
+    gap: 0.625rem;
+}
+
+.category-link span:first-child i {
+    font-size: 0.875rem;
+    color: #95a5a6;
 }
 
 .category-count {
-    background: white;
-    color: #183e73;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
+    background: #f28738;
+    color: white;
+    padding: 0.25rem 0.625rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
     font-weight: 600;
-    box-shadow: 0 2px 6px rgba(255, 107, 0, 0.2);
+    min-width: 28px;
+    text-align: center;
 }
 
 .subcategory-list {
-    margin-left: 1.25rem;
-    padding-left: 1rem;
+    margin-left: 2.5rem;
     margin-top: 0.5rem;
-    border-left: 2px dashed rgba(24, 62, 115, 0.2);
+    margin-bottom: 0.5rem;
     display: none;
     opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
+    transform: translateY(-5px);
+    transition: all 0.2s ease;
 }
 
 .category-item.expanded > .subcategory-list {
@@ -132,60 +180,54 @@
     transform: translateY(0);
 }
 
+.subcategory-list .category-item {
+    margin-bottom: 0.375rem;
+}
+
+.subcategory-list .category-item-wrapper {
+    background: #f8f9fa;
+    box-shadow: none;
+    border: 1px solid #e9ecef;
+}
+
+.subcategory-list .category-item-wrapper:hover {
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
 .subcategory-list .category-link {
-    font-size: 0.95rem;
-    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+}
+
+.subcategory-list .category-link span:first-child i {
+    font-size: 0.75rem;
 }
 
 .subcategory-list .category-count {
-    font-size: 0.8rem;
-    padding: 0.2rem 0.6rem;
-}
-
-.category-item-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.toggle-subcategories {
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    color: #4a5568;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    outline: none;
-}
-
-.toggle-subcategories:hover {
-    color: var(--primary-color);
-}
-
-.toggle-subcategories i {
-    transition: transform 0.3s ease;
-}
-
-.category-item.expanded .toggle-subcategories i {
-    transform: rotate(180deg);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    min-width: 24px;
 }
 
 .no-categories {
     text-align: center;
     padding: 2rem 1rem;
-    color: #666;
-    font-style: italic;
-    background: rgba(24, 62, 115, 0.05);
+    color: #95a5a6;
+    background: white;
     border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.no-categories i {
+    color: #dfe6e9;
 }
 
 /* Products Container */
 .products-container {
-    background: white;
-    border-radius: 10px;
+    background: #f8f9fa;
+    border-radius: 12px;
     padding: 2rem;
     box-shadow: var(--card-shadow);
 }
@@ -247,25 +289,75 @@
     }
 }
 
+@media (max-width: 768px) {
+    .product-card {
+        height: 380px;
+        padding: 4px;
+    }
+    
+    .product-image {
+        border-radius: 16px;
+    }
+    
+    .product-details {
+        padding: 20px 16px 16px;
+        border-radius: 0 0 16px 16px;
+    }
+    
+    .product-title {
+        font-size: 1.2rem;
+    }
+    
+    .product-badge {
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .product-badge::before {
+        font-size: 16px;
+    }
+    
+    .quick-view-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}
+
 @media (max-width: 640px) {
     .products-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .product-card {
+        height: 360px;
+    }
+    
+    .product-title {
+        font-size: 1.15rem;
+    }
+    
+    .product-price {
+        font-size: 0.9rem;
     }
 }
 
 /* Product Cards */
 .product-card {
     background: white;
-    border-radius: 10px;
+    border-radius: 24px;
     overflow: hidden;
     transition: all 0.3s ease;
-    box-shadow: var(--card-shadow);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;
+    height: 420px;
+    padding: 6px;
 }
 
 .product-card:hover {
-    box-shadow: var(--hover-shadow);
-    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px);
 }
 
 .product-badge {
@@ -290,8 +382,10 @@
 
 .product-image {
     position: relative;
-    padding-top: 75%;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    border-radius: 18px;
 }
 
 .product-image img {
@@ -301,35 +395,43 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.5s ease;
 }
 
 .product-card:hover .product-image img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .product-details {
-    padding: 1.5rem;
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    right: 6px;
+    padding: 24px 20px 20px;
+    /* backdrop-filter: blur(2px); */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
+    border-radius: 0 0 18px 18px;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 12px;
+    z-index: 2;
 }
 
 .product-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #f28738;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: white;
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.3;
 }
 
 .product-description {
-    color: #666;
-    font-size: 0.9rem;
-    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.875rem;
+    line-height: 1.5;
     margin: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -337,39 +439,56 @@
 .product-meta {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-top: auto;
+    gap: 16px;
+    margin-bottom: 12px;
 }
 
 .product-price {
     font-weight: 600;
+    color: white;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     position: relative;
-    color: var(--secondary-color);
+}
+
+.product-price::before {
+    content: '\f02b';
+    font-family: 'Line Awesome Free';
+    font-weight: 900;
+    font-size: 14px;
+    opacity: 0.9;
 }
 
 .quick-view-btn {
-    background: #f28738;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
+    background: white;
+    color: #2d3436;
+    padding: 12px 20px;
+    border-radius: 16px;
     text-decoration: none;
     transition: all 0.3s ease;
     text-align: center;
-    flex-grow: 1;
+    width: 100%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .quick-view-btn i {
     font-size: 0.875rem;
+    display: none;
 }
 
 .quick-view-btn:hover {
+    background: #f28738;
+    color: white;
     transform: translateY(-2px);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(242, 135, 56, 0.4);
+    box-shadow: 0 6px 16px rgba(242, 135, 56, 0.4);
 }
 
 /* Pagination Controls */
@@ -613,14 +732,16 @@
                                                 $subCategoryId = base64_encode($subcategory['id'] ?? '') ?? '';
                                             @endphp
                                                 <li class="category-item">
-                                                    <a href="{{ site_url('Products?category_id=' . ($categoryId) . '&sub_category_id=' . ($subCategoryId)) }}"
-                                                       class="category-link {{ $selected_sub_cat == $subCategoryId ? 'selected' : '' }}">
-                                                        <span>
-                                                            <i class="fas fa-angle-right"></i>
-                                                            {{ $language_name == 'french' ? ($subcategory['name_french'] ?? $subcategory['name']) : $subcategory['name'] }}
-                                                        </span>
-                                                        <span class="category-count">{{ $subcategory['sub_category_total_products'] ?? 0 }}</span>
-                                                    </a>
+                                                    <div class="category-item-wrapper">
+                                                        <a href="{{ site_url('Products?category_id=' . ($categoryId) . '&sub_category_id=' . ($subCategoryId)) }}"
+                                                           class="category-link {{ $selected_sub_cat == $subCategoryId ? 'selected' : '' }}">
+                                                            <span>
+                                                                <i class="fas fa-angle-right"></i>
+                                                                {{ $language_name == 'french' ? ($subcategory['name_french'] ?? $subcategory['name']) : $subcategory['name'] }}
+                                                            </span>
+                                                            <span class="category-count">{{ $subcategory['sub_category_total_products'] ?? 0 }}</span>
+                                                        </a>
+                                                    </div>
                                                 </li>
                                             @endforeach
                                         </ul>

@@ -1,7 +1,196 @@
 {{-- CI: application/views/elements/header-mid-bar.php --}}
-@section('content')
+<style>
+.mid-search-bar {
+    position: relative;
+    width: 100%;
+}
+
+.mid-search-bar span {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    padding: 8px 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.mid-search-bar span:hover {
+    /* border-color: #d0d0d0; */
+}
+
+.mid-search-bar span:focus-within {
+    /* border-color: #c0c0c0; */
+    border-color: #387dde;
+    outline: 4px solid #d8e6ff;
+}
+
+.mid-search-bar input[type="text"] {
+    border: none;
+    outline: none;
+    background: transparent;
+    flex: 1;
+    font-size: 16px;
+    color: #333;
+    padding: 0 8px;
+    font-weight: 500;
+}
+
+.mid-search-bar input[type="text"]::placeholder {
+    color: #999;
+    font-weight: 400;
+}
+
+.mid-search-bar .la-search {
+    color: #999;
+    font-size: 20px;
+    min-width: 24px;
+    border: none;
+    background: transparent;
+    position: relative;
+}
+
+.mid-search-bar .shortcut-button {
+    background-color: #f0f0f0;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 3px 6px;
+    margin-left: 10px;
+    font-size: 12px;
+    color: #666;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mid-search-bar .shortcut-button:hover {
+    background-color: #e5e5e5;
+    border-color: #d5d5d5;
+    color: #555;
+}
+
+/* Search Dropdown Styles */
+.open-search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    margin-top: 8px;
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+    animation: dropdownSlide 0.3s ease;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-product-section {
+    padding: 16px;
+}
+
+.search-product-section-title {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 12px;
+}
+
+.search-product-section-title span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.search-product-result {
+    min-height: 60px;
+}
+
+.search-product-result #coming-res-data {
+    display: block;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    padding: 20px;
+    font-style: italic;
+}
+
+.search-product-result #ProductListUl {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.search-product-result #ProductListUl li {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f5f5f5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-product-result #ProductListUl li:hover {
+    background-color: #f8f9fa;
+    padding-left: 20px;
+}
+
+.search-product-result #ProductListUl li:last-child {
+    border-bottom: none;
+}
+
+.search-product-result #ProductListUl li .product-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f0f0f0;
+}
+
+.search-product-result #ProductListUl li .product-info {
+    flex: 1;
+}
+
+.search-product-result #ProductListUl li .product-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.search-product-result #ProductListUl li .product-price {
+    font-size: 12px;
+    color: #666;
+}
+
+.search-product-result #ProductListUl li .product-category {
+    font-size: 11px;
+    color: #999;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+</style>
 <div class="header-mid-bar">
-    <div class="container">
+    <div class="container" style="z-index: 6">
         <div class="header-mid-bar-inner">
             <div class="row align-items-center">
                 <div class="col-md-12 col-lg-3 col-xl-3">
@@ -32,10 +221,12 @@
                         </a>
                     </div>
                 </div>
+
+                
                 
                 <div class="col-md-6 col-lg-4 col-xl-5">
                     <div class="mid-search-bar">
-                        <span>
+                        <span style="padding: 5px 15px">
                             <input type="text" placeholder="Search..." onkeyup="searchProduct($(this).val())" id="ToSeachBoxes">
                             <i class="las la-search"></i>
                         </span>

@@ -53,26 +53,29 @@
 
 .product-card {
     background: #ffffff;
-    border-radius: 20px;
+    border-radius: 30px;
     overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    height: 100%;
+    height: 500px;
     display: flex;
     flex-direction: column;
+    padding: 5px;
 }
 
 .product-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.18);
 }
 
 .product-image {
     position: relative;
-    padding-top: 75%;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     background: #f8f9fa;
+    border-radius: 24px;
 }
 
 .product-image img {
@@ -82,41 +85,79 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.6s ease;
 }
 
 .product-card:hover .product-image img {
+    transform: scale(1.08);
+}
+
+/* Favorite Icon */
+.product-favorite {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 3;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.product-favorite:hover {
+    background: #f28738;
+    border-color: #f28738;
     transform: scale(1.1);
 }
 
+.product-favorite i {
+    font-size: 18px;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.product-favorite:hover i {
+    color: white;
+}
+
+/* Content Overlay */
 .product-info {
-    padding: 25px;
-    flex-grow: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 24px 24px;
+    backdrop-filter: blur(3px);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+    gap: 12px;
+    z-index: 2;
+    border-radius: 0 0 24px 24px;
 }
 
 .product-category {
     font-size: 0.85rem;
-    color: #ff6b35;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-    display: inline-block;
-    background: rgba(255, 107, 53, 0.1);
-    padding: 4px 12px;
-    border-radius: 15px;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: capitalize;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin-bottom: 4px;
 }
 
 .product-title {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #2d3436;
-    margin-bottom: 15px;
-    line-height: 1.4;
+    color: #ffffff;
+    margin-bottom: 8px;
+    line-height: 1.3;
     transition: color 0.3s ease;
 }
 
@@ -126,49 +167,59 @@
 }
 
 .product-title a:hover {
-    color: #ff6b35;
+    color: #ffa260ff;
 }
 
-/* .product-price {
-    margin-top: auto;
+/* Price and Icon Info */
+.product-meta {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding-top: 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    gap: 20px;
+    margin-bottom: 12px;
 }
 
-.product-price .amount {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #ff6b35;
-} */
-
-.view-details {
-    display: inline-flex;
+.product-price-info {
+    display: flex;
     align-items: center;
     gap: 8px;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.product-price-info i {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.product-price-info .amount {
+    font-weight: 600;
+}
+
+/* Search/Action Button */
+.view-details {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 14px 24px;
+    background: white;
     color: #2d3436;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    border-radius: 18px;
     transition: all 0.3s ease;
-    padding: 8px 16px;
-    border-radius: 20px;
-    background: rgba(45, 52, 54, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .view-details:hover {
-    color: #ff6b35;
-    background: rgba(255, 107, 53, 0.1);
+    background: #f28738;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(242, 135, 56, 0.4);
 }
 
 .view-details i {
-    transition: transform 0.3s ease;
-}
-
-.view-details:hover i {
-    transform: translateX(5px);
+    display: none;
 }
 
 /* Tab Navigation Styles */
@@ -253,25 +304,82 @@
 /* Responsive Design */
 @media (max-width: 1200px) {
     .showcase-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+}
+
+@media (max-width: 992px) {
+    .showcase-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .product-card {
+        height: 450px;
     }
 }
 
 @media (max-width: 767px) {
     .showcase-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .product-card {
+        height: 400px;
+        padding: 4px;
+    }
+    
+    .product-image {
+        border-radius: 20px;
     }
 
     .product-info {
-        padding: 20px;
+        padding: 24px 20px 20px;
+        border-radius: 0 0 20px 20px;
     }
 
     .product-title {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
+    }
+    
+    .product-category {
+        font-size: 0.8rem;
+    }
+    
+    .product-favorite {
+        top: 20px;
+        right: 20px;
+        width: 36px;
+        height: 36px;
+    }
+    
+    .product-favorite i {
+        font-size: 16px;
+    }
+    
+    .view-details {
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
     
     .showcase-title {
         font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-card {
+        height: 380px;
+    }
+    
+    .product-title {
+        font-size: 1.2rem;
+    }
+    
+    .product-price-info {
+        font-size: 0.9rem;
     }
 }
 
@@ -370,22 +478,29 @@
                                         <a href="{{ $productUrl }}">
                                             <img src="{{ $imageurl }}" alt="{{ $posterAndPlansProduct->name }}" loading="lazy">
                                         </a>
-                                    </div>
-                                    <div class="product-info">
-                                        <div>
-                                            <div class="product-category">{{ $posterAndPlansProduct->category_name }}</div>
+                                        
+                                        <!-- Favorite Icon -->
+                                        {{-- <div class="product-favorite">
+                                            <i class="lar la-heart"></i>
+                                        </div> --}}
+                                        
+                                        <!-- Content Overlay -->
+                                        <div class="product-info">
                                             <h3 class="product-title">
                                                 <a href="{{ $productUrl }}">{{ $posterAndPlansProduct->name }}</a>
                                             </h3>
-                                        </div>
-                                        <div style="display: flex; flex-direction: column; gap: 10px">
-                                            <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($posterAndPlansProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
-                                            <div>
-                                                <a href="{{ $productUrl }}" class="view-details">
-                                                    {{ $language_name == 'french' ? 'Voir les détails' : 'View Details' }}
-                                                    <i class="las la-arrow-right"></i>
-                                                </a>
+                                            <div class="product-category">{{ $posterAndPlansProduct->category_name }}</div>
+                                            
+                                            <div class="product-meta">
+                                                <div class="product-price-info">
+                                                    <i class="las la-tag"></i>
+                                                    <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($posterAndPlansProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
+                                                </div>
                                             </div>
+                                            
+                                            <a href="{{ $productUrl }}" class="view-details">
+                                                {{ $language_name == 'french' ? 'Voir les détails' : 'View Details' }}
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
