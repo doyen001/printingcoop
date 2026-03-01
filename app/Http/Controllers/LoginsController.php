@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
 class LoginsController extends Controller
 {
     /**
-     * Display login/register page
-     * CI: Logins->index() lines 16-24
+     * Display login page
+     * CI: Logins->index() lines 16-24 (adapted to login only)
      */
     public function index()
     {
@@ -26,11 +26,31 @@ class LoginsController extends Controller
         $language_name = config('store.language_name', 'english');
         
         $data = [
-            'page_title' => $language_name == 'french' ? "S'identifier S'enregistrer" : 'Login/Register',
+            'page_title' => $language_name == 'french' ? "S'identifier" : 'Login',
             'language_name' => $language_name,
         ];
         
         return view('logins.index', $data);
+    }
+
+    /**
+     * Display registration page
+     */
+    public function showRegister()
+    {
+        // Redirect if already logged in
+        if (session('loginId')) {
+            return redirect('MyOrders');
+        }
+
+        $language_name = config('store.language_name', 'english');
+
+        $data = [
+            'page_title' => $language_name == 'french' ? "Créer un compte" : 'Register',
+            'language_name' => $language_name,
+        ];
+
+        return view('logins.register', $data);
     }
     
     /**

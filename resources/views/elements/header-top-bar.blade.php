@@ -12,10 +12,10 @@
         --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
-    /* Header Top Bar Container */
+    /* Header Top Bar Container - matches section backgrounds (f8f9fa, light gradients) */
     .header-top-bar {
-        background: #163368;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #f0f4f8 100%);
+        border-bottom: 1px solid #e9ecef;
         position: relative;
         z-index: 1000;
     }
@@ -54,7 +54,7 @@
     }
 
     .left-menu ul li span {
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--text-dark);
         font-size: 0.875rem;
         font-weight: 500;
         display: flex;
@@ -68,7 +68,7 @@
     }
 
     .left-menu ul li span strong {
-        color: white;
+        color: #183e73;
         font-weight: 600;
         font-size: 0.9rem;
     }
@@ -100,7 +100,7 @@
     }
 
     .right-menu ul li a {
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--text-dark);
         text-decoration: none;
         font-size: 0.875rem;
         font-weight: 500;
@@ -114,8 +114,8 @@
     }
 
     .right-menu ul li a:hover {
-        color: white;
-        background: rgba(242, 135, 56, 0.2);
+        color: var(--primary-color);
+        background: rgba(242, 135, 56, 0.12);
         transform: translateY(-1px);
     }
 
@@ -138,18 +138,20 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: rgba(255, 255, 255, 0.9) !important;
+        color: var(--text-dark) !important;
         font-size: 0.875rem;
         font-weight: 500;
         padding: 0.375rem 0.75rem !important;
-        background: rgba(255, 255, 255, 0.1);
+        background: #ffffff;
+        border: 1px solid var(--border-color);
         border-radius: 6px;
         transition: all 0.2s ease;
     }
 
     .language-selector-box > a:hover {
-        background: rgba(242, 135, 56, 0.2) !important;
-        color: white !important;
+        background: rgba(242, 135, 56, 0.12) !important;
+        color: var(--primary-color) !important;
+        border-color: rgba(242, 135, 56, 0.3);
     }
 
     .language-selector-box > a i {
@@ -363,7 +365,7 @@
                             @if(empty($loginId))
                                 <li>
                                     <a href="{{ url('Logins') }}">
-                                        {{ $language_name == 'french' ? "S'identifier S'enregistrer" : 'Login/Register' }}
+                                        {{ $language_name == 'french' ? "S'identifier" : 'Login' }}
                                     </a>
                                 </li>
                             @else

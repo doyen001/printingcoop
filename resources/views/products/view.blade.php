@@ -84,7 +84,9 @@
         .swiper-button-next,
         .swiper-button-prev {
             background: white;
-            background-repeat: round;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
             width: 44px;
             height: 44px;
             border-radius: 50%;
@@ -147,16 +149,33 @@
             object-fit: cover;
         }
 
-        /* Product Details */
+        /* Product Details - modern card */
         .shop-product-detail-section {
-            padding-left: 2rem;
+            position: relative;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 22px 22px 20px 30px;
+            box-shadow: 0 26px 70px rgba(15, 23, 42, 0.14);
+            border: 1px solid rgba(242, 135, 56, 0.16);
         }
+/* 
+        .shop-product-detail-section::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 16px;
+            bottom: 16px;
+            width: 3px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #ffb166, #f28738);
+        } */
 
         .shop-product-detail {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
+            gap: 1rem;
         }
 
         .shop-product-detail h1 {
@@ -172,53 +191,84 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             background: var(--bg-light);
-            border-radius: 50%;
+            border-radius: 999px;
             color: var(--text-light);
-            font-size: 24px;
-            transition: all 0.3s ease;
+            font-size: 22px;
+            transition: all 0.25s ease;
             text-decoration: none;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
         }
 
         .wishlist-area a:hover {
-            background: var(--primary-color);
-            color: white;
-            transform: scale(1.1);
+            background: #ffffff;
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(242, 135, 56, 0.35);
         }
 
         /* Category & Availability */
         .shop-category {
             font-size: 0.95rem;
             color: var(--text-light);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .shop-category-label {
+            font-weight: 600;
+            color: #6b7280;
         }
 
         .shop-category font {
+            display: inline-block;
+            padding: 0.15rem 0.7rem;
+            border-radius: 999px;
+            background: #fff3e7;
             color: var(--primary-color);
             font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .availability-pill {
+            display: inline-block;
+            padding: 0.15rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #ecfdf3;
+            color: #15803d;
+        }
+
+        .availability-pill.out-of-stock {
+            background: #fef2f2;
+            color: #b91c1c;
         }
 
         /* Description */
         .universal-dark-info {
             color: var(--text-light);
             line-height: 1.7;
-            margin-bottom: 1.5rem;
-            padding: 1.25rem;
-            background: var(--bg-light);
-            border-radius: 12px;
-            border-left: 4px solid var(--primary-color);
+            margin-bottom: 1.25rem;
+            padding: 1rem 1.1rem;
+            background: #f9fafb;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
         }
 
         /* Product Fields */
         .product-fields {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
+            padding: 1.1rem 1.1rem 0.4rem;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
         }
 
         /* Price Area */
         .set-price-area {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
         }
 
         .shop-product-price {
@@ -493,7 +543,7 @@
         }
 
         .uploaded-file-name a {
-            width: 70%;
+            width: 150px;
             color: var(--text-dark);
             text-decoration: none;
             font-weight: 600;
@@ -748,31 +798,37 @@
                                         $multipalCategoryData = $Product['multipalCategoryData'];
                                     @endphp
                                     <div class="shop-category">
-                                        <span>{{ $language_name == 'french' ? 'Catégorie' : 'Category' }} :
-                                            @foreach ($multipalCategoryData as $key => $val)
-                                                <font>{{ $language_name == 'french' ? $val['name_french'] : $val['name'] }}
-                                                </font>
-                                            @endforeach
+                                        <span class="shop-category-label">
+                                            {{ $language_name == 'french' ? 'Catégorie' : 'Category' }} :
                                         </span>
+                                        @foreach ($multipalCategoryData as $key => $val)
+                                            <font>{{ $language_name == 'french' ? $val['name_french'] : $val['name'] }}</font>
+                                        @endforeach
                                     </div>
                                 </div>
                                 <div class="col-md-4 text-right">
                                     <div class="shop-category">
-                                        <span>{{ $language_name == 'french' ? 'Disponibilité' : 'Availability' }} :
-                                            <font>
-                                                @if ($language_name == 'french')
-                                                    {{ empty($Product['is_stock']) ? 'En Stock' : 'En rupture de stock' }}
-                                                @else
-                                                    {{ empty($Product['is_stock']) ? 'In Stock' : 'Out of Stock' }}
-                                                @endif
-                                            </font>
+                                        <span class="shop-category-label">
+                                            {{ $language_name == 'french' ? 'Disponibilité' : 'Availability' }} :
+                                        </span>
+                                        @php
+                                            $inStock = empty($Product['is_stock']);
+                                        @endphp
+                                        <span class="availability-pill {{ $inStock ? '' : 'out-of-stock' }}">
+                                            @if ($language_name == 'french')
+                                                {{ $inStock ? 'En Stock' : 'En rupture de stock' }}
+                                            @else
+                                                {{ $inStock ? 'In Stock' : 'Out of Stock' }}
+                                            @endif
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="universal-dark-info">
-                                <span>{{ $language_name == 'french' ? $Product['short_description_french'] : $Product['short_description'] }}</span>
-                            </div>
+                            @if(!empty($Product['short_description_french']) || !empty($Product['short_description']))
+                                <div class="universal-dark-info">
+                                    <span>{{ $language_name == 'french' ? $Product['short_description_french'] : $Product['short_description'] }}</span>
+                                </div>
+                            @endif
 
                             @php
                                 $product_id = $Product['id'];
@@ -785,7 +841,6 @@
                                     <input type="hidden" id="product_id" value="{{ $Product['id'] }}" name="product_id">
                                     <input type="hidden" id="product_price" value="{{ $Product[$product_price_currency] }}"
                                         name="price">
-
                                     <div class="product-fields">
                                         <div class="row">
                                             @if ($provider)

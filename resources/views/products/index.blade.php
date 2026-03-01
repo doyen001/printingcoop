@@ -81,12 +81,17 @@
 
 .category-item-wrapper {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 0;
     background: white;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     transition: all 0.2s ease;
+    min-height: 44px;
+}
+
+.category-item-wrapper .category-link {
+    min-width: 0;
 }
 
 .category-item-wrapper:hover {
@@ -131,6 +136,12 @@
     flex-grow: 1;
     font-weight: 500;
     font-size: 0.95rem;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.category-link .category-count {
+    flex-shrink: 0;
 }
 
 .category-link:hover {
@@ -146,11 +157,22 @@
     display: flex;
     align-items: center;
     gap: 0.625rem;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .category-link span:first-child i {
     font-size: 0.875rem;
     color: #95a5a6;
+    flex-shrink: 0;
+}
+
+/* Single-line category name with ellipsis */
+.category-link .category-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .category-count {
@@ -692,10 +714,11 @@
                             
                             @if($MainStoreData->show_all_categories ?? false)
                                 <li class="category-item">
-                                    <a href="{{ site_url('Products') }}" class="category-link {{ $selected == 'selected' ? 'selected' : '' }}">
+                                    @php $all_cats_label = $language_name == 'french' ? 'Toutes catégories' : 'All categories'; @endphp
+                                    <a href="{{ site_url('Products') }}" class="category-link {{ $selected == 'selected' ? 'selected' : '' }}" title="{{ $all_cats_label }}">
                                         <span>
                                             <i class="fas fa-border-all"></i>
-                                            {{ $language_name == 'french' ? 'Toutes catégories' : 'All categories' }}
+                                            <span class="category-name">{{ $all_cats_label }}</span>
                                         </span>
                                         <span class="category-count">{{ $categories['all_categories_products'] ?? 0 }}</span>
                                     </a>
@@ -713,12 +736,13 @@
                                         @endif
                                         @php
                                             $categoryId = base64_encode($category['id'] ?? '') ?? '';
+                                            $category_label = $language_name == 'french' ? ucfirst($category['name_french'] ?? $category['name']) : ucfirst($category['name']);
                                         @endphp
                                         <a href="{{ site_url('Products?category_id=' . $categoryId) }}"
-                                           class="category-link {{ $selected == $categoryId ? 'selected' : '' }}">
+                                           class="category-link {{ $selected == $categoryId ? 'selected' : '' }}" title="{{ $category_label }}">
                                             <span>
                                                 <i class="fas fa-folder"></i>
-                                                {{ $language_name == 'french' ? ucfirst($category['name_french'] ?? $category['name']) : ucfirst($category['name']) }}
+                                                <span class="category-name">{{ $category_label }}</span>
                                             </span>
                                             <span class="category-count">{{ $category['total_products'] ?? 0 }}</span>
                                         </a>
@@ -730,14 +754,15 @@
                                             @php
                                                 $categoryId = base64_encode($category['id'] ?? '') ?? '';
                                                 $subCategoryId = base64_encode($subcategory['id'] ?? '') ?? '';
+                                                $subcategory_label = $language_name == 'french' ? ($subcategory['name_french'] ?? $subcategory['name']) : $subcategory['name'];
                                             @endphp
                                                 <li class="category-item">
                                                     <div class="category-item-wrapper">
                                                         <a href="{{ site_url('Products?category_id=' . ($categoryId) . '&sub_category_id=' . ($subCategoryId)) }}"
-                                                           class="category-link {{ $selected_sub_cat == $subCategoryId ? 'selected' : '' }}">
+                                                           class="category-link {{ $selected_sub_cat == $subCategoryId ? 'selected' : '' }}" title="{{ $subcategory_label }}">
                                                             <span>
                                                                 <i class="fas fa-angle-right"></i>
-                                                                {{ $language_name == 'french' ? ($subcategory['name_french'] ?? $subcategory['name']) : $subcategory['name'] }}
+                                                                <span class="category-name">{{ $subcategory_label }}</span>
                                                             </span>
                                                             <span class="category-count">{{ $subcategory['sub_category_total_products'] ?? 0 }}</span>
                                                         </a>

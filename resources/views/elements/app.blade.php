@@ -13,7 +13,7 @@
     
     <!-- CSS Files -->
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     @php
         $website_store_id = config('store.main_store_id', 1);

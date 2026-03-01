@@ -37,7 +37,13 @@ Route::prefix('Home')->group(function () {
 
 // Authentication Routes (Logins controller)
 Route::prefix('Logins')->group(function () {
-    Route::match(['get', 'post'], '/', [LoginsController::class, 'index'])->name('login');
+    // Login page
+    Route::get('/', [LoginsController::class, 'index'])->name('login');
+
+    // Registration page
+    Route::get('/register', [LoginsController::class, 'showRegister'])->name('register');
+
+    // AJAX / auth actions
     Route::post('/checkLoginByAjax', [LoginsController::class, 'checkLoginByAjax']);
     Route::get('/emailVerification/{id}', [LoginsController::class, 'emailVerification']);
     Route::get('/forgotPassword', [LoginsController::class, 'forgotPassword']);
