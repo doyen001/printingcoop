@@ -599,21 +599,117 @@ if (!function_exists('dateFormate')) {
 }
 
 /**
- * Get order status class
- * Returns CSS class based on order status
+ * Get order status HTML (English)
+ * CI: constants.php getOrderSatusClass($status)
  */
 if (!function_exists('getOrderSatusClass')) {
-    function getOrderSatusClass($status)
+    function getOrderSatusClass($status = null)
     {
-        $classes = [
-            1 => 'label-warning',  // Pending
-            2 => 'label-info',      // Processing
-            3 => 'label-primary',   // Shipped
-            4 => 'label-success',   // Delivered
-            5 => 'label-danger',    // Cancelled
+        $statusData = [
+            1 => '<button type="button" class="btn btn-sm">Incomplete</button>',
+            2 => '<button type="button" class="btn btn-sm btn-primary">New Order</button>',
+            3 => '<button type="button" class="btn btn-warning btn-sm">Processing</button>',
+            4 => '<button type="button" class="btn btn-sm" style="background-color: #17a2b8; border-color: #17a2b8;">Shipped</button>',
+            5 => '<button type="button" class="btn btn-info btn-sm">Delivered</button>',
+            6 => '<button type="button" class="btn btn-dark btn-sm">Cancelled</button>',
+            7 => '<button type="button" class="btn btn-danger btn-sm">Failed</button>',
+            8 => '<button type="button" class="btn btn-info btn-sm">Complete</button>',
+            9 => '<button type="button" class="btn btn-sm" style="background-color: #17a2b8; border-color: #17a2b8;">Ready for pickup</button>',
         ];
-        
-        return $classes[$status] ?? 'label-default';
+
+        if (!empty($status)) {
+            return $statusData[$status] ?? '';
+        }
+
+        return $statusData;
+    }
+}
+
+/**
+ * Get order status HTML (French)
+ * CI: constants.php getOrderSatusClassFrench($status)
+ */
+if (!function_exists('getOrderSatusClassFrench')) {
+    function getOrderSatusClassFrench($status = null)
+    {
+        $statusData = [
+            1 => '<button type="button" class="btn btn-sm">Incomplète</button>',
+            2 => '<button type="button" class="btn btn-sm btn-primary">Nouvelle commande</button>',
+            3 => '<button type="button" class="btn btn-warning btn-sm">En traitement</button>',
+            4 => '<button type="button" class="btn btn-sm" style="background-color: #17a2b8; border-color: #17a2b8;">Expédié</button>',
+            5 => '<button type="button" class="btn btn-info btn-sm">Livré</button>',
+            6 => '<button type="button" class="btn btn-dark btn-sm">Annulé</button>',
+            7 => '<button type="button" class="btn btn-danger btn-sm">Échoué</button>',
+            8 => '<button type="button" class="btn btn-info btn-sm">Achevée</button>',
+        ];
+
+        if (!empty($status)) {
+            return $statusData[$status] ?? '';
+        }
+
+        return $statusData;
+    }
+}
+
+/**
+ * Get order payment status HTML (English)
+ * CI: constants.php getOrderPaymentStatus($status)
+ */
+if (!function_exists('getOrderPaymentStatus')) {
+    function getOrderPaymentStatus($status = null, $type = 'list')
+    {
+        if ($type === 'list') {
+            $statusData = [
+                1 => '<button type="button" class="btn btn-sm btn-warning">Pending</button>',
+                2 => '<button type="button" class="btn btn-sm btn-info">Success</button>',
+                3 => '<button type="button" class="btn btn-sm btn-danger">Failed</button>',
+            ];
+        } elseif ($type === 'csv') {
+            $statusData = [
+                1 => 'Pending',
+                2 => 'Success',
+                3 => 'Failed',
+            ];
+        } else {
+            $statusData = [];
+        }
+
+        if (!empty($status)) {
+            return $statusData[$status] ?? '';
+        }
+
+        return $statusData;
+    }
+}
+
+/**
+ * Get order payment status HTML (French)
+ * CI: constants.php getOrderPaymentStatusFrench($status)
+ */
+if (!function_exists('getOrderPaymentStatusFrench')) {
+    function getOrderPaymentStatusFrench($status = null, $type = 'list')
+    {
+        if ($type === 'list') {
+            $statusData = [
+                1 => '<button type="button" class="btn btn-sm btn-warning">En attente</button>',
+                2 => '<button type="button" class="btn btn-sm btn-info">Succès</button>',
+                3 => '<button type="button" class="btn btn-sm btn-danger">Échoué</button>',
+            ];
+        } elseif ($type === 'csv') {
+            $statusData = [
+                1 => 'En attente',
+                2 => 'Succès',
+                3 => 'Échoué',
+            ];
+        } else {
+            $statusData = [];
+        }
+
+        if (!empty($status)) {
+            return $statusData[$status] ?? '';
+        }
+
+        return $statusData;
     }
 }
 
@@ -886,9 +982,9 @@ if (!function_exists('emailTemplate')) {
     function emailTemplate($subject, $body, $empty = false, $logo = false)
 {
     //<img src="'.url('assets/images/printing.coopLogo.png').' width="60%">
-    $logo = $logo ? $logo : 'https://printing.coop/assets/images/printing.coopLogo.png';
+    $logo = $logo ? $logo : 'https://laravel.imprimeriecoop.com/assets/images/printing.coopLogo.png';
     $html = '<div class="top-section" style="width:100%;text-align:center; font-family: Raleway, sans-serif !important;display: flex;justify-content: center;align-items: center;">
-        <div class="top-mid-section" style="width:100%; max-width:600px; height:auto; text-align:center; padding:0px 0px 0px 0px; box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);background-image: url(https://printing.coop/assets/images/bg-vector-img.jpg);">
+        <div class="top-mid-section" style="width:100%; max-width:600px; height:auto; text-align:center; padding:0px 0px 0px 0px; box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);background-image: url(https://laravel.imprimeriecoop.com/assets/images/bg-vector-img.jpg);">
             <div style="background: rgba(255,255,255,0.9)">
             <div class="top-inner-section" style="background: #fa762b; padding: 3px 0px 1px 0px; box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);">
             </div>
@@ -925,11 +1021,11 @@ if (!function_exists('emailTemplateFranch')) {
     function emailTemplateFranch($subject, $body)
     {
         $html = '<div class="top-section" style="width:100%;text-align:center; font-family: Raleway, sans-serif !important;display: flex;justify-content: center;align-items: center;">
-            <div class="top-mid-section" style="width:100%; max-width:600px; height:auto; text-align:center; padding:0px 0px 0px 0px; box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);background-image: url(https://printing.coop/assets/images/bg-vector-img.jpg);">
+            <div class="top-mid-section" style="width:100%; max-width:600px; height:auto; text-align:center; padding:0px 0px 0px 0px; box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);background-image: url(https://laravel.imprimeriecoop.com/assets/images/bg-vector-img.jpg);">
                 <div style="background: rgba(255,255,255,0.9)">
                 <div class="top-inner-section" style="background: #fa762b; padding: 3px 0px 1px 0px; box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);">
                 </div>
-                <div style="padding: 20px 0px 10px 0px; text-align: center;"><img src="https://printing.coop/uploads/logo/printing_coop_imprimeur_coop_logo2018_FR.png" width="60%"></div>
+                <div style="padding: 20px 0px 10px 0px; text-align: center;"><img src="https://laravel.imprimeriecoop.com/uploads/logo/printing_coop_imprimeur_coop_logo2018_FR.png" width="60%"></div>
                 <div class="tem-mid-section" style="text-align: center;">
                     <div class="tem-visibility" style="z-index: 99; padding: 20px;">
                         <div class="top-title" style="font-size: 22px; text-align: center;">
@@ -976,7 +1072,7 @@ if (!function_exists('getLogoImages')) {
         
         if (file_exists($logoPath)) {
             if ($mail) {
-                $imageurl = "https://printing.coop/uploads/logo/" . $imageName;
+                $imageurl = "https://laravel.imprimeriecoop.com/uploads/logo/" . $imageName;
             } else {
                 $imageurl = asset('uploads/logo/' . $imageName);
             }
@@ -1008,6 +1104,119 @@ if (!function_exists('upsServiceCode')) {
             '65' => 'UPS World Wide Saver',
         ];
         return $ups_service_code;
+    }
+}
+
+/**
+ * Get FlagShip service code meta
+ * CI: constants.php FlagShipServiceCode($code)
+ */
+if (!function_exists('FlagShipServiceCode')) {
+    function FlagShipServiceCode($code = null)
+    {
+        $codes = [
+            'FEDEX_2_DAY' => [
+                'flagship_code' => 'secondDay',
+                'courier_code' => 'FEDEX_2_DAY',
+                'courier_desc' => '2 Days',
+                'courier_name' => 'FedEx',
+            ],
+            'FEDEX_EXPRESS_SAVER' => [
+                'flagship_code' => 'express',
+                'courier_code' => 'FEDEX_EXPRESS_SAVER',
+                'courier_desc' => 'Economy',
+                'courier_name' => 'FedEx',
+            ],
+            'PRIORITY_OVERNIGHT' => [
+                'flagship_code' => 'expressAm',
+                'courier_code' => 'PRIORITY_OVERNIGHT',
+                'courier_desc' => 'Priority Overnight',
+                'courier_name' => 'FedEx',
+            ],
+            'STANDARD_OVERNIGHT' => [
+                'flagship_code' => 'expressAm',
+                'courier_code' => 'STANDARD_OVERNIGHT',
+                'courier_desc' => 'Standard Overnight',
+                'courier_name' => 'FedEx',
+            ],
+            'GRD' => [
+                'flagship_code' => 'standard',
+                'courier_code' => 'GRD',
+                'courier_desc' => 'Dicom Ground',
+                'courier_name' => 'Dicom',
+            ],
+            'PurolatorExpress9AM' => [
+                'flagship_code' => 'expressEarlyAm',
+                'courier_code' => 'PurolatorExpress9AM',
+                'courier_desc' => 'Purolator Express 9AM',
+                'courier_name' => 'courier_name',
+            ],
+            'PurolatorExpress10:30AM' => [
+                'flagship_code' => 'expressAm',
+                'courier_code' => 'PurolatorExpress10:30AM',
+                'courier_desc' => 'Purolator Express 10:30 AM',
+                'courier_name' => 'Purolator',
+            ],
+            'PurolatorExpress' => [
+                'flagship_code' => 'express',
+                'courier_code' => 'PurolatorExpress',
+                'courier_desc' => 'Purolator Express',
+                'courier_name' => 'Purolator',
+            ],
+        ];
+
+        if (!empty($code)) {
+            return $codes[$code] ?? [];
+        }
+
+        return $codes;
+    }
+}
+
+/**
+ * Get human-readable shipping method from order
+ * CI: constants.php getShipingName($orderData)
+ */
+if (!function_exists('getShipingName')) {
+    function getShipingName($orderData)
+    {
+        // CI: constants.php getShipingName($orderData)
+        // In CI $orderData is always an array; here we normalize.
+        if (is_object($orderData)) {
+            $orderData = (array) $orderData;
+        } elseif (!is_array($orderData)) {
+            $orderData = [];
+        }
+
+        $upsServiceCode = upsServiceCode();
+        $str = '';
+
+        if (!empty($orderData['shipping_method_formate'])) {
+            $shipping_method_formate = explode('-', $orderData['shipping_method_formate']);
+
+            if ($shipping_method_formate[0] == 'ups') {
+                // Third part is UPS service code
+                $code = $shipping_method_formate[2] ?? null;
+                if ($code && isset($upsServiceCode[$code])) {
+                    $str = $upsServiceCode[$code] . ' (UPS)';
+                }
+            } elseif ($shipping_method_formate[0] == 'canadapost') {
+                // Third part is Canada Post service name
+                $serviceName = $shipping_method_formate[2] ?? '';
+                $str = $serviceName . ' (Canada Post)';
+            } elseif ($shipping_method_formate[0] == 'flagship') {
+                // Third part is FlagShip courier code
+                $code = $shipping_method_formate[2] ?? null;
+                if ($code) {
+                    $codeData = FlagShipServiceCode($code);
+                    if (!empty($codeData)) {
+                        $str = $codeData['courier_name'] . '<br>' . $codeData['courier_desc'] . '</br>(FlagShip)';
+                    }
+                }
+            }
+        }
+
+        return $str;
     }
 }
 

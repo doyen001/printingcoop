@@ -823,6 +823,7 @@ class ProductsController extends Controller
         $recto_verso = $params['recto_verso'] ?? null;
         $recto_verso_price = $params['recto_verso_price'] ?? 0;
         $votre_text = $params['votre_text'] ?? '';
+        $file_comments = $params['file_comments'] ?? [];
         
         $productData = DB::table('products')->where('id', $product_id)->first();
         if (!$productData) {
@@ -982,7 +983,21 @@ class ProductsController extends Controller
         $name_french = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(['(', ')', "'", ','], '', $productData['name_french'] ?? $productData['name']));
         
         // Get cart images from session
-        $cart_images = session('product_id')[$product_id] ?? [];
+        $cart_images = session("product_id.$product_id") ?? [];
+
+        // Merge any inline comments from the add-to-cart form
+        if (!empty($cart_images) && !empty($file_comments)) {
+            foreach ($cart_images as $key => &$image) {
+                if (isset($file_comments[$key])) {
+                    $image['cumment'] = $file_comments[$key];
+
+                    // Keep session in sync with latest comment
+                    $sessionKey = "product_id.$product_id.$key";
+                    session([$sessionKey => $image]);
+                }
+            }
+            unset($image);
+        }
         
         // Check if file upload is required (website_store_id != 5)
         $website_store_id = config('store.website_store_id', 1);
@@ -1219,19 +1234,27 @@ class ProductsController extends Controller
     {
         $product_id = $request->input('product_id');
         $skey = $request->input('skey');
-        $location = $request->input('location');
-        
-        if (session()->has('product_id.' . $product_id)) {
-            $productImages = session()->get('product_id.' . $product_id);
-            unset($productImages[$skey]);
-            session()->put('product_id.' . $product_id, $productImages);
 
-            /*if (file_exists($location)) {
-                unlink($location);
-            }*/
+        if (empty($product_id) || empty($skey)) {
+            return response()->json(['success' => false]);
         }
-        exit(0);
-        //echo json_encode($return_arr);
+
+        // Read the specific file entry from session (same structure as uploadImage/updateCumment)
+        $sessionKey = "product_id.$product_id.$skey";
+        $fileData = session($sessionKey);
+
+        if ($fileData) {
+            // Remove file from filesystem if it still exists
+            $location = $fileData['location'] ?? null;
+            if (!empty($location) && file_exists($location) && is_file($location)) {
+                @unlink($location);
+            }
+
+            // Remove only this file entry from session
+            session()->forget($sessionKey);
+        }
+
+        return response()->json(['success' => true]);
     }
     
     /**
@@ -1696,11 +1719,11 @@ class ProductsController extends Controller
      */
     private function emailTemplate($subject, $body, $empty = false, $logo = false)
     {
-        $logo = $logo ?: 'https://printing.coop/assets/images/printing.coopLogo.png';
+        $logo = $logo ?: 'https://laravel.imprimeriecoop.com/assets/images/printing.coopLogo.png';
         $websiteName = config('app.name', 'Printing Coop');
         
         $html = '<div class="top-section" style="width:100%;text-align:center; font-family: Raleway, sans-serif !important;display: flex;justify-content: center;align-items: center;">
-            <div class="top-mid-section" style="width:100%; max-width:600px; height:auto; text-align:center; padding:0px 0px 0px 0px; box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);background-image: url(https://printing.coop/assets/images/bg-vector-img.jpg);">
+            <div class="top-mid-section" style="width:100%; max-width:600px; height:auto; text-align:center; padding:0px 0px 0px 0px; box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.5);background-image: url(https://laravel.imprimeriecoop.com/assets/images/bg-vector-img.jpg);">
                 <div style="background: rgba(255,255,255,0.9)">
                 <div class="top-inner-section" style="background: #fa762b; padding: 3px 0px 1px 0px; box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);">
                 </div>

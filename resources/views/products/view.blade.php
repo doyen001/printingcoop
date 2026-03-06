@@ -352,7 +352,7 @@
             color: white;
             border-radius: 8px;
             font-weight: 600;
-            margin-bottom: 0.75rem;
+            /* margin-bottom: 0.75rem; */
             transition: all 0.3s ease;
         }
 
@@ -892,7 +892,7 @@
                                             </div>
 
                                             <div class="uploaded-file-detail" id="upload-file-data">
-                                                {{-- @if (session()->has("product_id.{$Product['id']}"))
+                                                @if (session()->has("product_id.{$Product['id']}"))
                                                     @php
                                                         $file_data = session("product_id.{$Product['id']}");
                                                     @endphp
@@ -939,7 +939,7 @@
                                                             </div>
                                                         </div>
                                                     @endforeach
-                                                @endif --}}
+                                                @endif
                                             </div>
                                         </div>
                                     @endif
@@ -1086,7 +1086,7 @@
                 $.ajax({
                     type: 'POST',
                     dataType: 'html',
-                    url: "{{ url('products/calculate-price') }}",
+                    url: "{{ url('ShoppingCarts/calculate-price') }}",
                     data: formData,
                     cache: false,
                     contentType: false,
@@ -1118,7 +1118,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'html',
-                url: "{{ url('Products/updateCumment') }}",
+                url: "{{ url('ShoppingCarts/updateCumment') }}",
                 data: ({
                     'cumment': cumment,
                     'product_id': product_id,
@@ -1145,7 +1145,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'html',
-                url: "{{ url('Products/deleteImage') }}",
+                url: "{{ url('ShoppingCarts/deleteImage') }}",
                 data: ({
                     'location': location,
                     'product_id': product_id,
@@ -1169,7 +1169,7 @@
             $('#loader-img').show();
             $('#btnSubmit').prop('disabled', true);
             e.preventDefault();
-            var url = "{{ url('Products/addToCart') }}";
+            var url = "{{ url('ShoppingCarts/addToCart') }}";
             $.ajax({
                 type: 'POST',
                 url: url,

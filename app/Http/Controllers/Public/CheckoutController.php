@@ -213,7 +213,6 @@ class CheckoutController extends Controller
         } else {
             // Create order from cart (lines 226-325)
             $cart = new CartService();
-            
             $ProductOrder['sub_total_amount'] = $cart->total();
             $ProductOrder['total_amount'] = $cart->total();
             $ProductOrder['preffered_customer_discount'] = 0;

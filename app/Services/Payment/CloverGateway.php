@@ -225,7 +225,10 @@ class CloverGateway
      */
     private function getCurrency($currency_id)
     {
-        $currency = \DB::table('currencies')->where('id', $currency_id)->first();
+        // CI schema uses `currency` table; some Laravel setups might
+        // have a pluralized `currencies` table. Support both.
+        $currencyTable = \Schema::hasTable('currencies') ? 'currencies' : 'currency';
+        $currency = \DB::table($currencyTable)->where('id', $currency_id)->first();
         return $currency ? (array) $currency : [];
     }
 }

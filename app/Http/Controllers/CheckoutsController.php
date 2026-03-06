@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Schema;
 use App\Services\CartService;
+use App\Services\Shipping\UpsProvider;
+use App\Services\Shipping\CanadaPostProvider;
+use App\Services\Shipping\FlagShipProvider;
 
 /**
  * CheckoutsController
@@ -44,7 +48,6 @@ class CheckoutsController extends Controller
         if ($order_id != '0') {
             $order_id = base64_decode($order_id);
         }
-        
         // Skip step 1 if user is logged in
         if ($step == 1 && !empty($loginId)) {
             $step = 2;
@@ -63,29 +66,122 @@ class CheckoutsController extends Controller
         // Get user data
         $userData = DB::table('users')->where('id', $loginId)->first();
         
-        // Get addresses
-        $addresses = DB::table('addresses')->where('user_id', $loginId)->get();
+        // Get addresses (cast to array to match legacy CI view expectations)
+        $addresses = DB::table('addresses')
+            ->where('user_id', $loginId)
+            ->get()
+            ->map(function ($row) {
+                return (array) $row;
+            })
+            ->toArray();
         
-        // Get countries for address form
-        $countries = DB::table('countries')->where('flag', 1)->get();
+        // Get countries for address form (cast to array)
+        $countries = DB::table('countries')
+            ->where('flag', 1)
+            ->get()
+            ->map(function ($row) {
+                return (array) $row;
+            })
+            ->toArray();
+        
+        // Shipping / tax related data (kept close to CI implementation)
+        $total_charges_ups = [];
+        $CanedaPostShiping = ['list' => []];
+        $FlagShiping = [];
+        $PickupStoresList = $this->getPickupStoresList();
+        $salesTaxRatesProvinces_Data = [];
+        $our_company_shiping_cost = 0;
+        $coupon_code = null;
         
         // Initialize order data
         $ProductOrder = [];
         $ProductOrderItems = [];
-        
         if (!empty($order_id)) {
-            // Load existing order
-            $ProductOrder = DB::table('product_orders')->where('id', $order_id)->first();
-            if (empty($ProductOrder)) {
+            // Load existing order (CI: ProductOrder_Model->getProductOrderDataById / getProductOrderItemDataById)
+            $ProductOrderRow = DB::table('product_orders')->where('id', $order_id)->first();
+            if (empty($ProductOrderRow)) {
                 return redirect('/');
             }
-            $ProductOrder = (array) $ProductOrder;
+            $ProductOrder = (array) $ProductOrderRow;
             
+            // Cast order items to array to support $item['field'] access in Blade
             $ProductOrderItems = DB::table('product_order_items')
                 ->where('order_id', $order_id)
                 ->get()
+                ->map(function ($item) {
+                    return (array) $item;
+                })
                 ->toArray();
+            
+            // === Shipping / tax calculation for existing order (mirrors CI + Public\CheckoutController) ===
+            if (!empty($ProductOrder['shipping_state'] ?? null) &&
+                !empty($ProductOrder['shipping_country'] ?? null) &&
+                !empty($ProductOrder['shipping_city'] ?? null) &&
+                !empty($ProductOrder['shipping_pin_code'] ?? null)
+            ) {
+                $stateData = $this->getStateById($ProductOrder['shipping_state']);
+                $CountryData = $this->getCountryById($ProductOrder['shipping_country']);
+                $cityData = $this->getCityById($ProductOrder['shipping_city']);
+                
+                if (!empty($stateData) && !empty($CountryData) && !empty($cityData)) {
+                    $shipping_pin_code = strtoupper(str_replace(' ', '', $ProductOrder['shipping_pin_code']));
+                    
+                    $upsProvider = new UpsProvider();
+                    $upsProvider->addField('ShipTo_Name', $ProductOrder['shipping_name'] ?? '');
+                    $upsProvider->addField('ShipTo_AddressLine', [
+                        $ProductOrder['shipping_address'] ?? '',
+                        $ProductOrder['shipping_address'] ?? '',
+                    ]);
+                    $upsProvider->addField('ShipTo_City', $cityData['name']);
+                    $upsProvider->addField('ShipTo_StateProvinceCode', $stateData['iso2']);
+                    $upsProvider->addField('ShipTo_PostalCode', $shipping_pin_code);
+                    $upsProvider->addField('ShipTo_CountryCode', $CountryData['iso2']);
+                    
+                    $dimensions = [];
+                    $dimensions[0]['Weight'] = 1; // Kg
+                    $dimensions[0]['Qty'] = $ProductOrder['total_items'] ?? count($ProductOrderItems);
+                    $upsProvider->addField('dimensions', $dimensions);
+                    
+                    [$response, $status] = $upsProvider->processRate();
+                    $ups_response = json_decode($response);
+                    
+                    if ($status == 200 && isset($ups_response->RateResponse->RatedShipment)) {
+                        $total_charges_ups = $ups_response->RateResponse->RatedShipment;
+                    }
+                    
+                    // Canada Post / Sina provider shipping (provider_product_count)
+                    $provider_product_count = $this->getOrderProductCount($order_id);
+                    if ($provider_product_count > 0) {
+                        $methods = $this->sinaShippingMethods($order_id);
+                        $CanedaPostShiping = ['statu' => 200, 'msg' => ''];
+                        foreach ($methods as $method) {
+                            $CanedaPostShiping['list'] = [[
+                                'service_name' => $method[1],
+                                'price' => $method[2],
+                            ]];
+                        }
+                    } else {
+                        $canadaPostProvider = new CanadaPostProvider();
+                        $CanedaPostShiping = $canadaPostProvider->getRates($shipping_pin_code);
+                    }
+                    $ProductOrder['provider_product_count'] = $provider_product_count;
+                    
+                    // Tax rates for billing state
+                    $salesTaxRatesProvinces_Data = $this->salesTaxRatesProvincesById($ProductOrder['billing_state'] ?? null);
+                    
+                    // Store / FlagShip shipping
+                    $storeData = $this->getStoreDataById($ProductOrder['store_id'] ?? null);
+                    $our_company_shiping_cost = $this->calculateShippingCost($ProductOrder['total_amount'] ?? 0);
+                    
+                    $flag_ship = $storeData['flag_ship'] ?? 'no';
+                    if ($flag_ship === 'yes') {
+                        $flagShipProvider = new FlagShipProvider();
+                        $FlagShiping = $flagShipProvider->getRates($ProductOrder, $ProductOrderItems, $CountryData, $stateData, $cityData, $storeData);
+                    }
+                }
+            }
         } else {
+            // dd("testing");
             // Create new order from cart
             $ProductOrder['sub_total_amount'] = $this->cart->total();
             $ProductOrder['total_amount'] = $this->cart->total();
@@ -129,17 +225,34 @@ class CheckoutsController extends Controller
             }
         }
         
+        // Prepare view data (align with legacy CI view variables)
         $data = [
             'page_title' => $language_name == 'french' ? 'Check-out' : 'Checkout',
             'language_name' => $language_name,
             'step' => $step,
             'order_id' => $order_id,
+            // Legacy view expects $address (singular) not $addresses
+            'address' => $addresses,
             'addresses' => $addresses,
             'countries' => $countries,
+            // These are used by the "new address" form; keep defaults matching CI structure
+            'states' => [],
+            'citys' => [],
+            'postData' => [],
             'ProductOrder' => $ProductOrder,
+            // Legacy view variable name (singular)
+            'ProductOrderItem' => $ProductOrderItems,
             'ProductOrderItems' => $ProductOrderItems,
             'userData' => $userData,
             'loginName' => session('loginName', ''),
+            // Shipping-related variables expected by the legacy checkout view.
+            'total_charges_ups' => $total_charges_ups,
+            'CanedaPostShiping' => $CanedaPostShiping,
+            'FlagShiping' => $FlagShiping,
+            'PickupStoresList' => $PickupStoresList,
+            'salesTaxRatesProvinces_Data' => $salesTaxRatesProvinces_Data,
+            'our_company_shiping_cost' => $our_company_shiping_cost,
+            'coupon_code' => $coupon_code,
         ];
         
         return view('checkouts.index', $data);
@@ -186,12 +299,23 @@ class CheckoutsController extends Controller
             $preffered_discount = ($sub_total * 10) / 100;
         }
         
-        // Get tax rate based on billing state
-        $taxData = DB::table('sales_tax_rates_provinces')
-            ->where('id', $address->state)
-            ->first();
+        // Get tax rate based on billing state (replicate CI salesTaxRatesProvincesById)
+        $tax_rate = 0;
+        // Prefer new normalized table if it exists
+        if (Schema::hasTable('sales_tax_rates_provinces')) {
+            $taxData = DB::table('sales_tax_rates_provinces')
+                ->where('state_id', $address->state)
+                ->first();
+            $tax_rate = $taxData->total_tax_rate ?? 0;
+        }
+        // Fallback to legacy CI table name if present
+        elseif (Schema::hasTable('sales-tax-rates-provinces')) {
+            $taxData = DB::table('sales-tax-rates-provinces')
+                ->where('state_id', $address->state)
+                ->first();
+            $tax_rate = $taxData->total_tax_rate ?? 0;
+        }
         
-        $tax_rate = $taxData->total_tax_rate ?? 0;
         $total_sales_tax = ($sub_total * $tax_rate) / 100;
         
         $total_amount = $sub_total - $preffered_discount + $total_sales_tax;
@@ -236,8 +360,10 @@ class CheckoutsController extends Controller
             'delivery_charge' => 0,
             'coupon_code' => '',
             'coupon_discount_amount' => 0,
-            'order_status' => 'pending',
-            'payment_status' => 1, // Convert payment_status string to integer (CI compatibility)
+            // CI uses integer status column; 1 = New / Pending
+            'status' => 1,
+            // Payment status: 1 = pending (matches CI PaymentStatus::Pending)
+            'payment_status' => 1,
         ];
         
         if (!empty($order_id)) {
@@ -349,5 +475,103 @@ class CheckoutsController extends Controller
             'msg' => 'Order placed successfully',
             'order_id' => $order_id
         ]);
+    }
+
+    // ========== Private helper methods (ported from Public\CheckoutController for CI compatibility) ==========
+
+    private function getStateById($id)
+    {
+        if (empty($id)) {
+            return [];
+        }
+        $state = DB::table('states')->where('id', $id)->first();
+        return $state ? (array) $state : [];
+    }
+
+    private function getCountryById($id)
+    {
+        if (empty($id)) {
+            return [];
+        }
+        $country = DB::table('countries')->where('id', $id)->first();
+        return $country ? (array) $country : [];
+    }
+
+    private function getCityById($id)
+    {
+        if (empty($id)) {
+            return [];
+        }
+        $city = DB::table('cities')->where('id', $id)->first();
+        return $city ? (array) $city : [];
+    }
+
+    private function salesTaxRatesProvincesById($state_id)
+    {
+        if (empty($state_id)) {
+            return ['total_tax_rate' => 0];
+        }
+
+        // Match CI Address_Model::salesTaxRatesProvincesById, but be tolerant to
+        // either the legacy dashed table name or a normalized underscored one.
+        if (Schema::hasTable('sales_tax_rates_provinces')) {
+            $tax = DB::table('sales_tax_rates_provinces')
+                ->where('state_id', $state_id)
+                ->first();
+        } elseif (Schema::hasTable('sales-tax-rates-provinces')) {
+            $tax = DB::table('sales-tax-rates-provinces')
+                ->where('state_id', $state_id)
+                ->first();
+        } else {
+            $tax = null;
+        }
+
+        return $tax ? (array) $tax : ['total_tax_rate' => 0];
+    }
+
+    private function getOrderProductCount($order_id)
+    {
+        if (empty($order_id)) {
+            return 0;
+        }
+
+        return DB::table('product_order_items')
+            ->join('provider_products', 'product_order_items.product_id', '=', 'provider_products.product_id')
+            ->where('product_order_items.order_id', $order_id)
+            ->count();
+    }
+
+    private function sinaShippingMethods($order_id)
+    {
+        // Placeholder for Sina API integration. Kept for CI parity.
+        // Return structure: [['code', 'service_name', 'price'], ...]
+        return [];
+    }
+
+    private function getStoreDataById($id)
+    {
+        if (empty($id)) {
+            return [];
+        }
+        $store = DB::table('stores')->where('id', $id)->first();
+        return $store ? (array) $store : [];
+    }
+
+    private function calculateShippingCost($total_amount)
+    {
+        // Implement custom company shipping cost rules if needed.
+        // For now, mirror Public\CheckoutController stub and return 0.
+        return 0;
+    }
+
+    private function getPickupStoresList()
+    {
+        // CI: Store_Model->getPickupStoresList() reads from `pickup_stores` table
+        return DB::table('pickup_stores')
+            ->get()
+            ->map(function ($item) {
+                return (array) $item;
+            })
+            ->toArray();
     }
 }

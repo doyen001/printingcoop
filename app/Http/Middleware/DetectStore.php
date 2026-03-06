@@ -210,6 +210,8 @@ class DetectStore
      */
     private function getCurrencyList()
     {
+        // Underlying table is `currency` in CI; Eloquent model should already
+        // point to correct table, but keep this for clarity if customized.
         $currencies = Currency::all();
         
         $AllCurrencyList = [];

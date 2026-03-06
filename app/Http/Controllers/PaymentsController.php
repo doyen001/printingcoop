@@ -101,26 +101,28 @@ class PaymentsController extends Controller
     {
         $language_name = config('store.language_name', 'english');
         
-        // Get PayPal configuration
-        $paypal_mode = config('payment.paypal_mode', 'sandbox');
-        $paypal_client_id = config('payment.paypal_client_id');
+        // CI-style PayPal redirect: use legacy HTML form redirect to PayPal
+        // based on store main_store_data and currency configuration,
+        // matching Checkouts::SubmitOrder() -> elements/PaypalRedirect.
+        $mainStoreData = config('store.main_store_data', []);
         
-        if (empty($paypal_client_id)) {
-            return redirect()->back()->with('message_error', 'PayPal not configured');
+        // Build currency list as in CI $CurrencyList (table `currency`)
+        $currencyTable = \Schema::hasTable('currencies') ? 'currencies' : 'currency';
+        $currencies = DB::table($currencyTable)->get();
+        $CurrencyList = [];
+        foreach ($currencies as $currency) {
+            $CurrencyList[$currency->id] = (array) $currency;
         }
         
-        // Prepare PayPal data
         $data = [
-            'ProductOrder' => $order,
+            'ProductOrder' => (array) $order,
             'BASE_URL' => url('/'),
             'language_name' => $language_name,
-            'paypal_mode' => $paypal_mode,
-            'paypal_client_id' => $paypal_client_id,
-            'return_url' => url('Payments/paypal_success/' . base64_encode($order_id)),
-            'cancel_url' => url('Payments/paypal_cancel/' . base64_encode($order_id)),
+            'MainStoreData' => $mainStoreData,
+            'CurrencyList' => $CurrencyList,
         ];
         
-        return view('payments.paypal_redirect', $data);
+        return view('elements.PaypalRedirect', $data);
     }
     
     /**
@@ -160,7 +162,8 @@ class PaymentsController extends Controller
         }
         
         // Process payment
-        $currency = DB::table('currencies')->where('id', $order->currency_id ?? 1)->first();
+        $currencyTable = \Schema::hasTable('currencies') ? 'currencies' : 'currency';
+        $currency = DB::table($currencyTable)->where('id', $order->currency_id ?? 1)->first();
         $currency_code = $currency->code ?? 'CAD';
         
         $paymentData = [

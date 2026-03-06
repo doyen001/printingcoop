@@ -35,14 +35,14 @@ class MyOrdersController extends Controller
         $language_name = config('store.language_name', 'english');
         $loginId = session('loginId');
         
-        $orders = DB::table('product_orders')
+        $orderData = DB::table('product_orders')
             ->where('user_id', $loginId)
             ->orderBy('created', 'desc')
             ->paginate(20);
         
         $data = [
             'page_title' => $language_name == 'french' ? 'Historique des commandes' : 'Order History',
-            'orders' => $orders,
+            'orders' => $orderData,
         ];
         
         return view('my_orders.index', $data);
@@ -85,9 +85,19 @@ class MyOrdersController extends Controller
         $shippingCountry = DB::table('countries')->where('id', $order->shipping_country)->first();
         $shippingCity = DB::table('cities')->where('id', $order->shipping_city)->first();
         
-        $salesTaxRates = DB::table('sales_tax_rates_provinces')
-            ->where('id', $order->billing_state)
-            ->first();
+        // Match CI: Address_Model->salesTaxRatesProvincesById($orderData['billing_state'])
+        // and be tolerant to either underscored or dashed table names.
+        if (\Schema::hasTable('sales_tax_rates_provinces')) {
+            $salesTaxRates = DB::table('sales_tax_rates_provinces')
+                ->where('state_id', $order->billing_state)
+                ->first();
+        } elseif (\Schema::hasTable('sales-tax-rates-provinces')) {
+            $salesTaxRates = DB::table('sales-tax-rates-provinces')
+                ->where('state_id', $order->billing_state)
+                ->first();
+        } else {
+            $salesTaxRates = null;
+        }
         
         $data = [
             'page_title' => $language_name == 'french' ? 'Détails de la commande' : 'Order Details',

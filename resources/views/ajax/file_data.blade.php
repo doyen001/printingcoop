@@ -25,7 +25,8 @@
                 </div>
             </div>
             <div class="upload-field">
-                <textarea id="cumment-{{ $return_arr['skey'] }}">{{ $return_arr['cumment'] }}</textarea>
+                <textarea id="cumment-{{ $return_arr['skey'] }}"
+                          name="file_comments[{{ $return_arr['skey'] }}]">{{ $return_arr['cumment'] }}</textarea>
             </div>
         </div>
     </div>

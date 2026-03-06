@@ -46,7 +46,7 @@
 
 .shop-cart-table thead th {
     padding: 20px 15px;
-    text-align: left;
+    text-align: center;
     font-weight: 600;
     color: #333;
     font-size: 14px;
@@ -66,6 +66,7 @@
 .shop-cart-table tbody td {
     padding: 20px 15px;
     vertical-align: middle;
+    text-align: center;
 }
 
 .product-remove {
@@ -693,12 +694,12 @@ $(document).ready(function() {
                                     </a>
                                 </td>
                                 <td class="product-thumbnail">
-                                    <a href="{{ url('Products/view/' . base64_encode($list->id)) }}">
+                                    <a href="{{ url('Products/view/' . base64_encode($list->product_id)) }}">
                                         <img src="{{ $imageurl }}" alt="{{ $list->name }}">
                                     </a>
                                 </td>
                                 <td class="product-name">
-                                    <a href="{{ url('Products/view/' . base64_encode($list->id)) }}">
+                                    <a href="{{ url('Products/view/' . base64_encode($list->product_id)) }}">
                                         <span>{{ ucfirst($list->name) }}</span>
                                     </a>
                                 </td>

@@ -2,7 +2,8 @@
 
 @section('content')
 @php
-    $stap = base64_decode($stap ?? base64_encode(1));
+    // Current checkout step provided by controller as integer $step (1-4)
+    $stap = $step ?? 1;
     
     if ($stap == 1) {
         $stap1Title = $language_name == 'french' ? 'Identifiez-vous ou inscrivez-vous' : 'Login Or Signup';
@@ -165,7 +166,7 @@
                                 <div class="universal-dark-title">
                                     <span>{!! $stap2Title !!}</span>
                                     @if($stap > 2)
-                                        <a class="mobile-position" href="{{ url('Checkouts/index/' . base64_encode($stap-1) . '/' . $order_id . '/' . $product_id . '/' . $coupon_code) }}">
+                                        <a class="mobile-position" href="{{ url('Checkouts/index/' . base64_encode($stap-1) . '/' . base64_encode($order_id)) }}">
                                             <button class="btn btn-warning button"  style="float:right;" type="button">
                                                 {{ ($language_name == 'french') ? 'Changement' : 'Change' }}</button>
                                         </a>
@@ -177,8 +178,9 @@
                                     <div class="card-body">
                                         <div class="account-address-area">
                                             <div class="checkout-addresss">
-                                                <form action="{{ url('Checkouts/index/' . base64_encode($stap) . '/' . $order_id . '/' . $product_id . '/' . $coupon_code) }}" method="post">
+                                                <form action="{{ url('Checkouts/saveAddress') }}" method="post">
                                                     @csrf
+                                                    <input type="hidden" name="order_id" value="{{ $order_id }}">
                                                     <div id="exsiting-address">
                                                         <div id="address-list">
                                                             @php
@@ -206,7 +208,13 @@
                                                                                     {{ ucfirst($list['name']) }} {{ $list['mobile'] }} {{ !empty($list['alternate_phone']) ? ',' . $list['alternate_phone'] : '' }}
                                                                                     {{ !empty($list['company_name']) ? '(' . $list['company_name'] . ')' : '' }}</span>
                                                                                 <br>
-                                                                                <span class="tt-t">{{ $list['address'] }}, {{ $list['cityName'] }}, {{ $list['StateName'] }}, {{ $list['CountryName'] }} - <strong>{{ $list['pin_code'] }}</strong></span>
+                                                                                <span class="tt-t">
+                                                                                    {{ $list['address'] }},
+                                                                                    {{ $list['cityName'] ?? $list['city'] ?? '' }},
+                                                                                    {{ $list['StateName'] ?? $list['state'] ?? '' }},
+                                                                                    {{ $list['CountryName'] ?? $list['country'] ?? '' }}
+                                                                                    - <strong>{{ $list['pin_code'] }}</strong>
+                                                                                </span>
                                                                             </div>
                                                                         </label>
                                                                     </div>
@@ -364,7 +372,7 @@
                                         @php
                                             $stap_old = $stap - 1;
                                         @endphp
-                                        <a class="mobile-position" href="{{ url('Checkouts/index/' . base64_encode($stap_old) . '/' . $order_id . '/' . $product_id . '/' . $coupon_code) }}">
+                                        <a class="mobile-position" href="{{ url('Checkouts/index/' . base64_encode($stap_old) . '/' . base64_encode($order_id)) }}">
                                             <button class="btn btn-warning button" style="float:right;" type="button">Change</button>
                                         </a>
                                     @endif
@@ -375,10 +383,12 @@
                                 <div id="collapse3" class="collapse show" aria-labelledby="heading3" data-parent="#accordion">
                                     <div class="card-body">
                                         <div class="shipping_method-fields">
-                                            <form action="{{ url('Checkouts/index/' . base64_encode($stap) . '/' . $order_id . '/' . $product_id . '/' . $coupon_code) }}" method="post">
+                                            <form action="{{ url('Checkouts/saveShipping') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="order_id" value="{{ $order_id }}">
                                                 @csrf
                                                 @php
-                                                    $shipping_method_formate = $ProductOrder['shipping_method_formate'];
+                                                    $shipping_method_formate = $ProductOrder['shipping_method_formate'] ?? '';
                                                     $upsServiceCode = upsServiceCode();
                                                 @endphp
 
@@ -388,7 +398,7 @@
                                                     @endphp
                                                     <div class="shipping-metthod-single">
                                                         <label>
-                                                            <input type="radio" name="shipping_method_formate" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
+                                                            <input type="radio" name="shipping_method" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
                                                             <div class="row">
                                                                 <div class="col-md-12 col-lg-3 col-xl-2">
                                                                     <strong>{{ $product_price_currency_symbol . $val->TotalCharges->MonetaryValue }}</strong>
@@ -404,13 +414,13 @@
                                                     </div>
                                                 @endforeach
 
-                                                @foreach ($CanedaPostShiping['list'] as $key => $val)
+                                                @foreach (($CanedaPostShiping['list'] ?? []) as $key => $val)
                                                     @php
                                                         $value = 'canadapost-' . $val['price'] . '-' . $val['service_name'];
                                                     @endphp
                                                     <div class="shipping-metthod-single">
                                                         <label>
-                                                            <input type="radio" name="shipping_method_formate" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
+                                                            <input type="radio" name="shipping_method" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
                                                             <div class="row">
                                                                 <div class="col-md-12 col-lg-3 col-xl-2">
                                                                     <strong>{{ $product_price_currency_symbol . $val['price'] }}</strong>
@@ -432,7 +442,7 @@
                                                     @endphp
                                                     <div class="shipping-metthod-single">
                                                         <label>
-                                                            <input type="radio" name="shipping_method_formate" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
+                                                            <input type="radio" name="shipping_method" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
                                                             <div class="row">
                                                                 <div class="col-md-12 col-lg-12 col-xl-2">
                                                                     <strong>{{ ($language_name == 'french') ? 'Livraison gratuite' : 'Free Delivery' }}</strong>
@@ -463,7 +473,7 @@
                                                     @endphp
                                                     <div class="shipping-metthod-single">
                                                         <label>
-                                                            <input type="radio" name="shipping_method_formate" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
+                                                            <input type="radio" name="shipping_method" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
                                                             <div class="row">
                                                                 <div class="col-md-12 col-lg-3 col-xl-2">
                                                                     <strong>
@@ -485,14 +495,14 @@
                                                     </div>
                                                 @endforeach
 
-                                                @if ($ProductOrder['provider_product_count'] == 0)
+                                                @if (($ProductOrder['provider_product_count'] ?? 0) == 0)
                                                     @foreach ($PickupStoresList as $key => $val)
                                                         @php
                                                             $value = 'pickupinstore-0.00-' . $val['id'];
                                                         @endphp
                                                         <div class="shipping-metthod-single">
                                                             <label>
-                                                                <input type="radio" name="shipping_method_formate" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
+                                                                <input type="radio" name="shipping_method" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
                                                                 <div class="row">
                                                                     <div class="col-md-12 col-lg-12 col-xl-2">
                                                                         <strong>{{ ($language_name == 'french') ? 'Livraison gratuite' : 'Free Delivery' }}</strong>
@@ -521,9 +531,9 @@
                                 </div>
                             @endif
                         </div>
-                        <form action="{{ url('Checkouts/SubmitOrder') }}" id="place-order-form" method="post">
+                        <form action="{{ url('Payments/process') }}" id="place-order-form" method="post">
                             @csrf
-                            <input type="hidden" name="order_id" value="{{ base64_decode($order_id) }}">
+                            <input type="hidden" name="order_id" value="{{ $order_id }}">
                             <div class="card">
                                 <div class="card-header {{ $stap == 4 ? '' : 'collapsed' }}" id="heading4" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
                                     <div class="universal-dark-title">
@@ -606,38 +616,49 @@
                                         @foreach ($ProductOrderItem as $item)
                                             @php
                                                 $product_id = $item['product_id'];
-                                                // Assuming you have a method to get product
-                                                // $Product = Product::find($product_id);
-                                                
                                                 $cart_images = json_decode($item['cart_images'], true);
+
+                                                // Handle both legacy provider_product_id (may be missing) and standard attribute_ids
                                                 
-                                                if ($item['provider_product_id']) {
+                                                if (!empty(json_decode($item['attribute_ids'], true)['provider_product_id'] ?? null)) {
                                                     $attribute_ids = sina_options_map($item['attribute_ids']);
                                                 } else {
                                                     $attribute_ids = json_decode($item['attribute_ids'], true);
                                                 }
-                                                
-                                                $product_size = json_decode($item['product_size'], true);
-                                                $product_width_length = json_decode($item['product_width_length'], true);
-                                                $page_product_width_length = json_decode($item['page_product_width_length'], true);
-                                                $product_depth_length_width = json_decode($item['product_depth_length_width'], true);
-                                                
+
+                                                // Support both JSON strings (CI-style) and already-decoded arrays
+                                                $product_size = is_array($item['product_size'])
+                                                    ? $item['product_size']
+                                                    : json_decode($item['product_size'], true);
+
+                                                $product_width_length = is_array($item['product_width_length'])
+                                                    ? $item['product_width_length']
+                                                    : json_decode($item['product_width_length'], true);
+
+                                                $page_product_width_length = is_array($item['page_product_width_length'])
+                                                    ? $item['page_product_width_length']
+                                                    : json_decode($item['page_product_width_length'], true);
+
+                                                $product_depth_length_width = is_array($item['product_depth_length_width'])
+                                                    ? $item['product_depth_length_width']
+                                                    : json_decode($item['product_depth_length_width'], true);
+
                                                 $votre_text = $item['votre_text'];
                                                 $recto_verso = $recto_verso_french = $item['recto_verso'];
                                                 $imageurl = getProductImage($item['product_image']);
                                             @endphp
                                             <tr>
                                                 <td class="product-thumbnail">
-                                                    <a href="{{ url('Products/view/' . base64_encode($item['id'])) }}" target="_blank">
+                                                    <a href="{{ url('Products/view/' . base64_encode($product_id)) }}" target="_blank">
                                                         <img src="{{ $imageurl }}">
                                                     </a>
                                                 </td>
                                                 <td class="product-name">
-                                                    <a href="{{ url('Products/view/' . base64_encode($item['id'])) }}" target="_blank">
+                                                    <a href="{{ url('Products/view/' . base64_encode($product_id)) }}" target="_blank">
                                                         @if ($language_name == 'french')
-                                                            {{ ucfirst($Product['name_french'] ?? '') }}
+                                                            {{ ucfirst($item['name_french'] ?? '') }}
                                                         @else
-                                                            {{ ucfirst($Product['name'] ?? '') }}
+                                                            {{ ucfirst($item['name'] ?? '') }}
                                                         @endif
                                                     </a>
                                                     <div class="row align-items-center">
@@ -896,35 +917,50 @@
                                             <strong>{{ ($language_name == 'french') ? 'Appliquer' : 'Apply' }} Shipping Method</strong>
                                         </div>
                                         <div class="col-7 col-md-6">
-                                            @if ($ProductOrder['shipping_method_formate'])
+                                            @if (!empty($ProductOrder['shipping_method_formate'] ?? null))
                                                 @php
                                                     $shipping_method_formate = explode('-', $ProductOrder['shipping_method_formate']);
                                                     $upsServiceCode = upsServiceCode();
+                                                    
+                                                    // Ensure we have enough array elements
+                                                    if (count($shipping_method_formate) < 3) {
+                                                        $shipping_method_formate = array_pad($shipping_method_formate, 3, '');
+                                                    }
                                                 @endphp
                                                 <span>
-                                                    @if ($shipping_method_formate[0] === 'ups')
-                                                        {{ $upsServiceCode[$shipping_method_formate[2]] }} (UPS)
+                                                    @if ($shipping_method_formate[0] == 'ups')
+                                                        {{ $upsServiceCode[$shipping_method_formate[2]] ?? '' }} (UPS)
                                                     @elseif ($shipping_method_formate[0] == 'canadapost')
-                                                        {{ $shipping_method_formate[2] }} (Canada Post)
+                                                        {{ $shipping_method_formate[2] ?? '' }} (Canada Post)
                                                     @elseif ($shipping_method_formate[0] == 'flagship')
                                                         @php
-                                                            $codeData = FlagShipServiceCode($shipping_method_formate[2]);
+                                                            $codeData = FlagShipServiceCode($shipping_method_formate[2] ?? '');
                                                         @endphp
-                                                        {!! $codeData['courier_name'] . '<br>' . $codeData['courier_desc'] . '</br>(FlagShip)' !!}
+                                                        {!! ($codeData['courier_name'] ?? '') . '<br>' . ($codeData['courier_desc'] ?? '') . '<br/>(FlagShip)' !!}
                                                     @elseif ($shipping_method_formate[0] == 'pickupinstore')
                                                         @php
-                                                            // Assuming you have Store model
-                                                            // $pickupStore = Store::find($shipping_method_formate[2]);
+                                                            $pickupStore = [];
+                                                            if (!empty($shipping_method_formate[2])) {
+                                                                // Use Store model to get pickup store information
+                                                                try {
+                                                                    $pickupStore = \App\Models\Store::find($shipping_method_formate[2]);
+                                                                    if (!$pickupStore) {
+                                                                        $pickupStore = [];
+                                                                    }
+                                                                } catch (\Exception $e) {
+                                                                    $pickupStore = [];
+                                                                }
+                                                            }
                                                         @endphp
-                                                        Pickup In Store<br>{{ $pickupStore['name'] ?? '' }}<br>{{ $pickupStore['address'] ?? '' }}<br>{{ $pickupStore['phone'] ?? '' }}
+                                                        Pickup In Store<br>{{ $pickupStore->name ?? '' }}<br>{{ $pickupStore->address ?? '' }}<br>{{ $pickupStore->phone ?? '' }}
                                                     @endif
-                                                    <br><strong>{{ $product_price_currency_symbol . ucfirst($shipping_method_formate[1]) }}</strong>
+                                                    <br><strong>{{ $product_price_currency_symbol . ucfirst($shipping_method_formate[1] ?? '') }}</strong>
                                                 </span>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
-                                <form action="{{ url('Checkouts/index/' . base64_encode($stap) . '/' . $order_id . '/' . $product_id . '/' . $coupon_code) }}" onsubmit="$('#loader-img').show()">
+                                <form action="{{ url('Checkouts/index/' . base64_encode($stap) . '/' . base64_encode($order_id)) }}" onsubmit="$('#loader-img').show()">
                                     <div class="single-cart-total">
                                         <div class="row align-items-center">
                                             <div class="col-5 col-md-12 col-lg-12 col-xl-6">

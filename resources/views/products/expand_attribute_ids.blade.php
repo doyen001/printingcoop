@@ -18,14 +18,28 @@
             @endif
             
             @php
-                // Multi-language support - handle both object and array access
+                // Skip primitive values (we expect object/array structures)
                 $is_object = is_object($val);
+                $is_array = is_array($val);
+                if (!$is_object && !$is_array) {
+                    continue;
+                }
+
+                // Multi-language support - handle both object and array access
                 if ($language_name == 'French') {
-                    $attribute_name = $is_object ? ($val->attribute_name_french ?? $val->attribute_name) : ($val['attribute_name_french'] ?? $val['attribute_name']);
-                    $item_name = $is_object ? ($val->item_name_french ?? $val->item_name) : ($val['item_name_french'] ?? $val['item_name']);
+                    $attribute_name = $is_object
+                        ? ($val->attribute_name_french ?? $val->attribute_name ?? '')
+                        : ($val['attribute_name_french'] ?? ($val['attribute_name'] ?? ''));
+                    $item_name = $is_object
+                        ? ($val->item_name_french ?? $val->item_name ?? '')
+                        : ($val['item_name_french'] ?? ($val['item_name'] ?? ''));
                 } else {
-                    $attribute_name = $is_object ? $val->attribute_name : $val['attribute_name'];
-                    $item_name = $is_object ? $val->item_name : $val['item_name'];
+                    $attribute_name = $is_object
+                        ? ($val->attribute_name ?? '')
+                        : ($val['attribute_name'] ?? '');
+                    $item_name = $is_object
+                        ? ($val->item_name ?? '')
+                        : ($val['item_name'] ?? '');
                 }
             @endphp
             
@@ -44,12 +58,25 @@
                 @php
                     // Multi-language support for custom attributes - handle both object and array access
                     $is_object = is_object($val);
+                    $is_array = is_array($val);
+                    if (!$is_object && !$is_array) {
+                        continue;
+                    }
+
                     if ($language_name == 'French') {
-                        $attribute_name = $is_object ? ($val->attribute_name_french ?? $val->attribute_name) : ($val['attribute_name_french'] ?? $val['attribute_name']);
-                        $item_name = $is_object ? ($val->item_name_french ?? $val->item_name) : ($val['item_name_french'] ?? $val['item_name']);
+                        $attribute_name = $is_object
+                            ? ($val->attribute_name_french ?? $val->attribute_name ?? '')
+                            : ($val['attribute_name_french'] ?? ($val['attribute_name'] ?? ''));
+                        $item_name = $is_object
+                            ? ($val->item_name_french ?? $val->item_name ?? '')
+                            : ($val['item_name_french'] ?? ($val['item_name'] ?? ''));
                     } else {
-                        $attribute_name = $is_object ? $val->attribute_name : $val['attribute_name'];
-                        $item_name = $is_object ? $val->item_name : $val['item_name'];
+                        $attribute_name = $is_object
+                            ? ($val->attribute_name ?? '')
+                            : ($val['attribute_name'] ?? '');
+                        $item_name = $is_object
+                            ? ($val->item_name ?? '')
+                            : ($val['item_name'] ?? '');
                     }
                 @endphp
                 

@@ -313,7 +313,8 @@ class PdfGenerator
     
     private function getCurrencyList()
     {
-        $currencies = DB::table('currencies')->get();
+        $currencyTable = \Schema::hasTable('currencies') ? 'currencies' : 'currency';
+        $currencies = DB::table($currencyTable)->get();
         $result = [];
         
         foreach ($currencies as $currency) {

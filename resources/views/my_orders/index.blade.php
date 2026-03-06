@@ -321,84 +321,207 @@
                 </div><br>
                 
                 <div class="order-display-section">
-                    @if(!empty($orders) && count($orders) > 0)
-                        @foreach($orders as $order)
+                    @if(!empty($orderData))
+                        @foreach($orderData as $list)
+                            @php
+                                $currency_id = $list['currency_id'] ?? 1;
+                                $OrderCurrencyData = $CurrencyList[$currency_id] ?? [];
+                                $order_currency_currency_symbol = $OrderCurrencyData['symbols'] ?? '$';
+                            @endphp
                             <div class="single-order-display">
+
                                 <div class="email-field1">
                                     <div class="row align-items-center">
                                         <div class="col-7 col-md-4 col-lg-3 col-xl-3">
                                             <div class="order-id">
-                                                <button type="submit">{{ $order->order_id ?? 'N/A' }}</button>
+                                                <button type="submit">{{ $list['order_id'] }}</button>
                                             </div>
                                         </div>
                                         <div class="col-5 col-md-3 col-lg-3 col-xl-3">
                                             <div class="status-btn">
-                                                {{-- Order status badge --}}
-                                                @php
-                                                    $statusClass = '';
-                                                    $statusText = '';
-                                                    switch($order->status ?? 0) {
-                                                        case 1:
-                                                            $statusClass = 'pending';
-                                                            $statusText = $language_name == 'french' ? 'En attente' : 'Pending';
-                                                            break;
-                                                        case 2:
-                                                            $statusClass = 'processing';
-                                                            $statusText = $language_name == 'french' ? 'Traitement' : 'Processing';
-                                                            break;
-                                                        case 3:
-                                                            $statusClass = 'shipped';
-                                                            $statusText = $language_name == 'french' ? 'Expédié' : 'Shipped';
-                                                            break;
-                                                        case 4:
-                                                            $statusClass = 'delivered';
-                                                            $statusText = $language_name == 'french' ? 'Livré' : 'Delivered';
-                                                            break;
-                                                        case 5:
-                                                            $statusClass = 'completed';
-                                                            $statusText = $language_name == 'french' ? 'Complété' : 'Completed';
-                                                            break;
-                                                        case 6:
-                                                            $statusClass = 'cancelled';
-                                                            $statusText = $language_name == 'french' ? 'Annulé' : 'Cancelled';
-                                                            break;
-                                                        default:
-                                                            $statusClass = 'pending';
-                                                            $statusText = $language_name == 'french' ? 'En attente' : 'Pending';
-                                                    }
-                                                @endphp
-                                                <span class="status-{{ $statusClass }}">{{ $statusText }}</span>
+                                                {{ $language_name == 'french' ? getOrderSatusClassFrench($list['status']) : getOrderSatusClass($list['status']) }}
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-12 col-md-5 col-lg-6 col-xl-6 text-right">
                                             <div class="order-id-button">
-                                                <a href="{{ url('MyOrders/view/' . base64_encode($order->id)) }}">
+                                                @if(in_array($list['status'], [6, 7, 8]))
+                                                    <a href="{{ url('MyOrders/deleteOrder/' . base64_encode($list['id'])) }}"
+                                                        onclick="return confirm('Are you sure you want to delete this order?');">
+                                                        <button type="button">
+                                                            {{ $language_name == 'french' ? 'supprimer' : 'delete' }}
+                                                        </button>
+                                                    </a>
+                                                @endif
+                                                @if(in_array($list['status'], [2, 3, 4]))
+                                                    <a href="javascript:void(0)" onclick="changeOrderStatus('{{ $list['id'] }}',6)">
+                                                        <button type="submit">
+                                                            {{ $language_name == 'french' ? 'Annuler' : 'cancel' }}
+                                                        </button>
+                                                    </a>
+                                                @endif
+                                                <a href="{{ url('MyOrders/view/' . base64_encode($list['id'])) }}">
                                                     <button class="view-details-btn" type="button">
                                                         {{ $language_name == 'french' ? "Voir l'ordre" : 'View Order' }}
+                                                    </button>
+                                                </a>
+                                                @php
+                                                    if ($language_name == 'french') {
+                                                        $file_name = $list['order_id'] . "-fr-invoice.pdf";
+                                                        $file_name = strtolower($file_name);
+                                                        $InvoiceText = 'Facture Pdf';
+                                                    } else {
+                                                        $file_name = $list['order_id'] . "-invoice.pdf";
+                                                        $file_name = strtolower($file_name);
+                                                        $InvoiceText = 'Invoice Pdf';
+                                                    }
+                                                    $linkInvoice = url('MyOrders/downloadOrderPdf/' . $list['id'] . '/invoice');
+                                                @endphp
+
+                                                <a href="{{ $linkInvoice }}">
+                                                    <button class="view-details-btn" type="button">
+                                                        <i class="fa fas fa-file-download"></i> {{ $InvoiceText }}
+                                                    </button>
+                                                </a>
+                                                @php
+                                                    if ($language_name == 'french') {
+                                                        $file_name = $list['order_id'] . "-fr-order.pdf";
+                                                        $file_name = strtolower($file_name);
+                                                        $OrderText = 'Commander Pdf';
+                                                    } else {
+                                                        $file_name = $list['order_id'] . "-order.pdf";
+                                                        $file_name = strtolower($file_name);
+                                                        $OrderText = 'Order Pdf';
+                                                    }
+                                                    $linkOrder = url('MyOrders/downloadOrderPdf/' . $list['id'] . '/order');
+                                                @endphp
+                                                <a href="{{ $linkOrder }}">
+                                                    <button class="view-details-btn" type="button">
+                                                        <i class="fa fas fa-file-download"></i> {{ $OrderText }}
                                                     </button>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
+                                <div class="cart-product-display">
+                                    <table>
+                                        <tbody>
+                                            @foreach($list['OrderItem'] as $item)
+                                            <tr>
+                                                <td style="width: 80px;">
+                                                    <div class="cart-product-img">
+                                                        <a href="{{ url('Products/view/' . base64_encode($item['product_id'])) }}">
+                                                            @php
+                                                                $imageurl = getProductImage($item['product_image']);
+                                                                $personailise = $item['personailise'];
+                                                                $personailise_image = $item['personailise_image'];
+                                                                $Personalised = 'Unpersonalised';
+                                                                if ($personailise == 1 && !empty($personailise_image)) {
+                                                                    $Personalised = 'Personalised';
+                                                                    $imageurl = asset('uploads/personailise/' . $personailise_image);
+                                                                }
+                                                            @endphp
+                                                            <img src="{{ $imageurl }}">
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cart-product-desc">
+                                                        <div class="cart-product-title">
+                                                            <a href="{{ url('Products/view/' . base64_encode($item['product_id'])) }}">
+                                                                <span>
+                                                                    {{ $language_name == 'french' ? $item['name_french'] : $item['name'] }}
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cart-product-price">
+                                                        <span>{{ $item['quantity'] }}</span>X<span>{{ $order_currency_currency_symbol . number_format($item['price'], 2) }}</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="email-text1">
+                                                        <div class="cart-product-price">
+                                                            <span>{{ $order_currency_currency_symbol . number_format($item['subtotal'], 2) }}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div class="email-field1">
                                     <div class="row align-items-center">
                                         <div class="col-12 col-sm-7 col-md-7">
                                             <div class="order-id">
                                                 <span>
                                                     {{ $language_name == 'french' ? 'Commandé le' : 'Ordered On' }}
-                                                    <strong>{{ $order->created ? date('M d, Y', strtotime($order->created)) : 'N/A' }}</strong>
+                                                    <strong>{{ dateFormate($list['created']) }}</strong>
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-5 col-md-5 text-right">
                                             <div class="order-id">
                                                 <span>
-                                                    {{ $language_name == 'french' ? "Total de la commande" : 'Order Total' }}:
+                                                    {{ $language_name == 'french' ? 'Sous-total' : 'Sub Total' }}:
                                                     <strong>
-                                                        ${{ number_format($order->total_amount ?? 0, 2) }}
+                                                        {{ $order_currency_currency_symbol . number_format($list['sub_total_amount'], 2) }}
+                                                    </strong>
+                                                </span>
+                                            </div>
+                                            @if(!empty($list['preffered_customer_discount']) && $list['preffered_customer_discount'] != "0.00")
+                                                <div class="order-id">
+                                                    <span>
+                                                        {{ $language_name == 'french' ? 'Remise client privilégiée' : 'Preffered Customer Discount' }}:
+                                                        <strong>
+                                                            {{ '-' . $order_currency_currency_symbol . number_format($list['preffered_customer_discount'], 2) }}
+                                                        </strong>
+                                                    </span>
+                                                </div>
+                                            @endif
+                                            @if(!empty($list['coupon_discount_amount']) && $list['coupon_discount_amount'] != "0.00")
+                                                <div class="order-id">
+                                                    <span>
+                                                        {{ $language_name == 'french' ? 'Remise du coupon' : 'Coupon Discount' }}:
+                                                        <strong>
+                                                            {{ '-' . $order_currency_currency_symbol . number_format($list['coupon_discount_amount'], 2) }}
+                                                        </strong>
+                                                    </span>
+                                                </div>
+                                            @endif
+                                            <div class="order-id">
+                                                <span>
+                                                    {{ $language_name == 'french' ? "Frais d'expédition" : 'Shipping Fee' }}:
+                                                    <strong>
+                                                        {{ $order_currency_currency_symbol . number_format($list['delivery_charge'], 2) }}
+                                                    </strong>
+                                                </span>
+                                            </div>
+                                            @if(!empty($list['total_sales_tax']) && $list['total_sales_tax'] != '0.00')
+                                                @php
+                                                    // Note: You'll need to implement this helper function in Laravel
+                                                    // $salesTaxRatesProvinces_Data = getSalesTaxRatesProvincesById($list['billing_state']);
+                                                    $taxType = 'Tax'; // Default fallback
+                                                    $taxRate = 0; // Default fallback
+                                                @endphp
+                                                <div class="order-id">
+                                                    <span>
+                                                        Total {{ $taxType }} {{ number_format($taxRate, 2) }}%:
+                                                        <strong>
+                                                            {{ $order_currency_currency_symbol . number_format($list['total_sales_tax'], 2) }}
+                                                        </strong>
+                                                    </span>
+                                                </div>
+                                            @endif
+
+                                            <div class="order-id">
+                                                <span>{{ $language_name == 'french' ? "Total de la commande" : 'Order Total' }}:
+                                                    <strong>
+                                                        {{ $order_currency_currency_symbol . number_format($list['total_amount'], 2) }}
                                                     </strong>
                                                 </span>
                                             </div>
