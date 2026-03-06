@@ -181,8 +181,7 @@ class CheckoutsController extends Controller
                 }
             }
         } else {
-            // dd("testing");
-            // Create new order from cart
+            // Create new order from cart (matches CI logic - no order_id set yet)
             $ProductOrder['sub_total_amount'] = $this->cart->total();
             $ProductOrder['total_amount'] = $this->cart->total();
             $ProductOrder['preffered_customer_discount'] = 0;
@@ -200,7 +199,19 @@ class CheckoutsController extends Controller
                 }
             }
             
-            // Prepare order items from cart
+            // Get main store data (matches CI main_store_data)
+            $main_store_data = DB::table('stores')->where('main_store', 1)->first();
+            if (!$main_store_data) {
+                $main_store_data = DB::table('stores')->first();
+            }
+            
+            // Set store-related fields (matches CI)
+            $ProductOrder['currency_id'] = $main_store_data->default_currency_id ?? 1;
+            $ProductOrder['store_id'] = $main_store_data->id;
+            $ProductOrder['payment_mode'] = $main_store_data->paypal_payment_mode ?? 'paypal';
+            
+            // Note: order_id is NOT set here - it's generated when order is saved (matches CI logic)
+            // The order_id will be created in saveAddress() method using: prefix + insert_id items from cart
             $items = $this->cart->contents();
             foreach ($items as $key => $item) {
                 $productData = DB::table('products')->where('id', $item['id'])->first();
@@ -262,6 +273,9 @@ class CheckoutsController extends Controller
      * Save address and create/update order
      * CI: Checkouts->index() POST handling lines 340-476
      */
+    /**
+     * Save address and order (matches CI checkout step 2)
+     */
     public function saveAddress(Request $request)
     {
         $language_name = config('store.language_name', 'english');
@@ -288,18 +302,25 @@ class CheckoutsController extends Controller
         
         $order_id = $request->order_id ?? 0;
         
-        // Get cart data
+        // Get cart data (matches CI cart logic)
         $cart = new CartService();
         $sub_total = $cart->total();
         $total_items = $cart->totalItems();
         
-        // Calculate preferred customer discount
+        // Get main store data (matches CI main_store_data)
+        $main_store_data_obj = DB::table('stores')->where('main_store', 1)->first();
+        if (!$main_store_data_obj) {
+            $main_store_data_obj = DB::table('stores')->first();
+        }
+        $main_store_data = (array) $main_store_data_obj;
+        
+        // Calculate preferred customer discount (matches CI logic)
         $preffered_discount = 0;
         if ($userData->user_type == 2 && $userData->preferred_status == 1) {
             $preffered_discount = ($sub_total * 10) / 100;
         }
         
-        // Get tax rate based on billing state (replicate CI salesTaxRatesProvincesById)
+        // Get tax rate based on billing state (matches CI salesTaxRatesProvincesById)
         $tax_rate = 0;
         // Prefer new normalized table if it exists
         if (Schema::hasTable('sales_tax_rates_provinces')) {
@@ -317,10 +338,9 @@ class CheckoutsController extends Controller
         }
         
         $total_sales_tax = ($sub_total * $tax_rate) / 100;
-        
         $total_amount = $sub_total - $preffered_discount + $total_sales_tax;
         
-        // Prepare order data
+        // Prepare order data (matches CI PostData structure)
         $orderData = [
             'user_id' => $loginId,
             'name' => session('loginName'),
@@ -360,56 +380,90 @@ class CheckoutsController extends Controller
             'delivery_charge' => 0,
             'coupon_code' => '',
             'coupon_discount_amount' => 0,
-            // CI uses integer status column; 1 = New / Pending
-            'status' => 1,
+            // CI uses integer status column; 2 = New (matches database default)
+            'status' => 2,
             // Payment status: 1 = pending (matches CI PaymentStatus::Pending)
             'payment_status' => 1,
+            
+            // Additional fields from CI
+            'currency_id' => $main_store_data['default_currency_id'] ?? 1,
+            'store_id' => $main_store_data['id'],
+            'payment_mode' => $main_store_data['paypal_payment_mode'] ?? 'paypal',
         ];
-        
         if (!empty($order_id)) {
-            // Update existing order
+            // Update existing order (matches CI logic)
             $orderData['id'] = $order_id;
             DB::table('product_orders')->where('id', $order_id)->update($orderData);
             $insert_id = $order_id;
         } else {
-            // Create new order
+            // Create new order (matches CI logic)
             $orderData['created'] = now();
             $insert_id = DB::table('product_orders')->insertGetId($orderData);
             
-            // Update order_id with prefix
-            $order_prefix = config('store.order_id_prefix', 'ORD');
+            // Update order_id with prefix (matches CI logic)
+            // dd("order_id_prefix: ", $main_store_data['order_id_prefix']);
+            $order_prefix = $main_store_data['order_id_prefix'] ?? 'ORD';
             DB::table('product_orders')->where('id', $insert_id)->update([
                 'order_id' => $order_prefix . $insert_id
             ]);
+        }
+        
+        // Save order items (matches CI ProductOrderItem logic)
+        $items = $cart->contents();
+        foreach ($items as $item) {
+            $productData = DB::table('products')->where('id', $item['id'])->first();
             
-            // Save order items
-            $items = $cart->contents();
-            foreach ($items as $item) {
-                $productData = DB::table('products')->where('id', $item['id'])->first();
+            $orderItemData = [
+                'order_id' => $insert_id,
+                'product_id' => $item['id'],
+                'name' => substr($productData->name ?? '', 0, 255),
+                'name_french' => substr($productData->name_french ?? '', 0, 250),
+                'price' => $item['price'],
+                'quantity' => $item['qty'],
+                'subtotal' => $item['subtotal'],
+                'product_image' => substr($productData->product_image ?? '', 0, 200),
+                'short_description' => substr($productData->short_description ?? '', 0, 250),
+                'short_description_french' => substr($productData->short_description_french ?? '', 0, 250),
+                'full_description' => $productData->full_description ?? '',
+                'full_description_french' => $productData->full_description_french ?? '',
+                'discount' => $productData->discount ?? 0,
+                'code' => substr($productData->code ?? '', 0, 50),
+                'brand' => substr($productData->brand ?? '', 0, 50),
+                'delivery_charge' => $productData->delivery_charge ?? 0,
+                'total_stock' => $productData->total_stock ?? 0,
+                'shipping_box_length' => $productData->shipping_box_length ?? 0,
+                'shipping_box_width' => $productData->shipping_box_width ?? 0,
+                'shipping_box_height' => $productData->shipping_box_height ?? 0,
+                'shipping_box_weight' => $productData->shipping_box_weight ?? 0,
                 
-                DB::table('product_order_items')->insert([
-                    'order_id' => $insert_id,
-                    'product_id' => $item['id'],
-                    'name' => $productData->name ?? '',
-                    'name_french' => $productData->name_french ?? '',
-                    'price' => $item['price'],
-                    'quantity' => $item['qty'],
-                    'subtotal' => $item['subtotal'],
-                    'product_image' => $productData->product_image ?? '',
-                    'cart_images' => json_encode($item['options']['cart_images'] ?? []),
-                    'attribute_ids' => json_encode($item['options']['attribute_ids'] ?? []),
-                    'product_size' => json_encode($item['options']['product_size'] ?? []),
-                    'product_width_length' => json_encode($item['options']['product_width_length'] ?? []),
-                    'page_product_width_length' => json_encode($item['options']['page_product_width_length'] ?? []),
-                    'product_depth_length_width' => json_encode($item['options']['product_depth_length_width'] ?? []),
-                    'votre_text' => $item['options']['votre_text'] ?? '',
-                    'recto_verso' => $item['options']['recto_verso'] ?? '',
-                    'created' => now(),
-                ]);
+                // Cart options (JSON encoded like CI)
+                'cart_images' => json_encode($item['options']['cart_images'] ?? []),
+                'attribute_ids' => json_encode($item['options']['attribute_ids'] ?? []),
+                'product_size' => json_encode($item['options']['product_size'] ?? []),
+                'product_width_length' => json_encode($item['options']['product_width_length'] ?? []),
+                'page_product_width_length' => json_encode($item['options']['page_product_width_length'] ?? []),
+                'product_depth_length_width' => json_encode($item['options']['product_depth_length_width'] ?? []),
+                'votre_text' => $item['options']['votre_text'] ?? '',
+                'recto_verso' => $item['options']['recto_verso'] ?? '',
+                // Note: provider_product_id is NOT saved in product_order_items table in CI
+                // It's only retrieved via JOIN when reading data
+                
+                'created' => now(),
+            ];
+            
+            if (!empty($order_id)) {
+                // Update existing order item
+                DB::table('product_order_items')
+                    ->where('order_id', $insert_id)
+                    ->where('product_id', $item['id'])
+                    ->update($orderItemData);
+            } else {
+                // Insert new order item
+                DB::table('product_order_items')->insert($orderItemData);
             }
         }
         
-        // Redirect to next step
+        // Redirect to next step (matches CI logic)
         $next_step = 3;
         return redirect('Checkouts/index/' . base64_encode($next_step) . '/' . base64_encode($insert_id));
     }
@@ -421,25 +475,45 @@ class CheckoutsController extends Controller
     {
         $order_id = $request->order_id;
         $shipping_method = $request->shipping_method;
-        
+
         if (empty($order_id) || empty($shipping_method)) {
             return redirect()->back()->with('message_error', 'Please select a shipping method');
         }
-        
-        // Parse shipping method (format: method-price)
-        $shipping_parts = explode('-', $shipping_method);
-        $delivery_charge = $shipping_parts[1] ?? 0;
-        
-        // Update order with shipping
+
         $order = DB::table('product_orders')->where('id', $order_id)->first();
-        $new_total = $order->total_amount + $delivery_charge;
-        
-        DB::table('product_orders')->where('id', $order_id)->update([
+        if (!$order) {
+            return redirect()->back()->with('message_error', 'Order not found');
+        }
+
+        // Start from current total amount
+        $new_total = $order->total_amount;
+
+        // If an old shipping method exists, remove its delivery charge from total
+        if (!empty($order->shipping_method_formate)) {
+            $old_parts = explode('-', $order->shipping_method_formate);
+            $old_delivery = isset($old_parts[1]) ? (float) $old_parts[1] : 0.0;
+            $new_total -= $old_delivery;
+        }
+
+        // Parse new shipping method (format: method-price-...)
+        $shipping_parts = explode('-', $shipping_method);
+        $delivery_charge = isset($shipping_parts[1]) ? (float) $shipping_parts[1] : 0.0;
+
+        $updateData = [
             'shipping_method_formate' => $shipping_method,
             'delivery_charge' => $delivery_charge,
-            'total_amount' => $new_total,
-        ]);
-        
+            'total_amount' => $new_total + $delivery_charge,
+        ];
+
+        // FlagShip-specific original cost (4th segment)
+        if (!empty($shipping_parts[0]) && $shipping_parts[0] === 'flagship') {
+            $updateData['flag_shiping_cost'] = isset($shipping_parts[3]) ? (float) $shipping_parts[3] : 0.0;
+        } else {
+            $updateData['flag_shiping_cost'] = 0.0;
+        }
+
+        DB::table('product_orders')->where('id', $order_id)->update($updateData);
+
         // Redirect to payment step
         $next_step = 4;
         return redirect('Checkouts/index/' . base64_encode($next_step) . '/' . base64_encode($order_id));

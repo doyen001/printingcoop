@@ -138,7 +138,7 @@ Route::prefix('MyOrders')->group(function () {
     Route::get('/deleteOrder/{id}', [MyOrdersController::class, 'deleteOrder']);
     Route::post('/changeOrderStatus', [MyOrdersController::class, 'changeOrderStatus']);
     Route::get('/downloadOrderPdf/{id}/{type?}', [MyOrdersController::class, 'downloadOrderPdf']);
-    Route::get('/download/{filePath}/{name}', [MyOrdersController::class, 'download']);
+    Route::get('/download/{filePath}/{name}', [MyOrdersController::class, 'download'])->where('filePath', '.*');
     Route::get('/reorder/{id}', [MyOrdersController::class, 'reorder']);
     Route::get('/trackOrder/{id}', [MyOrdersController::class, 'trackOrder']);
 });

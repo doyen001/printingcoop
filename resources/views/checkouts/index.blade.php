@@ -36,23 +36,24 @@
     }
 @endphp
 
-<div class="checkout-section universal-spacing universal-bg-white">
-    <div class="container">
+<div class="checkout-section checkout-modern universal-spacing universal-bg-white">
+    <div class="container" style="max-width: 1400px;">
         <div class="checkout-section-inner">
             <div class="row">
                 <div class="col-md-7">
-                    <div class="text-center" style="color:red">
+                    <div class="checkout-msg checkout-msg--error text-center">
                         {{ session('message_error') }}
                     </div>
-                    <div class="text-center" style="color:green">
+                    <div class="checkout-msg checkout-msg--success text-center">
                         {{ session('message_success') }}
-                    </div><br>
+                    </div>
+                    <div class="checkout-msg-spacer"></div>
                     <div id="accordion">
                         <div class="card">
                             <div class="card-header {{ $stap == 1 ? '' : 'collapsed' }}" id="heading1" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
                                 <div class="universal-dark-title">
                                     <span>{!! $stap1Title !!}</span>
-                                    <span style="float:right;">{{ $loginName }}</span>
+                                    <span class="checkout-step-user">{{ $loginName }}</span>
                                 </div>
                             </div>
                             @if($stap1Open)
@@ -70,7 +71,7 @@
                                                             <label>
                                                             {{ ($language_name == 'french') ? 'Adresse électronique:' : 'Email Address:' }}</label>
                                                             <input type="email" id="ck_moblie_number" maxlength="100" name="ck_moblie_number">
-                                                            <label id="ck_moblie_number_error"  class="mt-3"style="color:red"></label>
+                                                            <label id="ck_moblie_number_error" class="mt-3 checkout-field-error"></label>
                                                         </div>
                                                         <div class="login-btn">
                                                             <button type="submit" id="checkoutContinue">
@@ -91,7 +92,7 @@
                                                                 <label>
                                                                     {{ ($language_name == 'french') ? 'Adresse électronique:' : 'Email Address:' }}</label>
                                                                 <input type="email" name="email" id="ck_signup_mobile" maxlength="100">
-                                                                <label id="ck_signup_email_error" class="mt-3" style="color:red"></label>
+                                                                <label id="ck_signup_email_error" class="mt-3 checkout-field-error"></label>
                                                                 <input type="hidden" name="signupOtp" id="ck_signupOtp" value="">
                                                                 <input type="hidden" name="signupOtpMobile" id="ck_signupOtpMobile" value="">
                                                                 <button id="ck-signup-continue" class="register btn btn-warning float-right" type="Button" onclick="cksendOptSignupMobile()">{{ ($language_name == 'french') ? 'Renvoyer' : 'Resend' }}</button>
@@ -100,28 +101,28 @@
                                                                 <div class="single-review">
                                                                     <label>{{ ($language_name == 'french') ? 'Entrez le code:' : 'Enter Code' }}</label>
                                                                     <input type="text" placeholder="Enter Code" name="singup_inputOtp" id="ck_singup_inputOtp" maxlength="6">
-                                                                    <label id="ck_singup_inputOtp_error" style="color:red"></label><br>
+                                                                    <label id="ck_singup_inputOtp_error" class="checkout-field-error"></label><br>
                                                                 </div>
                                                                 <div class="single-review">
                                                                     <label>{{ ($language_name == 'french') ? 'Prénom:' : 'First Name:' }}</label>
                                                                     <input type="text" placeholder="First Name" name="fname" id="ck_fname" maxlength="30">
-                                                                    <label id="ck_signup_fname_error" style="color:red"></label><br>
+                                                                    <label id="ck_signup_fname_error" class="checkout-field-error"></label><br>
                                                                 </div>
                                                                 <div class="single-review">
                                                                     <label>{{ ($language_name == 'french') ? 'Nom de famille:' : 'Last Name:' }}</label>
                                                                     <input type="text" placeholder="Last Name" name="lname" maxlength="30" id="ck_lname">
-                                                                    <label id="ck_signup_lname_error" style="color:red"></label><br>
+                                                                    <label id="ck_signup_lname_error" class="checkout-field-error"></label><br>
                                                                     <input type="hidden" name="email_verification" id="email_verification" value="1">
                                                                 </div>
                                                                 <div class="single-review">
                                                                     <label>{{ ($language_name == 'french') ? 'Définir le mot de passe:' : 'Set Password:' }}</label>
                                                                     <input type="password" placeholder="Set Password" name="password" id="ck_signup_password" maxlength="20" minlength="8">
-                                                                    <label id="ck_signup_password_error" style="color:red"></label>
+                                                                    <label id="ck_signup_password_error" class="checkout-field-error"></label>
                                                                 </div>
                                                                 <div class="single-review">
                                                                     <label>{{ ($language_name == 'french') ? 'Confirmez le mot de passe:' : 'Confirm Password:' }}</label>
                                                                     <input type="password" placeholder="Set Password" name="confirm_password" id="ck_signup_confirm_password" maxlength="20" minlength="8">
-                                                                    <label id="ck_signup_confirm_password_error" style="color:red"></label>
+                                                                    <label id="ck_signup_confirm_password_error" class="checkout-field-error"></label>
                                                                 </div>
                                                             </div>
                                                             <div class="login-btn">
@@ -142,12 +143,12 @@
                                                             <div class="single-review">
                                                                 <label>{{ ($language_name == 'french') ? 'Adresse électronique:' : 'Email Address:' }}</label>
                                                                 <input type="email" name="loginemail" id="ck_login_mobile" maxlength="100">
-                                                                <label id="ck_login_mobile_error" style="color:red"></label><br>
+                                                                <label id="ck_login_mobile_error" class="checkout-field-error"></label><br>
                                                             </div>
                                                             <div class="single-review">
                                                                 <label>{{ ($language_name == 'french') ? 'Mot de passe:' : 'Password:' }}</label>
                                                                 <input type="password" placeholder="Password" name="loginpassword" id="ck_login_password">
-                                                                <label id="ck_login_password_error" style="color:red"></label>
+                                                                <label id="ck_login_password_error" class="checkout-field-error"></label>
                                                             </div>
                                                             <div class="login-btn">
                                                                 <button type="submit"  id="ckloginSubmit">{{ ($language_name == 'french') ? 'S\'identifier' : 'Login' }}</button>
@@ -167,7 +168,7 @@
                                     <span>{!! $stap2Title !!}</span>
                                     @if($stap > 2)
                                         <a class="mobile-position" href="{{ url('Checkouts/index/' . base64_encode($stap-1) . '/' . base64_encode($order_id)) }}">
-                                            <button class="btn btn-warning button"  style="float:right;" type="button">
+                                            <button class="btn btn-warning button checkout-step-change" type="button">
                                                 {{ ($language_name == 'french') ? 'Changement' : 'Change' }}</button>
                                         </a>
                                     @endif
@@ -184,6 +185,7 @@
                                                     <div id="exsiting-address">
                                                         <div id="address-list">
                                                             @php
+                                                                
                                                                 $display = 'none';
                                                             @endphp
                                                             @if (!empty($address))
@@ -222,7 +224,7 @@
                                                             @endif
                                                         </div>
 
-                                                        <div class="save-btn" style="display:{{ $display }}" id="Save-and-Deliver-here">
+                                                        <div class="save-btn checkout-save-address-wrap" id="Save-and-Deliver-here" style="display: {{ $display }}">
                                                             <button class="save" type="submit">{{ ($language_name == 'french') ? 'Enregistrer et livrer ici' : 'Save and Deliver here' }}</button>
                                                         </div>
                                                     </div>
@@ -258,7 +260,7 @@
                                                             </div>
                                                             <div class="col-md-12">
                                                                 <div class="single-review">
-                                                                    <textarea style="height:150px;" type="text" placeholder="Address (area &amp; street)*" name="address"></textarea>
+                                                                    <textarea class="checkout-textarea-address" type="text" placeholder="Address (area &amp; street)*" name="address"></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
@@ -373,7 +375,7 @@
                                             $stap_old = $stap - 1;
                                         @endphp
                                         <a class="mobile-position" href="{{ url('Checkouts/index/' . base64_encode($stap_old) . '/' . base64_encode($order_id)) }}">
-                                            <button class="btn btn-warning button" style="float:right;" type="button">Change</button>
+                                            <button class="btn btn-warning button checkout-step-change" type="button">Change</button>
                                         </a>
                                     @endif
                                 </div>
@@ -420,7 +422,7 @@
                                                     @endphp
                                                     <div class="shipping-metthod-single">
                                                         <label>
-                                                            <input type="radio" name="shipping_method" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }}>
+                                                            <input type="radio" name="shipping_method" value="{{ $value }}" {{ $shipping_method_formate == $value ? 'checked' : '' }} style="margin-left: 4px;">
                                                             <div class="row">
                                                                 <div class="col-md-12 col-lg-3 col-xl-2">
                                                                     <strong>{{ $product_price_currency_symbol . $val['price'] }}</strong>
@@ -546,7 +548,7 @@
                                             <div class="payment-sections">
                                                 <div id="accordion1">
                                                     <div class="card">
-                                                        <div class="card-header" id="headingPay3" data-toggle="collapse" data-target="#collapsePay3" aria-expanded="false" aria-controls="collapsePay3">
+                                                        <div  id="headingPay3" data-toggle="collapse" data-target="#collapsePay3" aria-expanded="false" aria-controls="collapsePay3">
                                                             <label class="main-input" for="3payment">
                                                                 <input name="payment_type" value="paypal" type="radio" id="3payment" checked>
                                                                 {{ ($language_name == 'french') ? 'Pay Pal' : 'Paypal' }}</label>
@@ -561,7 +563,7 @@
                                                     </div>
                                                     <!-- POS CHECKOUT -->
                                                     <div class="card pos">
-                                                        <div class="card-header" id="headingPay4" data-toggle="collapse" data-target="#collapsePay4" aria-expanded="false" aria-controls="collapsePay4">
+                                                        <div s id="headingPay4" data-toggle="collapse" data-target="#collapsePay4" aria-expanded="false" aria-controls="collapsePay4">
                                                             <label class="main-input" for="4payment">
                                                                 <input name="payment_type" value="pos" type="radio" id="4payment">
                                                                 {{ ($language_name == 'french') ? 'POS' : 'POS' }}</label>
@@ -968,8 +970,8 @@
                                             </div>
                                             <div class="col-7 col-md-12 col-lg-12 col-xl-6">
                                                 <div class="for-coupon">
-                                                    <span style="color:red">{{ session('code_error') }}</span>
-                                                    <span style="color:green">{{ session('code_success') }}</span>
+                                                    <span class="checkout-msg--error">{{ session('code_error') }}</span>
+                                                    <span class="checkout-msg--success">{{ session('code_success') }}</span>
                                                     <input type="text" name="coupon_code" placeholder="Enter Coupon Code" required>
                                                     <button type="submit" name="apply_code" value="apply">{{ ($language_name == 'french') ? 'Appliquer' : 'Apply' }}</button>
                                                 </div>
@@ -1020,5 +1022,284 @@
         </div>
     </div>
 </div>
+
+@push('styles')
+<style>
+/* Modern checkout overrides – scoped to .checkout-modern */
+.checkout-modern .checkout-section-inner {
+    --checkout-radius: 12px;
+    --checkout-shadow: 0 2px 12px rgba(0,0,0,.06);
+    --checkout-shadow-hover: 0 4px 20px rgba(0,0,0,.08);
+    --checkout-border: 1px solid rgba(0,0,0,.08);
+    --checkout-accent: #183e73;
+    --checkout-accent-light: #2d5aa0;
+    --checkout-input-bg: #fafafa;
+    --checkout-focus-ring: 0 0 0 3px rgba(24,62,115,.15);
+}
+
+/* Messages */
+.checkout-modern .checkout-msg-spacer { height: 1.25rem; }
+.checkout-modern .checkout-msg:empty { display: none; }
+.checkout-modern .checkout-msg--error { color: #c53030; font-size: 0.9375rem; }
+.checkout-modern .checkout-msg--success { color: #276749; font-size: 0.9375rem; }
+.checkout-modern .checkout-field-error { color: #c53030; font-size: 0.875rem; display: block; margin-top: 0.25rem; }
+.checkout-modern .checkout-step-user { float: right; font-weight: 500; opacity: .95; }
+.checkout-modern .card-header .fa-check { color: #276749 !important; }
+.checkout-modern .checkout-step-change { float: right; border-radius: 8px; font-weight: 600; transition: transform .2s, box-shadow .2s; }
+.checkout-modern .checkout-step-change:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+
+/* Cards – rounded, soft shadow */
+.checkout-modern #accordion .card {
+    border: var(--checkout-border) !important;
+    border-radius: var(--checkout-radius) !important;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    box-shadow: var(--checkout-shadow);
+    transition: box-shadow .25s ease;
+}
+.checkout-modern #accordion .card:hover { box-shadow: var(--checkout-shadow-hover); }
+
+/* Step headers – modern pill look when active */
+.checkout-modern #accordion .card-header {
+    background: var(--checkout-accent) !important;
+    border: none !important;
+    padding: 1rem 1.35rem !important;
+    border-radius: 0 !important;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .25s ease, color .25s ease;
+}
+.checkout-modern #accordion .card-header.collapsed {
+    background: #fff !important;
+    border-bottom: var(--checkout-border);
+    color: #374151;
+}
+.checkout-modern #accordion .card-header .universal-dark-title span { font-size: 1.0625rem; letter-spacing: 0; }
+.checkout-modern #accordion .card-header.collapsed .universal-dark-title span { color: #374151; }
+.checkout-modern #accordion .card-header .universal-dark-title span::before,
+.checkout-modern #accordion .card-header .universal-dark-title span::after { display: none; }
+
+/* Card body spacing */
+.checkout-modern #accordion .card-body {
+    padding: 1.5rem 1.35rem !important;
+    background: #fff;
+}
+
+/* Forms – inputs and labels */
+.checkout-modern .single-review {
+    margin-bottom: 1.125rem;
+}
+.checkout-modern .single-review label {
+    font-size: 0.9375rem;
+    color: #374151;
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+    display: block;
+}
+.checkout-modern .single-review input[type="text"],
+.checkout-modern .single-review input[type="email"],
+.checkout-modern .single-review input[type="password"],
+.checkout-modern .single-review select {
+    width: 100%;
+    height: 2.75rem;
+    padding: 0.5rem 0.875rem;
+    border: var(--checkout-border);
+    border-radius: 8px;
+    background: var(--checkout-input-bg);
+    font-size: 0.9375rem;
+    transition: border-color .2s, box-shadow .2s;
+}
+.checkout-modern .single-review input:focus,
+.checkout-modern .single-review select:focus,
+.checkout-modern .single-review textarea:focus {
+    outline: none;
+    border-color: var(--checkout-accent);
+    box-shadow: var(--checkout-focus-ring);
+}
+.checkout-modern .single-review textarea,
+.checkout-modern .checkout-textarea-address {
+    min-height: 150px;
+    padding: 0.75rem 0.875rem;
+    border-radius: 8px;
+    border: var(--checkout-border);
+    background: var(--checkout-input-bg);
+    resize: vertical;
+}
+.checkout-modern .checkout-select-single .shipping-form {
+    background: #f8fafc;
+    padding: 1.25rem;
+    margin-top: 1rem;
+    border-radius: 10px;
+    border: var(--checkout-border);
+}
+
+/* Buttons */
+.checkout-modern .login-btn button,
+.checkout-modern .save-btn .save,
+.checkout-modern .order-btn button {
+    min-height: 2.75rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: background .2s, transform .15s, box-shadow .2s;
+}
+.checkout-modern .login-btn button:hover,
+.checkout-modern .save-btn .save:hover,
+.checkout-modern .order-btn button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(24,62,115,.35);
+}
+.checkout-modern .save-btn a {
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    transition: color .2s, background .2s;
+}
+.checkout-modern .order-btn.text-right { margin-top: 1.5rem; }
+
+/* Address blocks */
+.checkout-modern .email-field-t {
+    padding: 1rem 1.25rem;
+    border: var(--checkout-border);
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    transition: border-color .2s, box-shadow .2s;
+}
+.checkout-modern .email-field-t:hover,
+.checkout-modern .email-field-t:has(input:checked) {
+    border-color: var(--checkout-accent);
+    box-shadow: var(--checkout-focus-ring);
+}
+.checkout-modern .checkout-addresss label span.new-c-addr {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: background .2s, transform .15s;
+}
+.checkout-modern .checkout-addresss label span.new-c-addr:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
+.checkout-modern .checkout-addresss .delivery-fileds {
+    padding: 1.25rem 0 0 1rem;
+}
+
+/* Shipping method options */
+.checkout-modern .shipping-metthod-single {
+    padding: 1rem 1rem 1rem 2.5rem;
+    margin-bottom: 0.75rem;
+    border: var(--checkout-border);
+    border-radius: 10px;
+    transition: border-color .2s, background .2s;
+}
+.checkout-modern .shipping-metthod-single:hover,
+.checkout-modern .shipping-metthod-single:has(input:checked) {
+    border-color: var(--checkout-accent);
+    background: #f8fafc;
+}
+.checkout-modern .shipping-metthod-single strong { font-size: 1rem; color: #111; }
+.checkout-modern .shipping-metthod-single span { color: #6b7280; font-size: 0.9375rem; }
+.checkout-modern .shipping-metthod-single input[type="radio"] { margin-left: 4px; }
+
+/* Order summary / cart totals */
+.checkout-modern .order-area,
+.checkout-modern .cart-total-area {
+    border: var(--checkout-border);
+    border-radius: var(--checkout-radius);
+    padding: 1.5rem;
+    background: #fff;
+    box-shadow: var(--checkout-shadow);
+}
+.checkout-modern .order-area .universal-dark-title,
+.checkout-modern .cart-total-area .universal-dark-title {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(0,0,0,.06);
+}
+.checkout-modern .order-area .universal-dark-title span::before,
+.checkout-modern .order-area .universal-dark-title span::after,
+.checkout-modern .cart-total-area .universal-dark-title span::before,
+.checkout-modern .cart-total-area .universal-dark-title span::after { display: none; }
+.checkout-modern .shop-cart-table tbody td { padding: 1rem 0.5rem; }
+.checkout-modern .shop-cart-table .product-thumbnail img {
+    border-radius: 8px;
+    object-fit: cover;
+}
+.checkout-modern .shop-cart-table td.product-name a {
+    font-weight: 600;
+    color: #111;
+    transition: color .2s;
+}
+.checkout-modern .single-cart-total {
+    padding: 0.875rem 0;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.checkout-modern .single-cart-total span.total {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--checkout-accent);
+}
+.checkout-modern .for-coupon input {
+    border-radius: 8px;
+    border: var(--checkout-border);
+    padding: 0.5rem 0.875rem;
+    min-height: 2.5rem;
+}
+.checkout-modern .for-coupon button {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: transform .15s, box-shadow .2s;
+}
+.checkout-modern .for-coupon button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+/* Payment section */
+.checkout-modern #accordion1 .card {
+    border: none !important;
+    border-bottom: var(--checkout-border) !important;
+    border-radius: 0 !important;
+}
+.checkout-modern #accordion1 .card-header {
+    padding: 1rem 1rem 1rem 3rem !important;
+    border-radius: 8px;
+    transition: background .2s;
+}
+.checkout-modern #accordion1 .card-header:hover { background: #f8fafc !important; }
+.checkout-modern .payment-option { padding: 1rem 0 1.5rem 3rem; }
+.checkout-modern .card-details input {
+    border-radius: 8px;
+    border: var(--checkout-border);
+    padding: 0.5rem 0.875rem;
+    min-height: 2.5rem;
+}
+
+/* Uploaded files */
+.checkout-modern .uploaded-file-single-inner {
+    border: var(--checkout-border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+}
+.checkout-modern .uploaded-file-single-inner:hover { box-shadow: var(--checkout-shadow); }
+.checkout-modern .uploaded-file-img { border-radius: 6px; }
+
+@media (max-width: 768px) {
+    .checkout-modern #accordion .card-header { padding: 0.875rem 1rem !important; }
+    .checkout-modern #accordion .card-body { padding: 1rem !important; }
+    .checkout-modern .checkout-step-user { float: none; display: block; margin-top: 0.25rem; }
+    .checkout-modern .order-area,
+    .checkout-modern .cart-total-area { padding: 1rem; }
+}
+</style>
+@endpush
 
 @endsection

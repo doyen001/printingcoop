@@ -98,7 +98,7 @@
 
     /* Order ID Button */
     .order-id button {
-        background: #2c3e50;
+        background: #f28738;
         color: #ffffff;
         border: none;
         padding: 10px 16px;
@@ -339,7 +339,7 @@
                                         </div>
                                         <div class="col-5 col-md-3 col-lg-3 col-xl-3">
                                             <div class="status-btn">
-                                                {{ $language_name == 'french' ? getOrderSatusClassFrench($list['status']) : getOrderSatusClass($list['status']) }}
+                                                {!! $language_name == 'french' ? getOrderSatusClassFrench($list['status']) : getOrderSatusClass($list['status']) !!}
                                             </div>
                                         </div>
 
@@ -348,14 +348,14 @@
                                                 @if(in_array($list['status'], [6, 7, 8]))
                                                     <a href="{{ url('MyOrders/deleteOrder/' . base64_encode($list['id'])) }}"
                                                         onclick="return confirm('Are you sure you want to delete this order?');">
-                                                        <button type="button">
+                                                        <button type="button" class="view-details-btn">
                                                             {{ $language_name == 'french' ? 'supprimer' : 'delete' }}
                                                         </button>
                                                     </a>
                                                 @endif
                                                 @if(in_array($list['status'], [2, 3, 4]))
                                                     <a href="javascript:void(0)" onclick="changeOrderStatus('{{ $list['id'] }}',6)">
-                                                        <button type="submit">
+                                                        <button type="submit" class="view-details-btn">
                                                             {{ $language_name == 'french' ? 'Annuler' : 'cancel' }}
                                                         </button>
                                                     </a>
@@ -540,4 +540,80 @@
         </div>
     </div>
 </div>
+
+<!-- Cancellation Modal (matches CI MyOrders/index.php) -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ $language_name == 'french' ? "Raison de l'annulation" : 'Cancellation Reason' }}</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form class="form-horizontal" name="commentform" method="post" action="" id="changeOrderStatusForm">
+                <input type="hidden" name="order_id" id="cl_order_id">
+                <input type="hidden" name="status" id="cl_status">
+                
+                <div class="modal-body">
+                    <div id="MsgError"></div>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="InputMessage" class="col-lg-12 control-label">{{ $language_name == 'french' ? 'Raison' : 'Reason' }}</label>
+                            <div class="col-lg-12">
+                                <textarea name="mobileMsg" id="mobileMsg" class="form-control" rows="5" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="btnSubmit">{{ $language_name == 'french' ? 'Soumettre' : 'Submit' }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+// Change order status function (matches CI assets/js/custom.min.js)
+function changeOrderStatus(order_id, status) {
+    $("#mobileMsg").html("");
+    $("#cl_order_id").val(order_id);
+    $("#cl_status").val(status);
+    $("#myModal").modal("show");
+}
+
+// Handle form submission (matches CI assets/js/custom.min.js)
+$(document).ready(function() {
+    $("#changeOrderStatusForm").submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $("#btnSubmit").attr("disabled", true);
+        
+        $.ajax({
+            type: "POST",
+            url: "{{ url('MyOrders/changeOrderStatus') }}",
+            data: form.serialize(),
+            success: function(response) {
+                $("#myModal").modal("hide");
+                $("#btnSubmit").attr("disabled", false);
+                
+                var result = JSON.parse(response);
+                if (result.status == 1) {
+                    // Reload page to show updated status
+                    location.reload();
+                } else {
+                    $("#MsgError").html('<div class="alert alert-danger">' + result.msg + '</div>');
+                }
+            },
+            error: function() {
+                $("#myModal").modal("hide");
+                $("#btnSubmit").attr("disabled", false);
+                $("#MsgError").html('<div class="alert alert-danger">Error occurred. Please try again.</div>');
+            }
+        });
+    });
+});
+</script>
+@endpush

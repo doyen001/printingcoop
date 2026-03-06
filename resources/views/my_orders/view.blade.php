@@ -629,24 +629,31 @@
                                                                                 @endif
                                                                                 <div class="uploaded-file-info">
                                                                         <div class="uploaded-file-name">
-                                                                            <span><?= $return_arr['name'] ?></span>
+                                                                            <span>{{ $return_arr['name'] }}</span>
                                                                         </div>
                                                                         <div class="upload-field">
-                                                                            <?php $link = $BASE_URL . "MyOrders/download/" . urlencode($return_arr['location']) . "/" . urlencode($return_arr['name']); ?><br>
+                                                                            @php
+                                                                                // Convert absolute path to relative path (matches CI approach)
+                                                                                $location = $return_arr['location'] ?? '';
+                                                                                if (strpos($location, '/home/heorh/Documents/laravel-printing-imprimeur/public/') === 0) {
+                                                    $location = str_replace('/home/heorh/Documents/laravel-printing-imprimeur/public/', '', $location);
+                                                }
+                                                $link = url('MyOrders/download/' . urlencode($location) . '/' . urlencode($return_arr['name']));
+                                            @endphp
 
-                                                                            <div class="uploaded-file-info">
-                                                                                <a href="<?= $link ?>">
-                                                                                    <i class="fa fas fa-file-download"></i>
-                                                                                    <?= ($language_name == 'French') ? 'Télécharger' : 'Download' ?>
-                                                                                </a>
+                                            <div class="uploaded-file-info">
+                                                <a href="{{ $link }}">
+                                                    <i class="fa fas fa-file-download"></i>
+                                                    {{ $language_name == 'french' ? 'Télécharger' : 'Download' }}
+                                                </a>
 
-                                                                                <?php if (!empty($return_arr['cumment'])) { ?>
-                                                                                    <div class="upload-field">
-                                                                                        <?= ($language_name == 'French') ? 'Commentaire' : 'Comment' ?> : <?= $return_arr['cumment'] ?>
-                                                                                    </div>
-                                                                                <?php } ?>
-                                                                            </div>
-                                                                        </div>
+                                                @if(!empty($return_arr['cumment']))
+                                                    <div class="upload-field">
+                                                        {{ $language_name == 'french' ? 'Commentaire' : 'Comment' }} : {{ $return_arr['cumment'] }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
                                                                     </div>
                                                                             </div>
                                                                         </div>

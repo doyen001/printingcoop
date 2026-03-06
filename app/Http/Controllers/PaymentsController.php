@@ -72,9 +72,11 @@ class PaymentsController extends Controller
         $language_name = config('store.language_name', 'english');
         
         // Update order status
+        // CI uses integer status / payment_status columns via OrderStatus / PaymentStatus
+        // Here we mirror that convention: status=2 (confirmed), payment_status=2 (completed).
         $orderData = [
-            'order_status' => 'confirmed',
-            'payment_status' => 1, // Convert 'pending' to integer (CI compatibility)
+            'status' => 2,
+            'payment_status' => 2,
             'payment_method' => 'COD',
             'updated' => now(),
         ];
@@ -184,8 +186,8 @@ class PaymentsController extends Controller
             $paymentRes = json_decode($response['paymentData']);
             
             DB::table('product_orders')->where('id', $order_id)->update([
-                'order_status' => 'confirmed',
-                'payment_status' => 'completed',
+                'status' => 2,
+                'payment_status' => 2,
                 'payment_method' => 'Credit Card',
                 'transition_id' => $paymentRes->id ?? '',
                 'transition_remark' => 'payment success',
@@ -205,7 +207,7 @@ class PaymentsController extends Controller
         } else {
             // Payment failed
             DB::table('product_orders')->where('id', $order_id)->update([
-                'payment_status' => 'failed',
+                'payment_status' => 3,
                 'transition_remark' => 'payment failed',
                 'updated' => now(),
             ]);
@@ -341,6 +343,7 @@ class PaymentsController extends Controller
         $PayerID = $request->input('PayerID');
         
         $orderData = [
+            'status' => 2,
             'payment_method' => 'PayPal',
             'transition_id' => $txn_id,
         ];
@@ -386,7 +389,8 @@ class PaymentsController extends Controller
             $order_id = base64_decode($order_id);
             
             DB::table('product_orders')->where('id', $order_id)->update([
-                'payment_status' => 'cancelled',
+                // Treat cancelled as failed for integer status column
+                'payment_status' => 3,
                 'transition_remark' => 'payment cancelled by user',
                 'updated' => now(),
             ]);
