@@ -84,7 +84,7 @@
 
     .category-card {
         background: #ffffff;
-        border-radius: 15px;
+        border-radius: 0.5rem;
         overflow: hidden;
         box-shadow: var(--card-shadow);
         transition: var(--transition);

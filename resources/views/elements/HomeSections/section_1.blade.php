@@ -2,8 +2,7 @@
 {{-- ABOUT US Section --}}
 <style>
     .about-img img {
-        box-shadow: 7px 7px 7px 0px grey;
-        border-radius: 7px;
+        border-radius: 0.5rem;
     }
 </style>
 <div class="what-wedo-section universal-spacing">
