@@ -61,26 +61,20 @@
     line-height: 1.6;
 }
 
-.services-grid {
+ .services-grid {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: 140px;
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
     margin-top: 40px;
 }
 
 .service-image-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 8px;
-    text-align: left;
-    transition: all 0.3s ease;
+    background: transparent;
+    text-align: center;
+    transition: transform 0.3s ease;
     opacity: 0;
     transform: translateY(20px);
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-    overflow: hidden;
+    cursor: default;
 }
 
 .service-image-card.visible {
@@ -89,65 +83,10 @@
 }
 
 .service-image-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
 }
 
-/* Bento box layout - varying sizes */
-.service-image-card:nth-child(1) {
-    grid-column: span 4;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(2) {
-    grid-column: span 5;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(3) {
-    grid-column: span 3;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(4) {
-    grid-column: span 3;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(5) {
-    grid-column: span 4;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(6) {
-    grid-column: span 5;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(7) {
-    grid-column: span 4;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(8) {
-    grid-column: span 4;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(9) {
-    grid-column: span 4;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(10) {
-    grid-column: span 6;
-    grid-row: span 2;
-}
-
-.service-image-card:nth-child(11) {
-    grid-column: span 6;
-    grid-row: span 2;
-}
+/* (Removed original bento grid spans so cards flow in a simple grid) */
 
 .service-icon {
     display: none;
@@ -176,40 +115,20 @@
 } */
 
 .service-name {
-    font-size: 1.5rem;
+    font-size: 20px;
     font-weight: 600;
-    color: #fff;
+    color: #333333;
     margin-bottom: 0;
-    transition: all 0.3s ease;
-    line-height: 1.4;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.service-description {
-    font-size: 0.875rem;
-    color: #6c757d;
-    line-height: 1.6;
-    margin-bottom: 0;
-}
-
-.service-image-card:hover .service-name {
-    /* color: #f28738; */
-    transform: translateY(-2px);
+    line-height: 1.3;
 }
 
 .service-content {
-    height: 50%;
-    display: flex;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(3px);
-    background: linear-gradient(to top, #2e2e2e 0%, transparent 100%);
+    position: static;
+    height: auto;
+    display: block;
+    padding: 10px 4px 0;
+    background: transparent;
     text-align: center;
-    z-index: 2;
 }
 
 .service-link {
@@ -219,24 +138,13 @@
 }
 
 .service-image {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100%;
-    height: 100%;
+    background: #ffffff;
+    border-radius: .5rem;
     overflow: hidden;
-    border-radius: 0;
-    margin-bottom: 0;
-    transform: none;
-    transition: all 0.3s ease;
-    box-shadow: none;
-    background: #f9fafb;
+    padding-top: 100%; /* 1:1 square */
 }
-
-/* .service-image-card:hover .service-image {
-    transform: scale(1.05);
-} */
-
 
 .service-image img {
     position: absolute;
@@ -244,13 +152,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: all 0.3s ease;
-    transform: scale(1.1);
-}
-
-.service-image-card:hover .service-image img {
-    transform: scale(1.2);
+    object-fit: contain;
 }
 
 
@@ -271,54 +173,6 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-    .services-grid {
-        grid-template-columns: repeat(8, 1fr);
-        grid-auto-rows: 150px;
-        gap: 18px;
-    }
-    
-    .service-image-card:nth-child(1) {
-        grid-column: span 4;
-        grid-row: span 2;
-    }
-    
-    .service-image-card:nth-child(2) {
-        grid-column: span 4;
-        grid-row: span 2;
-    }
-    
-    .service-image-card:nth-child(3) {
-        grid-column: span 3;
-        grid-row: span 2;
-    }
-    
-    .service-image-card:nth-child(4) {
-        grid-column: span 5;
-        grid-row: span 2;
-    }
-    
-    .service-image-card:nth-child(5) {
-        grid-column: span 4;
-        grid-row: span 2;
-    }
-    
-    .service-image-card:nth-child(6) {
-        grid-column: span 4;
-        grid-row: span 2;
-    }
-    
-    .service-image-card:nth-child(7) {
-        grid-column: span 4;
-        grid-row: span 2;
-    }
-    
-    .service-image-card:nth-child(8) {
-        grid-column: span 4;
-        grid-row: span 2;
-    }
-}
-
 @media (max-width: 991px) {
     .services-section {
         padding: 80px 0;
@@ -329,28 +183,8 @@
     }
 
     .services-grid {
-        grid-template-columns: repeat(6, 1fr);
-        grid-auto-rows: 140px;
-        gap: 16px;
-    }
-    
-    .service-image-card {
-        padding: 6px;
-    }
-    
-    .service-image-card:nth-child(1),
-    .service-image-card:nth-child(2),
-    .service-image-card:nth-child(3),
-    .service-image-card:nth-child(4),
-    .service-image-card:nth-child(5),
-    .service-image-card:nth-child(6),
-    .service-image-card:nth-child(7),
-    .service-image-card:nth-child(8),
-    .service-image-card:nth-child(9),
-    .service-image-card:nth-child(10),
-    .service-image-card:nth-child(11) {
-        grid-column: span 3;
-        grid-row: span 2;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 }
 
@@ -365,27 +199,7 @@
 
     .services-grid {
         grid-template-columns: 1fr;
-        grid-auto-rows: 200px;
         gap: 16px;
-    }
-    
-    .service-image-card {
-        padding: 6px;
-    }
-    
-    .service-image-card:nth-child(1),
-    .service-image-card:nth-child(2),
-    .service-image-card:nth-child(3),
-    .service-image-card:nth-child(4),
-    .service-image-card:nth-child(5),
-    .service-image-card:nth-child(6),
-    .service-image-card:nth-child(7),
-    .service-image-card:nth-child(8),
-    .service-image-card:nth-child(9),
-    .service-image-card:nth-child(10),
-    .service-image-card:nth-child(11) {
-        grid-column: span 1;
-        grid-row: span 1;
     }
     
     .services-section {
@@ -438,14 +252,12 @@
                     @endphp
                     
                     <div class="service-image-card">
-                        <a href="javascript:void(0)" class="service-link">
-                            <div class="service-image">
-                                 <img src="{{ $imageurl }}" alt="{{ $serviceName }}" loading="lazy">
-                            </div>
-                            <div class="service-content">
-                                <h3 class="service-name">{{ $serviceName }}</h3>
-                            </div>
+                        <a href="javascript:void(0)" class="service-link service-image">
+                            <img src="{{ $imageurl }}" alt="{{ $serviceName }}" loading="lazy">
                         </a>
+                        <div class="service-content">
+                            <h3 class="service-name">{{ $serviceName }}</h3>
+                        </div>
                     </div>
                 @endforeach
             </div>

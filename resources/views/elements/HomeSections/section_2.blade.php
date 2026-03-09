@@ -52,113 +52,63 @@
 }
 
 .product-card {
-    background: #ffffff;
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    height: 500px;
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
+    background: transparent;
+    /* border-radius: 8px; */
+    /* padding: 16px 16px 18px; */
+    text-align: center;
+    /* box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04); */
+    /* transition: box-shadow 0.2s ease, transform 0.15s ease; */
+    transform: translateY(0) !important;
+    transition: transform 0.3s ease;
+    height: 340px;
 }
 
 .product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.18);
+    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16); */
+    transform: translateY(-3px) !important;
 }
 
 .product-image {
-    position: relative;
     width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #f8f9fa;
-    border-radius: 24px;
-}
-
-.product-image img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-}
-
-.product-card:hover .product-image img {
-    transform: scale(1.08);
-}
-
-/* Favorite Icon */
-.product-favorite {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
+    background: #ffffff;
+    border-radius: 4px;
+    /* padding: 10px; */
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 3;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: .5rem;
+    overflow: hidden;
 }
 
-.product-favorite:hover {
-    background: #f28738;
-    border-color: #f28738;
-    transform: scale(1.1);
+.product-image img {
+    position: static;
+    width: 100%;
+    height: 250px;
+    /* object-fit: contain; */
 }
 
-.product-favorite i {
-    font-size: 18px;
-    color: #666;
-    transition: color 0.3s ease;
-}
-
-.product-favorite:hover i {
-    color: white;
-}
-
-/* Content Overlay */
 .product-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 30px 24px 24px;
-    backdrop-filter: blur(3px);
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    z-index: 2;
-    border-radius: 0 0 24px 24px;
+    position: static;
+    padding: 10px 4px 0;
+    background: transparent;
+    text-align: center;
 }
 
 .product-category {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.8);
-    text-transform: capitalize;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-    margin-bottom: 4px;
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 2px;
+    line-height: 1.3;
 }
 
 .product-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 2px;
     line-height: 1.3;
-    transition: color 0.3s ease;
 }
 
 .product-title a {
@@ -167,133 +117,37 @@
 }
 
 .product-title a:hover {
-    color: #ffa260ff;
+    text-decoration: underline;
 }
 
-/* Price and Icon Info */
-.product-meta {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 12px;
-}
-
+.product-meta,
 .product-price-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: white;
-    font-size: 0.95rem;
-}
-
-.product-price-info i {
-    font-size: 16px;
-    opacity: 0.9;
-}
-
-.product-price-info .amount {
-    font-weight: 600;
-}
-
-/* Search/Action Button */
-.view-details {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 14px 24px;
-    background: white;
-    color: #2d3436;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    border-radius: 18px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.view-details:hover {
-    background: #f28738;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(242, 135, 56, 0.4);
-}
-
-.view-details i {
     display: none;
 }
 
-/* Tab Navigation Styles */
-.showcase-tabs {
-    margin-bottom: 40px;
-    text-align: center;
+.product-starting-price {
+    font-size: 12px;
+    color: #666666;
 }
 
-.nav-pills {
-    display: inline-flex;
-    gap: 15px;
-    padding: 5px;
-    background: rgba(248, 249, 250, 0.8);
-    border-radius: 50px;
-    margin: 0;
-    list-style: none;
-    flex-wrap: wrap;
-    justify-content: center;
+/* Tag blocks (formerly tabs) */
+.showcase-tag-block {
+    margin-top: 40px;
 }
 
-.nav-pills li {
-    margin: 0;
-}
-
-.nav-pills a {
-    display: inline-block;
-    padding: 12px 25px;
-    color: #ff6b35;
-    background: rgba(255, 107, 53, 0.1);
-    text-decoration: none;
+.showcase-tag-title {
+    font-size: 2rem;
     font-weight: 600;
-    font-size: 0.95rem;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-    position: relative;
-    white-space: nowrap;
-}
-
-.nav-pills a:hover {
-    color: #ffffff;
-    background: #f28738;
-    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
-}
-
-.nav-pills a.active {
-    color: #ffffff;
-    background: #f28738;
-    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
-}
-
-.tab-content {
-    margin-top: 30px;
-}
-
-.tab-pane {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.tab-pane.active {
-    display: block;
-    opacity: 1;
-}
-
-.tab-pane.show {
-    opacity: 1;
+    color: #183e73;
+    margin-bottom: 18px;
+    text-align: center;
 }
 
 /* Fade-in Animation */
 .fade-in {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: opacity 0.6s ease;
 }
 
 .fade-in.visible {
@@ -302,13 +156,6 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-    .showcase-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 25px;
-    }
-}
-
 @media (max-width: 992px) {
     .showcase-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -316,7 +163,7 @@
     }
     
     .product-card {
-        height: 450px;
+        height: 320px;
     }
 }
 
@@ -327,12 +174,12 @@
     }
 
     .product-card {
-        height: 400px;
-        padding: 4px;
+        height: 300px;
+        /* padding: 4px; */
     }
     
     .product-image {
-        border-radius: 20px;
+        border-radius: .5 rem;
     }
 
     .product-info {
@@ -371,7 +218,7 @@
 
 @media (max-width: 480px) {
     .product-card {
-        height: 380px;
+        height: 280px;
     }
     
     .product-title {
@@ -384,17 +231,6 @@
 }
 
 @media (max-width: 768px) {
-    .nav-pills {
-        gap: 10px;
-        padding: 5px;
-        background: transparent;
-    }
-
-    .nav-pills a {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-    }
-    
     .showcase-section {
         padding: 60px 0;
     }
@@ -427,124 +263,57 @@
             </p>
         </div>
         
-        {{-- Tabs navigation (CI lines 313-329) --}}
-        <div class="showcase-tabs">
-            <ul class="nav nav-pills">
-                @foreach($proudly_display_your_brand_tags as $key => $val)
-                    @php
-                        $active = $key == 0 ? 'active' : '';
-                        $href = '#Process' . $val->id;
-                        $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
-                    @endphp
-                    <li>
-                        <a class="{{ $active }}" data-toggle="pill" href="{{ $href }}">
-                            {{ $label }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-        
-        {{-- Tabs content (CI lines 331-378) --}}
-        <div class="tab-content">
-            @foreach($proudly_display_your_brand_tags as $key => $val)
-                @php
-                    $active = $key == 0 ? 'active show' : '';
-                    $div_id = 'Process' . $val->id;
-                    $tag_id = $val->id;
-                    
-                    // Get products by tag using FIND_IN_SET (CI line 340)
-                    // Limit to 4 products per tab (CI model line 1614)
-                    $posterAndPlansProducts = DB::table('products')
-                        ->join('categories', 'products.category_id', '=', 'categories.id')
-                        ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
-                        ->where('products.status', 1)
-                        ->orderBy('products.updated', 'desc')
-                        ->select('products.*', 'categories.name as category_name')
-                        ->limit(4)
-                        ->get();
-                @endphp
-                
-                <div id="{{ $div_id }}" class="tab-pane fade {{ $active }}">
+        {{-- Vertical tag blocks (flattened tabs) --}}
+        @foreach($proudly_display_your_brand_tags as $key => $val)
+            @php
+                $tag_id = $val->id;
+                $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
+
+                // Get products by tag using FIND_IN_SET (CI line 340), limit 30 per tag
+                $posterAndPlansProducts = DB::table('products')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
+                    ->where('products.status', 1)
+                    ->orderBy('products.updated', 'desc')
+                    ->select('products.*', 'categories.name as category_name')
+                    ->limit(20)
+                    ->get();
+            @endphp
+
+            @if($posterAndPlansProducts && count($posterAndPlansProducts) > 0)
+                <div class="showcase-tag-block">
+                    <h3 class="showcase-tag-title">{{ $label }}</h3>
                     <div class="showcase-grid">
-                        @if($posterAndPlansProducts && count($posterAndPlansProducts) > 0)
-                            @foreach($posterAndPlansProducts as $index => $posterAndPlansProduct)
-                                @php
-                                    $imageurl = url('uploads/products/' . $posterAndPlansProduct->product_image);
-                                    $productUrl = url('Products/view/' . base64_encode($posterAndPlansProduct->id));
-                                @endphp
-                                <div class="product-card fade-in">
-                                    <div class="product-image">
-                                        <a href="{{ $productUrl }}">
-                                            <img src="{{ $imageurl }}" alt="{{ $posterAndPlansProduct->name }}" loading="lazy">
-                                        </a>
-                                        
-                                        <!-- Favorite Icon -->
-                                        {{-- <div class="product-favorite">
-                                            <i class="lar la-heart"></i>
-                                        </div> --}}
-                                        
-                                        <!-- Content Overlay -->
-                                        <div class="product-info">
-                                            <h3 class="product-title">
-                                                <a href="{{ $productUrl }}">{{ $posterAndPlansProduct->name }}</a>
-                                            </h3>
-                                            <div class="product-category">{{ $posterAndPlansProduct->category_name }}</div>
-                                            
-                                            <div class="product-meta">
-                                                <div class="product-price-info">
-                                                    <i class="las la-tag"></i>
-                                                    <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($posterAndPlansProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
-                                                </div>
-                                            </div>
-                                            
-                                            <a href="{{ $productUrl }}" class="view-details">
-                                                {{ $language_name == 'french' ? 'Voir les détails' : 'View Details' }}
-                                            </a>
-                                        </div>
+                        @foreach($posterAndPlansProducts as $index => $posterAndPlansProduct)
+                            @php
+                                $imageurl = url('uploads/products/' . $posterAndPlansProduct->product_image);
+                                $productUrl = url('Products/view/' . base64_encode($posterAndPlansProduct->id));
+                            @endphp
+                            <div class="product-card">
+                                <a href="{{ $productUrl }}" class="product-image">
+                                    <img src="{{ $imageurl }}" alt="{{ $posterAndPlansProduct->name }}" loading="lazy">
+                                </a>
+                                <div class="product-info">
+                                    <div class="product-category">{{ $posterAndPlansProduct->category_name }}</div>
+                                    <h3 class="product-title">
+                                        <a href="{{ $productUrl }}">{{ $posterAndPlansProduct->name }}</a>
+                                    </h3>
+                                    <div class="product-starting-price">
+                                        {{ $language_name == 'french' ? 'À partir de ' : 'Starting at ' }}
+                                        {{ $product_price_currency_symbol ?? '$' }}{{ number_format($posterAndPlansProduct->{$product_price_currency ?? 'price_cad'}, 2) }}
                                     </div>
                                 </div>
-                            @endforeach
-                        @endif
+                            </div>
+                        @endforeach
                     </div>
                 </div>
-            @endforeach
-        </div>
+            @endif
+        @endforeach
     </div>
 </section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Bootstrap tab functionality
-        const tabLinks = document.querySelectorAll('.showcase-tabs .nav-pills a[data-toggle="pill"]');
-        
-        tabLinks.forEach(function(tabLink) {
-            tabLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Remove active class from all tabs
-                tabLinks.forEach(function(link) {
-                    link.classList.remove('active');
-                });
-                
-                // Add active class to clicked tab
-                this.classList.add('active');
-                
-                // Hide all tab panes
-                const tabPanes = document.querySelectorAll('.tab-content .tab-pane');
-                tabPanes.forEach(function(pane) {
-                    pane.classList.remove('active', 'show');
-                });
-                
-                // Show the target tab pane
-                const targetId = this.getAttribute('href');
-                const targetPane = document.querySelector(targetId);
-                if (targetPane) {
-                    targetPane.classList.add('active', 'show');
-                }
-            });
-        });
-
         // Intersection Observer for fade-in animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {

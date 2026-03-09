@@ -61,31 +61,6 @@
 }
 
 /* Product Navigation */
-.product-nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 40px;
-}
-
-.product-nav-item {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px 25px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid #f28738;
-    font-size: 1rem;
-}
-
-.product-nav-item:hover,
-.product-nav-item.active {
-    background: #f28738;
-    color: #ffffff;
-    transform: translateY(-3px);
-}
-
 /* Product Grid */
 .product-grid {
     display: grid;
@@ -95,20 +70,23 @@
 }
 
 .book-printing-section .product-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 30px;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    background: transparent;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 0.1s ease;
 }
 
 .book-printing-section .product-card:hover {
-    background: rgba(77, 57, 57, 0.1);
+    transform: translateY(-2px);
 }
 
 .book-printing-section .product-image {
     position: relative;
-    padding-top: 75%;
+    width: 100%;
+    background: #ffffff;
+    border-radius: .5rem;
     overflow: hidden;
+    padding-top: 100%; /* 1:1 square like section 2 */
 }
 
 .book-printing-section .product-image img {
@@ -117,49 +95,47 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: all 0.3s ease;
-}
-
-.book-printing-section .product-card:hover .product-image img {
-    transform: scale(1.1);
+    object-fit: contain;
 }
 
 .book-printing-section .product-info {
-    padding: 20px;
+    padding: 10px 4px 0;
+    background: transparent;
+    text-align: center;
 }
 
 .book-printing-section .category {
-    margin-bottom: 10px;
+    margin-bottom: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333333;
 }
 
 .book-printing-section .category a {
-    color: #e0e0e0ff;
+    color: inherit;
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
 }
 
 .book-printing-section .product-title {
-    margin: 0 0 15px 0;
+    margin: 0 0 2px 0;
 }
 
 .book-printing-section .product-title a {
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 14px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    color: #333333;
 }
 
 .book-printing-section .product-title a:hover {
-    color: #ff6b35;
+    text-decoration: underline;
 }
 
 .book-printing-section .price {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #fff;
-    margin-bottom: 12px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #666666;
+    margin-bottom: 0;
 }
 
 .quick-view-btn {
@@ -185,19 +161,22 @@
     font-size: 1.1rem;
 }
 
-/* Tab Content */
-[data-tab-content] {
-    display: none;
-}
-
-[data-tab-content].active {
-    display: block;
-}
-
 /* No Products Message */
 .no-products {
     text-align: center;
     padding: 40px 20px;
+}
+
+/* Vertical blocks for each tag (flattened tabs) */
+.product-block {
+    margin-top: 40px;
+}
+
+.product-block-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #183e73;
+    margin-bottom: 20px;
 }
 
 /* Responsive */
@@ -283,28 +262,14 @@
             </p>
         </div>
 
-        <div class="product-nav fade-in">
-            @foreach($montreal_book_printing_tags as $key => $val)
-                @php
-                    $active = $key == 0 ? 'active' : '';
-                    $div_id = 'Product1' . $val->id;
-                    $label = ucwords($language_name == 'french' ? $val->name_french : $val->name);
-                @endphp
-                <button class="product-nav-item {{ $active }}" data-tab-target="#{{ $div_id }}">
-                    {{ $label }}
-                </button>
-            @endforeach
-        </div>
-
         <div class="product-content">
             @foreach($montreal_book_printing_tags as $key => $val)
                 @php
-                    $active = $key == 0 ? 'active' : '';
-                    $div_id = 'Product1' . $val->id;
                     $tag_id = $val->id;
+                    $label = ucwords($language_name == 'french' ? $val->name_french : $val->name);
                     
                     // Get products by tag using FIND_IN_SET (CI line 303)
-                    // Limit to 4 products per tab (CI model getProductByTagId default limit)
+                    // Limit to 4 products per tag (CI model getProductByTagId default limit)
                     $cartNameProducts = DB::table('products')
                         ->join('categories', 'products.category_id', '=', 'categories.id')
                         ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
@@ -315,9 +280,10 @@
                         ->get();
                 @endphp
                 
-                <div id="{{ $div_id }}" data-tab-content class="{{ $active }}">
-                    <div class="product-grid">
-                        @if($cartNameProducts && count($cartNameProducts) > 0)
+                @if($cartNameProducts && count($cartNameProducts) > 0)
+                    <div class="product-block">
+                        <h3 class="product-block-title">{{ $label }}</h3>
+                        <div class="product-grid">
                             @foreach($cartNameProducts as $key => $cartNameProduct)
                                 @php
                                     $imageurl = url('uploads/products/' . $cartNameProduct->product_image);
@@ -325,44 +291,37 @@
                                     $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
                                     $productUrl = url('Products/view/' . base64_encode($cartNameProduct->id));
                                 @endphp
-                                <div class="product-card fade-in" style="box-shadow: -3px 0px 16px rgba(0, 0, 0, 0.08), -3px 0px 8px rgba(0, 0, 0, 0.04);">
-                                    <div class="product-image">
-                                        <a href="{{ $productUrl }}">
-                                            <img src="{{ $imageurl }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
-                                        </a>
-                                        <div class="product-info">
-                                            <div class="category">
-                                                <a href="{{ $productUrl }}">
-                                                    {{ $cartNameProduct->category_name }}
-                                                </a>
-                                            </div>
-                                            <h3 class="product-title">
-                                                <a href="{{ $productUrl }}">
-                                                    {{ $cartNameProduct->name }}
-                                                </a>
-                                            </h3>
-                                            <div class="price">
-                                                <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($cartNameProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
-                                            </div>
-                                            <div>
-                                                <a href="{{ $productUrl }}" class="quick-view-btn">
-                                                    <i class="las la-search"></i>
-                                                    <span>{{ $language_name == 'french' ? 'Aperçu rapide' : 'Quick View' }}</span>
-                                                </a>
-                                            </div>
+                                <div class="product-card fade-in">
+                                    <a href="{{ $productUrl }}" class="product-image">
+                                        <img src="{{ $imageurl }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
+                                    </a>
+                                    <div class="product-info">
+                                        <div class="category">
+                                            <a href="{{ $productUrl }}">
+                                                {{ $cartNameProduct->category_name }}
+                                            </a>
+                                        </div>
+                                        <h3 class="product-title">
+                                            <a href="{{ $productUrl }}">
+                                                {{ $cartNameProduct->name }}
+                                            </a>
+                                        </h3>
+                                        <div class="price">
+                                            {{ $language_name == 'french' ? 'À partir de ' : 'Starting at ' }}
+                                            <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($cartNameProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-                        @else
-                            <div class="no-products fade-in">
-                                <p class="section-description">
-                                    {{ $language_name == 'french' ? 'Aucun produit trouvé' : 'No Product Found' }}
-                                </p>
-                            </div>
-                        @endif
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="no-products fade-in">
+                        <p class="section-description">
+                            {{ $language_name == 'french' ? 'Aucun produit trouvé' : 'No Product Found' }}
+                        </p>
+                    </div>
+                @endif
             @endforeach
         </div>
     </div>
@@ -370,24 +329,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Tab functionality
-        const tabs = document.querySelectorAll('[data-tab-target]');
-        const tabContents = document.querySelectorAll('[data-tab-content]');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const target = document.querySelector(tab.dataset.tabTarget);
-
-                // Remove active class from all tabs and contents
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-
-                // Add active class to clicked tab and its content
-                tab.classList.add('active');
-                target.classList.add('active');
-            });
-        });
-
         // Intersection Observer for fade-in animation
         const fadeElements = document.querySelectorAll('.fade-in');
         const observer = new IntersectionObserver((entries) => {
