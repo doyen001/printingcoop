@@ -1350,4 +1350,93 @@ class OrdersController extends Controller
             return '<tr><td colspan="7" class="text-center text-danger">Error loading orders: ' . $e->getMessage() . '</td></tr>';
         }
     }
+
+    /**
+     * Generate monthly report PDF
+     * CI: Orders->make_pdf_montly_report() lines 1974-2026
+     */
+    public function generateMonthlyReport(Request $request)
+    {
+        try {
+            $status = $request->input('status');
+            $from = $request->input('from');
+            $to = $request->input('to');
+
+            // Get monthly orders data (CI project style)
+            $orders = $this->getMonthlyOrders($status, $from, $to);
+
+            // Prepare data for PDF view
+            $data = [
+                'orders' => $orders,
+                'status' => $status,
+                'from' => $from,
+                'to' => $to,
+            ];
+
+            // Generate PDF using DomPDF
+            $pdf = PDF::loadView('admin.orders.monthly_report_pdf', $data);
+            
+            // Create directory if it doesn't exist
+            $directory = storage_path('app/public/pdf');
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            // Generate unique filename
+            $fileName = 'monthly_report_' . rand(0, 999999) . '_' . date('Y-m-d') . '_' . time() . '.pdf';
+            $filePath = $directory . '/' . $fileName;
+            
+            // Save PDF
+            $pdf->save($filePath);
+
+            // Return JSON with pdf_url
+            $pdf_url = url('storage/pdf/' . $fileName);
+            
+            return response()->json([
+                'status' => 1,
+                'pdf_url' => $pdf_url,
+                'message' => 'Monthly report generated successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error generating monthly report: ' . $e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error generating monthly report: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Helper: Get monthly orders data
+     * CI: ProductOrder_Model->getMonthlyOrders() lines 381-407
+     */
+    protected function getMonthlyOrders($status, $from, $to)
+    {
+        $query = DB::table('product_orders')
+            ->select('product_orders.*')
+            ->leftJoin('provider_orders', 'provider_orders.order_id', '=', 'product_orders.id')
+            ->groupBy('product_orders.id')
+            ->orderBy('product_orders.created', 'desc');
+
+        // Apply date filters
+        if (!empty($from)) {
+            $query->where('product_orders.created', '>=', date('Y-m-d', strtotime($from)));
+        }
+
+        if (!empty($to)) {
+            $query->where('product_orders.created', '<=', date('Y-m-d', strtotime($to)));
+        }
+
+        // Apply status filter
+        if (!empty($status)) {
+            if (is_array($status)) {
+                $query->whereIn('product_orders.status', $status);
+            } else {
+                $query->where('product_orders.status', $status);
+            }
+        }
+
+        return $query->get();
+    }
 }

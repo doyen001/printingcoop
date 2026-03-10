@@ -322,6 +322,33 @@ $(document).ready(function() {
         if($('#search-order-form #monthly_report').is(':checked')) {
             $('#search-order-form #monthly_report').val('true');
             monthly_report = 'true';
+            
+            // Generate monthly report PDF (CI project style)
+            $.ajax({
+                url: '{{ url("admin/Orders/generateMonthlyReport") }}',
+                type: 'POST',
+                data: {
+                    from_no: $('#search-order-form #from_no').val(),
+                    to_no: $('#search-order-form #to_no').val(),
+                    from: $('#search-order-form #from').val(),
+                    to: $('#search-order-form #to').val(),
+                    status: $('#search-order-form .multi-select').val(),
+                    monthly_report: monthly_report,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.status === 1) {
+                        // Open PDF in new window
+                        window.open(response.pdf_url, '_blank');
+                    } else {
+                        alert('Error generating monthly report: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Error generating monthly report. Please try again.');
+                }
+            });
+            
         } else {
             $('#search-order-form #monthly_report').val('false');
             monthly_report = 'false';

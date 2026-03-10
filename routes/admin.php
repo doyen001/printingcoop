@@ -261,6 +261,7 @@ Route::prefix('admin')->middleware(['web', 'admin.auth'])->group(function () {
         Route::get('/data', [\App\Http\Controllers\Admin\OrdersController::class, 'getData'])->name('orders.data');
         Route::post('/list', [\App\Http\Controllers\Admin\OrdersController::class, 'list'])->name('orders.list');
         Route::get('/export-csv', [\App\Http\Controllers\Admin\OrdersController::class, 'exportCsv'])->name('orders.exportCsv');
+        Route::post('/generateMonthlyReport', [\App\Http\Controllers\Admin\OrdersController::class, 'generateMonthlyReport'])->name('orders.generateMonthlyReport');
     });
     
     // Users Routes
