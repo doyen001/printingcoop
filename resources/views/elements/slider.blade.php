@@ -265,7 +265,7 @@
 .tab-nav-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 30px;
+    gap: 20px;
     margin: 0 auto;
     padding: 0 20px;
 }

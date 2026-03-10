@@ -147,7 +147,7 @@ class ProductsController extends Controller
         $total = $this->getTotalActiveProduct($category_id, $sub_category_id, $printer_brand, $printer_series, $printer_models);
         
         $pageno = $request->input('pageno', 1);
-        $no_of_records_per_page = 12;
+        $no_of_records_per_page = 30;
         $offset = ($pageno - 1) * $no_of_records_per_page;
         $total_pages = ceil($total / $no_of_records_per_page);
         
