@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use PDF;
 
 /**
  * Admin OrdersController
@@ -560,23 +561,141 @@ class OrdersController extends Controller
     }
     
     /**
-     * Helper: Generate invoice PDF (placeholder)
+     * Helper: Generate invoice PDF
      */
     protected function generateInvoicePDF($order_id)
     {
-        // Implement PDF generation logic using a library like DomPDF or TCPDF
-        // This is a placeholder for the actual implementation
-        Log::info('Generating invoice PDF for order: ' . $order_id);
+        try {
+            // Get order data
+            $order = DB::table('product_orders')->where('id', $order_id)->first();
+            if (!$order) {
+                Log::error('Order not found for PDF generation: ' . $order_id);
+                return false;
+            }
+
+            // Get order items
+            $orderItems = DB::table('product_order_items')
+                ->where('order_id', $order_id)
+                ->get();
+
+            // Get store and currency info
+            $store = DB::table('stores')->where('id', $order->store_id)->first();
+            $currencySymbol = '$'; // Default, can be enhanced based on currency_id
+
+            // Create PDF view data
+            $data = [
+                'order' => $order,
+                'orderItems' => $orderItems,
+                'store' => $store,
+                'currencySymbol' => $currencySymbol,
+                'orderDate' => date('M d, Y H:i', strtotime($order->created)),
+            ];
+
+            // Generate PDF using DomPDF
+            $pdf = PDF::loadView('admin.orders.invoice_pdf', $data);
+            
+            // Create directory if it doesn't exist
+            $directory = storage_path('app/public/pdf');
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            // Save PDF
+            $filename = strtolower($order->order_id) . '-invoice.pdf';
+            $filepath = $directory . '/' . $filename;
+            $pdf->save($filepath);
+
+            Log::info('Invoice PDF generated successfully for order: ' . $order_id);
+            return true;
+
+        } catch (\Exception $e) {
+            Log::error('Error generating invoice PDF for order ' . $order_id . ': ' . $e->getMessage());
+            return false;
+        }
     }
     
     /**
-     * Helper: Generate order PDF (placeholder)
+     * Helper: Generate order PDF
      */
     protected function generateOrderPDF($order_id)
     {
-        // Implement PDF generation logic using a library like DomPDF or TCPDF
-        // This is a placeholder for the actual implementation
-        Log::info('Generating order PDF for order: ' . $order_id);
+        try {
+            // Get order data
+            $order = DB::table('product_orders')->where('id', $order_id)->first();
+            if (!$order) {
+                Log::error('Order not found for PDF generation: ' . $order_id);
+                return false;
+            }
+
+            // Get order items with decoded JSON data
+            $orderItems_raw = DB::table('product_order_items')
+                ->where('order_id', $order_id)
+                ->get();
+
+            // Process order items like in viewOrder method
+            $orderItems = [];
+            foreach ($orderItems_raw as $item) {
+                $itemArray = (array) $item;
+                $itemArray['cart_images'] = !empty($itemArray['cart_images']) ? json_decode($itemArray['cart_images'], true) : [];
+                $itemArray['attribute_ids'] = !empty($itemArray['attribute_ids']) ? json_decode($itemArray['attribute_ids'], true) : [];
+                $itemArray['product_size'] = !empty($itemArray['product_size']) ? json_decode($itemArray['product_size'], true) : [];
+                $itemArray['product_width_length'] = !empty($itemArray['product_width_length']) ? json_decode($itemArray['product_width_length'], true) : [];
+                $itemArray['page_product_width_length'] = !empty($itemArray['page_product_width_length']) ? json_decode($itemArray['page_product_width_length'], true) : [];
+                $itemArray['product_depth_length_width'] = !empty($itemArray['product_depth_length_width']) ? json_decode($itemArray['product_depth_length_width'], true) : [];
+                
+                // Ensure arrays are properly formatted
+                $itemArray['cart_images'] = is_array($itemArray['cart_images']) ? $itemArray['cart_images'] : [];
+                $itemArray['attribute_ids'] = is_array($itemArray['attribute_ids']) ? $itemArray['attribute_ids'] : [];
+                $itemArray['product_size'] = is_array($itemArray['product_size']) ? $itemArray['product_size'] : [];
+                $itemArray['product_width_length'] = is_array($itemArray['product_width_length']) ? $itemArray['product_width_length'] : [];
+                $itemArray['page_product_width_length'] = is_array($itemArray['page_product_width_length']) ? $itemArray['page_product_width_length'] : [];
+                $itemArray['product_depth_length_width'] = is_array($itemArray['product_depth_length_width']) ? $itemArray['product_depth_length_width'] : [];
+                
+                $orderItems[] = $itemArray;
+            }
+
+            // Get address details
+            $stateData = DB::table('states')->where('id', $order->billing_state)->first();
+            $countryData = DB::table('countries')->where('id', $order->billing_country)->first();
+            $cityData = DB::table('cities')->where('id', $order->billing_city)->first();
+
+            // Get store info
+            $store = DB::table('stores')->where('id', $order->store_id)->first();
+            $currencySymbol = '$'; // Default, can be enhanced based on currency_id
+
+            // Create PDF view data
+            $data = [
+                'order' => (array) $order,
+                'orderItems' => $orderItems,
+                'cityData' => (array) $cityData,
+                'stateData' => (array) $stateData,
+                'countryData' => (array) $countryData,
+                'store' => $store,
+                'currencySymbol' => $currencySymbol,
+                'orderDate' => date('M d, Y H:i', strtotime($order->created)),
+            ];
+
+            // Generate PDF using DomPDF
+            $pdf = PDF::loadView('admin.orders.order_pdf', $data);
+            
+            // Create directory if it doesn't exist
+            $directory = storage_path('app/public/pdf');
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            // Save PDF
+            $filename = strtolower($order->order_id) . '-order.pdf';
+            $filepath = $directory . '/' . $filename;
+            $pdf->save($filepath);
+
+            Log::info('Order PDF generated successfully for order: ' . $order_id);
+            return true;
+
+        } catch (\Exception $e) {
+            Log::error('Error generating order PDF for order ' . $order_id . ': ' . $e->getMessage());
+            return false;
+        }
     }
 
     /**
