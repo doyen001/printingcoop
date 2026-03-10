@@ -97,7 +97,7 @@
     height: 20px;
     object-fit: contain;
     color: #f28738;
-    transition: all 0.3s ease;
+    transition: all 0.1s ease;
 }
 
 /* .service-image-card:hover .service-icon {
@@ -272,7 +272,7 @@
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    entry.target.style.transitionDelay = `${index * 0.1}s`;
+                    entry.target.style.transitionDelay = `${index * 0}s`;
                 }
             });
         }, {

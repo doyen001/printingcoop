@@ -233,7 +233,7 @@
 
 </style>
 
-<section class="book-printing-section">
+<section class="book-printing-section" id="section-4-main">
     <div class="container">
         <div class="section-header fade-in">
             <div class="section-badge">
@@ -281,7 +281,7 @@
                 @endphp
                 
                 @if($cartNameProducts && count($cartNameProducts) > 0)
-                    <div class="product-block">
+                    <div class="product-block" id="section-4-tag-{{ $tag_id }}">
                         <h3 class="product-block-title">{{ $label }}</h3>
                         <div class="product-grid">
                             @foreach($cartNameProducts as $key => $cartNameProduct)
@@ -307,7 +307,6 @@
                                             </a>
                                         </h3>
                                         <div class="price">
-                                            {{ $language_name == 'french' ? 'À partir de ' : 'Starting at ' }}
                                             <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($cartNameProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
                                         </div>
                                     </div>
@@ -346,8 +345,8 @@
         });
 
         // Add quicker delay to product cards
-        document.querySelectorAll('.product-card').forEach((card, i) => {
-            card.style.transitionDelay = `${i * 0.03}s`;
-        });
+        // document.querySelectorAll('.product-card').forEach((card, i) => {
+        //     card.style.transitionDelay = `${i * 0}s`;
+        // });
     });
 </script>

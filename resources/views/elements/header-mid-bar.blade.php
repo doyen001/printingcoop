@@ -140,7 +140,7 @@
     padding: 12px 16px;
     border-bottom: 1px solid #f5f5f5;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 12px;

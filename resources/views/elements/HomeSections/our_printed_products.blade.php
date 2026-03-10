@@ -15,7 +15,7 @@
     }
 
     .printed-products {
-        padding: 120px 0;
+        /* padding: 120px 0; */
         background: linear-gradient(135deg, #ffffff 0%, var(--background-light) 100%);
         position: relative;
         overflow: hidden;
@@ -28,7 +28,7 @@
         right: 0;
         width: 100%;
         height: 100%;
-        background: radial-gradient(circle at top right, rgba(255, 107, 53, 0.05) 0%, transparent 70%);
+        background-color: #f8f9fa;
         z-index: 1;
     }
 
@@ -82,115 +82,80 @@
         margin-bottom: 60px;
     }
 
-    .category-card {
-        background: #ffffff;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        box-shadow: var(--card-shadow);
-        transition: var(--transition);
-        position: relative;
+    .product-card {
+        background: transparent;
+        text-align: center;
+        transform: translateY(0) !important;
+        transition: transform 0.3s ease;
+        height: 340px;
         opacity: 0;
-        transform: translateY(30px);
     }
 
-    .category-card.animate {
-        animation: fadeInUp 0.6s ease forwards;
-    }
-
-    .category-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
-        opacity: 0;
-        transition: var(--transition);
-        z-index: 1;
-    }
-
-    .category-card:hover::before {
+    .product-card.animate {
         opacity: 1;
+        transition: all 0.3s ease;
     }
 
-    .category-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    .product-card:hover {
+        transform: translateY(-3px) !important;
     }
 
-    .category-link {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-    }
-
-    .category-image {
-        position: relative;
-        padding-top: 100%;
-        overflow: hidden;
-        background: var(--background-light);
-    }
-
-    .category-image img {
-        position: absolute;
-        top: 0;
-        left: 0;
+    .product-image {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.6s ease;
+        background: #ffffff;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: .5rem;
+        overflow: hidden;
     }
 
-    .category-card:hover .category-image img {
-        transform: scale(1.1);
+    .product-image img {
+        position: static;
+        width: 100%;
+        height: 250px;
     }
 
-    .category-content {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 30px;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
-        transform: translateY(70%);
-        transition: var(--transition);
-        z-index: 2;
+    .product-info {
+        position: static;
+        padding: 10px 4px 0;
+        background: transparent;
+        text-align: center;
     }
 
-    .category-card:hover .category-content {
-        transform: translateY(0);
+    .product-category {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #333333;
+        margin-bottom: 2px;
+        line-height: 1.3;
     }
 
-    .category-name {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #ffffff;
-        margin: 0;
-        transition: var(--transition);
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        position: relative;
-        padding-bottom: 15px;
+    .printed-product-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333333;
+        margin-bottom: 2px;
+        line-height: 1.3;
     }
 
-    .category-name::after {
-        
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 0;
-        transition: var(--transition);
+    .printed-product-title a {
+        color: inherit;
+        text-decoration: none;
     }
 
-    .category-card:hover .category-name::after {
-        opacity: 1;
+    .printed-product-title a:hover {
+        text-decoration: underline;
     }
 
     .show-more-container {
         text-align: center;
         margin-top: 60px;
-		margin-bottom: 20px;
+        margin-bottom: 20px;
+        margin-left: 0px;
+        margin-right: 0px;
 		margin-left: 0px;
 		margin-right: 0px;
         position: relative;
@@ -448,16 +413,17 @@
                             $categoryId = base64_encode($category['id']);
                         @endphp
                         
-                        <article class="category-card {{ $hiddenClass }}" style="animation-delay: {{ $delay }}ms">
-                            <a href="{{ url('Products?category_id=' . $categoryId) }}" class="category-link">
-                                <div class="category-image">
-                                    <img src="{{ $src }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
-                                </div>
-                                <div class="category-content">
-                                    <h2 class="category-name">{{ $categoryName }}</h2>
-                                </div>
+                        <div class="product-card {{ $hiddenClass }}" style="animation-delay: {{ $delay }}ms">
+                            <a href="{{ url('Products?category_id=' . $categoryId) }}" class="product-image">
+                                <img src="{{ $src }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
                             </a>
-                        </article>
+                            <div class="product-info">
+                                {{-- <div class="product-category">Category</div> --}}
+                                <h3 class="printed-product-title">
+                                    <a href="{{ url('Products?category_id=' . $categoryId) }}">{{ $categoryName }}</a>
+                                </h3>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
 
@@ -474,11 +440,11 @@
                     </div>
                 @endif
 
-                <div class="view-all-container">
+                {{-- <div class="view-all-container">
                     <a href="{{ url('Products') }}" class="view-all-button">
                         {{ $language_name == 'french' ? 'Voir tout' : 'View All' }}
                     </a>
-                </div>
+                </div> --}}
             @endif
         </div>
     </div>
@@ -499,7 +465,7 @@
 
     // Function to handle animation of cards
     function animateCards() {
-        const cards = document.querySelectorAll('.category-card:not(.category-card-hidden)');
+        const cards = document.querySelectorAll('.product-card:not(.category-card-hidden)');
         cards.forEach(card => {
             if (isInViewport(card) && !card.classList.contains('animate')) {
                 card.classList.add('animate');

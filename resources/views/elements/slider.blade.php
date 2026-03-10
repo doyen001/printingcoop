@@ -177,12 +177,12 @@
         display: none;
     }
 
-    @media (max-width: 768px) {
+    /* @media (max-width: 768px) {
         .swipe-hint {
             display: block;
             animation: fadeOut 3s forwards 2s;
         }
-    }
+    } */
 
     @keyframes fadeOut {
         to { opacity: 0; }
@@ -251,6 +251,194 @@
         @endif
     </div>
 </section>
+
+{{-- Tab Navigation Section --}}
+@if(isset($proudly_display_your_brand_tags) && isset($montreal_book_printing_tags))
+<style>
+/* Tab Navigation Section - Using Section 2 Product Card Styles */
+.tab-navigation-section {
+    padding: 40px 0;
+    background: #f8f9fa;
+    height: 500px;
+}
+
+.tab-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 30px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.tab-nav-item {
+    cursor: pointer;
+}
+
+.tab-nav-item .product-card {
+    /* background: transparent; */
+    text-align: center;
+    transform: translateY(0) !important;
+    transition: transform 0.1s ease;
+    height: 340px;
+    opacity: 1;
+}
+
+.tab-nav-item .product-card:hover {
+    transform: translateY(-3px) !important;
+}
+
+.tab-nav-item .product-image {
+    width: 100%;
+    background: #ffffff;
+    border-radius: .2rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .5rem;
+    overflow: hidden;
+}
+
+.tab-nav-item .product-image img {
+    position: static;
+    width: 100%;
+    height: 240px;
+}
+
+.tab-nav-item .product-info {
+    position: static;
+    padding: 10px 4px 0;
+    background: transparent;
+    text-align: center;
+}
+
+.tab-nav-item .product-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+.tab-nav-item .product-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.tab-nav-item .product-title a:hover {
+    text-decoration: underline;
+}
+</style>
+
+<section class="tab-navigation-section">
+    <div class="tab-nav-grid">
+        {{-- Section 2 Tags --}}
+        @if(isset($proudly_display_your_brand_tags) && count($proudly_display_your_brand_tags) > 0)
+            @foreach($proudly_display_your_brand_tags as $key => $val)
+                @php
+                    $tag_id = $val->id;
+                    $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
+                    
+                    // Get first product for this tag
+                    $firstProduct = DB::table('products')
+                        ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
+                        ->where('products.status', 1)
+                        ->orderBy('products.updated', 'desc')
+                        ->first();
+                @endphp
+                
+                @if($firstProduct)
+                    <div class="tab-nav-item" onclick="scrollToSection('section-2-tag-{{ $tag_id }}')">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="{{ url('uploads/products/' . $firstProduct->product_image) }}" 
+                                     alt="{{ $label }}" 
+                                     loading="lazy">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">
+                                    <a href="javascript:void(0)" onclick="scrollToSection('section-2-tag-{{ $tag_id }}')">{{ $label }}</a>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        @endif
+        
+        {{-- Section 4 Tags --}}
+        @if(isset($montreal_book_printing_tags) && count($montreal_book_printing_tags) > 0)
+            @foreach($montreal_book_printing_tags as $key => $val)
+                @php
+                    $tag_id = $val->id;
+                    $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
+                    
+                    // Get first product for this tag
+                    $firstProduct = DB::table('products')
+                        ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
+                        ->where('products.status', 1)
+                        ->orderBy('products.updated', 'desc')
+                        ->first();
+                @endphp
+                
+                @if($firstProduct)
+                    <div class="tab-nav-item" onclick="scrollToSection('section-4-tag-{{ $tag_id }}')">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="{{ url('uploads/products/' . $firstProduct->product_image) }}" 
+                                     alt="{{ $label }}" 
+                                     loading="lazy">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">
+                                    <a href="javascript:void(0)" onclick="scrollToSection('section-4-tag-{{ $tag_id }}')">{{ $label }}</a>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        @endif
+    </div>
+</section>
+
+<script>
+// Function to scroll to specific section
+window.scrollToSection = function(sectionId) {
+    // Find the target section
+    const targetSection = document.getElementById(sectionId);
+    
+    if (targetSection) {
+        // Smooth scroll to the section
+        targetSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+        
+        // Add highlight effect
+        targetSection.style.transition = 'background-color 0.3s ease';
+        // targetSection.style.backgroundColor = '#fff3cd';
+        
+        // Remove highlight after 2 seconds
+        setTimeout(() => {
+            targetSection.style.backgroundColor = '';
+        }, 2000);
+    } else {
+        // If section not found, try to scroll to the main section areas
+        if (sectionId.startsWith('section-2-')) {
+            const section2 = document.querySelector('.showcase-section');
+            if (section2) {
+                section2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        } else if (sectionId.startsWith('section-4-')) {
+            const section4 = document.querySelector('.book-printing-section');
+            if (section4) {
+                section4.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    }
+};
+</script>
+@endif
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
