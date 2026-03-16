@@ -172,6 +172,25 @@
     background: transparent !important;
     color: #333 !important;
 }
+
+/* Header menu bar styling */
+.header-menu-bar {
+    background-color: white !important;
+    box-shadow: none;
+    border-top: 1px #d8d8d8 solid;
+}
+
+.header-menu-bar .all-menu li a {
+    color: rgb(72, 72, 72) !important;
+}
+
+.header-menu-bar .all-menu li a:hover {
+    color: rgb(72, 72, 72) !important;
+}
+
+.header-menu-bar.sticky {
+    box-shadow: 0 5px 15px rgba(168, 168, 168, 0.3);
+}
 </style>
 <div class="container-fluid header-menu-bar">
     <div class="header-menu-bar-inner">

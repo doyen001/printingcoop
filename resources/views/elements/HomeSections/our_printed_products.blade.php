@@ -15,7 +15,7 @@
     }
 
     .printed-products {
-        /* padding: 120px 0; */
+        padding: 50px 0;
         background: linear-gradient(135deg, #ffffff 0%, var(--background-light) 100%);
         position: relative;
         overflow: hidden;
@@ -42,18 +42,19 @@
 
     .printed-products-content {
         position: relative;
+        padding: 0 100px;
     }
 
     .printed-products-header {
         text-align: center;
-        margin-bottom: 80px;
+        /* margin-bottom: 80px; */
         position: relative;
     }
 
     .printed-products-title {
-        font-size: 3.2rem;
+        font-size: 32px;
         font-weight: 800;
-        color: #183e73;
+        color: #484848;
         margin-bottom: 30px;
         position: relative;
         display: inline-block;
@@ -63,7 +64,7 @@
         animation: fadeInUp 0.8s ease forwards;
     }
 
-    .printed-products-title::after {
+    /* .printed-products-title::after {
         content: '';
         position: absolute;
         bottom: -15px;
@@ -73,12 +74,13 @@
         height: 4px;
         background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
         border-radius: 2px;
-    }
+    } */
 
     .categories-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 40px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, auto);
+        gap: 20px;
         margin-bottom: 60px;
     }
 
@@ -114,7 +116,8 @@
     .product-image img {
         position: static;
         width: 100%;
-        height: 250px;
+        height: 100%;
+        aspect-ratio: 1 / 1;
     }
 
     .product-info {
@@ -296,7 +299,8 @@
     @media (max-width: 1400px) {
         .categories-grid {
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+            grid-template-rows: repeat(3, auto);
+            gap: 20px;
         }
     }
 
@@ -311,7 +315,7 @@
 
         .categories-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
+            gap: 20px;
         }
 
         .category-name {
@@ -334,7 +338,7 @@
 
         .categories-grid {
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 10px;
         }
 
         .category-content {

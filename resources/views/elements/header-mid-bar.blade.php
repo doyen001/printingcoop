@@ -188,6 +188,10 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+
+.header-mid-bar .container {
+    max-width: 1200px;
+}
 </style>
 <div class="header-mid-bar">
     <div class="container" style="z-index: 6">

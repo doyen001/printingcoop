@@ -259,7 +259,7 @@
 .tab-navigation-section {
     padding: 40px 0;
     background: #f8f9fa;
-    height: 500px;
+    height: 100%;
 }
 
 .tab-nav-grid {
@@ -267,7 +267,7 @@
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 20px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 40px;
 }
 
 .tab-nav-item {
@@ -279,7 +279,7 @@
     text-align: center;
     transform: translateY(0) !important;
     transition: transform 0.1s ease;
-    height: 340px;
+    height: 100%;
     opacity: 1;
 }
 
@@ -301,7 +301,8 @@
 .tab-nav-item .product-image img {
     position: static;
     width: 100%;
-    height: 240px;
+    height: 100%;
+    aspect-ratio: 1 / 1;
 }
 
 .tab-nav-item .product-info {
@@ -327,6 +328,20 @@
 .tab-nav-item .product-title a:hover {
     text-decoration: underline;
 }
+
+.product-badge {
+    background-color: #ff715b;
+    color: white;
+    position: absolute;
+    border-radius: 5px;
+    padding: 4px 12px;
+    top: 8px;
+    left: 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-family: Sans-serif;
+    font-weight: bold;
+}
 </style>
 
 <section class="tab-navigation-section">
@@ -350,6 +365,7 @@
                     <div class="tab-nav-item" onclick="scrollToSection('section-2-tag-{{ $tag_id }}')">
                         <div class="product-card">
                             <div class="product-image">
+                                <div class="product-badge">browse category</div>
                                 <img src="{{ url('uploads/products/' . $firstProduct->product_image) }}" 
                                      alt="{{ $label }}" 
                                      loading="lazy">
@@ -384,6 +400,7 @@
                     <div class="tab-nav-item" onclick="scrollToSection('section-4-tag-{{ $tag_id }}')">
                         <div class="product-card">
                             <div class="product-image">
+                                <div class="product-badge">browse category</div>
                                 <img src="{{ url('uploads/products/' . $firstProduct->product_image) }}" 
                                      alt="{{ $label }}" 
                                      loading="lazy">

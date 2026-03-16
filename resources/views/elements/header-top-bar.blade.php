@@ -245,6 +245,12 @@
         color: var(--primary-color);
     }
 
+    .header-top-bar .container {
+        /* flex: 0 0 41.666667%;
+        max-width: 41.666667%; */
+        max-width: 1200px;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
         .top-inner-bar {

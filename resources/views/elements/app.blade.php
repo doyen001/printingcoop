@@ -48,7 +48,7 @@
         $configurations = DB::table('configurations')->where('id', 1)->first();
         $language_name = config('store.language_name', 'english');
     @endphp
-    <div class="announcements-bar">
+    <div class="announcements-bar" style="background-color: #3e84b6">
         <div class="container">
             <span>
                 @if($language_name == 'french')

@@ -65,7 +65,7 @@
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 30px;
+    gap: 40px 20px;
     padding: 40px 0;
 }
 
@@ -229,6 +229,10 @@
 .fade-in.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+.product-content {
+    padding: 0 100px;
 }
 
 </style>

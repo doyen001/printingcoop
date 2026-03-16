@@ -46,8 +46,8 @@
 
 .showcase-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 20px;
     margin-top: 40px;
 }
 
@@ -83,7 +83,8 @@
 .product-image img {
     position: static;
     width: 100%;
-    height: 250px;
+    height: 100%;
+    aspect-ratio: 1 / 1;
     /* object-fit: contain; */
 }
 
@@ -133,6 +134,7 @@
 /* Tag blocks (formerly tabs) */
 .showcase-tag-block {
     margin-top: 40px;
+    padding: 0 100px;
 }
 
 .showcase-tag-title {
