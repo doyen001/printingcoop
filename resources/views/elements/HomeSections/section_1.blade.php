@@ -278,7 +278,7 @@
                     ->where('products.status', 1)
                     ->orderBy('products.updated', 'desc')
                     ->select('products.*', 'categories.name as category_name')
-                    ->limit(20)
+                    ->limit(9)
                     ->get();
             @endphp
 

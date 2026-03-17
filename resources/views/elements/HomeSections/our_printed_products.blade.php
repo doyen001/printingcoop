@@ -52,16 +52,23 @@
     }
 
     .printed-products-title {
-        font-size: 32px;
-        font-weight: 800;
+        font-size: 28px;
+        font-weight: 600;
         color: #484848;
-        margin-bottom: 30px;
+        margin-bottom: 0;
         position: relative;
         display: inline-block;
         letter-spacing: -0.5px;
-        opacity: 0;
+        /* opacity: 0;
         transform: translateY(30px);
-        animation: fadeInUp 0.8s ease forwards;
+        animation: fadeInUp 0.8s ease forwards; */
+    }
+
+    .printed-products-subtitle {
+        color: #484848;
+        font-weight: 100;
+        font-size: 18px;
+        margin-bottom: 20px;
     }
 
     /* .printed-products-title::after {
@@ -87,16 +94,16 @@
     .product-card {
         background: transparent;
         text-align: center;
-        transform: translateY(0) !important;
+        /* transform: translateY(0) !important;
         transition: transform 0.3s ease;
+        opacity: 0; */
         height: 340px;
-        opacity: 0;
     }
 
-    .product-card.animate {
+    /* .product-card.animate {
         opacity: 1;
         transition: all 0.3s ease;
-    }
+    } */
 
     .product-card:hover {
         transform: translateY(-3px) !important;
@@ -118,6 +125,7 @@
         width: 100%;
         height: 100%;
         aspect-ratio: 1 / 1;
+        /* transform: scale(1.06); */
     }
 
     .product-info {
@@ -358,8 +366,11 @@
         <div class="printed-products-content">
             <header class="printed-products-header">
                 <h1 class="printed-products-title">
-                    {{ $language_name == 'french' ? 'NOS PRODUITS IMPRIMÉS' : 'Our Printed Products' }}
+                    {{ $language_name == 'french' ? 'LES BASIQUES LES PLUS POPULAIRES' : 'Most Popular Basics' }}
                 </h1>
+                <p class="printed-products-subtitle">
+                    {{ $language_name == 'french' ? 'Matériel de marketing classique avec des résultats cohérents.' : 'Classic marketing materials with consistent results.' }}
+                </p>
             </header>
 
             @if(isset($our_printed_products_category) && count($our_printed_products_category) > 0)
@@ -410,8 +421,8 @@
                             $filenameWithoutExtension = pathinfo($alt_img, PATHINFO_FILENAME);
                             
                             // Hide cards after 9th item
-                            $hiddenClass = $key >= 9 ? 'category-card-hidden' : '';
-                            $delay = ($key % 9) * 100;
+                            $hiddenClass = $key >= 15 ? 'category-card-hidden' : '';
+                            $delay = ($key % 15) * 100;
 
                             //encode
                             $categoryId = base64_encode($category['id']);
@@ -419,7 +430,7 @@
                         
                         <div class="product-card {{ $hiddenClass }}" style="animation-delay: {{ $delay }}ms">
                             <a href="{{ url('Products?category_id=' . $categoryId) }}" class="product-image">
-                                <img src="{{ $src }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
+                                <img src="{{ $src }}" alt="{{ $filenameWithoutExtension }}" loading="lazy" style="transform: scale(1.06);">
                             </a>
                             <div class="product-info">
                                 {{-- <div class="product-category">Category</div> --}}
@@ -431,7 +442,7 @@
                     @endforeach
                 </div>
 
-                @if(count($our_printed_products_category) > 8)
+                {{-- @if(count($our_printed_products_category) > 8)
                     <div class="show-more-container">
                         <button class="show-more-button" onclick="toggleCategories()" aria-expanded="false">
                             <span class="show-more-text">
@@ -442,7 +453,7 @@
                             </svg>
                         </button>
                     </div>
-                @endif
+                @endif --}}
 
                 {{-- <div class="view-all-container">
                     <a href="{{ url('Products') }}" class="view-all-button">
@@ -468,14 +479,14 @@
     }
 
     // Function to handle animation of cards
-    function animateCards() {
-        const cards = document.querySelectorAll('.product-card:not(.category-card-hidden)');
-        cards.forEach(card => {
-            if (isInViewport(card) && !card.classList.contains('animate')) {
-                card.classList.add('animate');
-            }
-        });
-    }
+    // function animateCards() {
+    //     const cards = document.querySelectorAll('.product-card:not(.category-card-hidden)');
+    //     cards.forEach(card => {
+    //         if (isInViewport(card) && !card.classList.contains('animate')) {
+    //             card.classList.add('animate');
+    //         }
+    //     });
+    // }
 
     // Enhanced toggle categories function
     window.toggleCategories = function() {

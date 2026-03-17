@@ -178,6 +178,7 @@
     background-color: white !important;
     box-shadow: none;
     border-top: 1px #d8d8d8 solid;
+    border-bottom: 1px #f3f3f3ff solid;
     height: 60px;
 }
 
