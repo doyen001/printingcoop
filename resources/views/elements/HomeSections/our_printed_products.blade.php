@@ -409,9 +409,9 @@
                                 
                             $filenameWithoutExtension = pathinfo($alt_img, PATHINFO_FILENAME);
                             
-                            // Hide cards after 8th item
-                            $hiddenClass = $key >= 8 ? 'category-card-hidden' : '';
-                            $delay = ($key % 8) * 100;
+                            // Hide cards after 9th item
+                            $hiddenClass = $key >= 9 ? 'category-card-hidden' : '';
+                            $delay = ($key % 9) * 100;
 
                             //encode
                             $categoryId = base64_encode($category['id']);

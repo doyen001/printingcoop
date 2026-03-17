@@ -178,6 +178,11 @@
     background-color: white !important;
     box-shadow: none;
     border-top: 1px #d8d8d8 solid;
+    height: 60px;
+}
+
+.header-menu-bar-inner {
+    height: 100% !important;
 }
 
 .header-menu-bar .all-menu li a {
