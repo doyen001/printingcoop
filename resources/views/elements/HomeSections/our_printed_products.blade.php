@@ -15,7 +15,7 @@
     }
 
     .printed-products {
-        padding: 50px 0;
+        padding: 50px 0 0 0;
         background: linear-gradient(135deg, #ffffff 0%, var(--background-light) 100%);
         position: relative;
         overflow: hidden;

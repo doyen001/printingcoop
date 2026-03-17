@@ -4,7 +4,7 @@
 
 <style>
 .showcase-section {
-    padding: 80px 0;
+    /* padding: 80px 0; */
     background-color: #f8f9fa;
     position: relative;
     overflow: hidden;
@@ -133,16 +133,25 @@
 
 /* Tag blocks (formerly tabs) */
 .showcase-tag-block {
-    margin-top: 40px;
+    margin: 40px 0 100px 0;
     padding: 0 100px;
 }
 
 .showcase-tag-title {
-    font-size: 2rem;
+    font-size: 28px;
     font-weight: 600;
-    color: #183e73;
-    margin-bottom: 18px;
-    text-align: center;
+    color: #484848;
+    margin-bottom: 0;
+    position: relative;
+    display: inline-block;
+    letter-spacing: -0.5px;
+}
+
+.showcase-tag-subtitle {
+    color: #484848;
+    font-weight: 100;
+    font-size: 18px;
+    margin-bottom: 20px;
 }
 
 /* Fade-in Animation */
@@ -241,7 +250,7 @@
 
 <section class="showcase-section" id="section-2-main">
     <div class="container">
-        <div class="showcase-header fade-in">
+        {{-- <div class="showcase-header fade-in">
             <h2 class="showcase-title">
                 @if($language_name == 'french')
                     {{ $section_2->name_french ?? '' }}
@@ -263,7 +272,7 @@
                     {!! $section_2->content ?? '' !!}
                 @endif
             </p>
-        </div>
+        </div> --}}
         
         {{-- Vertical tag blocks (flattened tabs) --}}
         @foreach($proudly_display_your_brand_tags as $key => $val)
@@ -284,7 +293,12 @@
 
             @if($posterAndPlansProducts && count($posterAndPlansProducts) > 0)
                 <div class="showcase-tag-block" id="section-2-tag-{{ $tag_id }}">
-                    <h3 class="showcase-tag-title">{{ $label }}</h3>
+                    <header style="text-align: center;">
+                        <h3 class="showcase-tag-title">{{ $label }}</h3>
+                        {{-- <p class="showcase-tag-subtitle">
+                            {{ $language_name == 'french' ? "Des produits qui attirent l'attention pour toute promotion ou événement." : 'Classic marketing materials with consistent results.' }}
+                        </p> --}}
+                    </header>
                     <div class="showcase-grid">
                         @foreach($posterAndPlansProducts as $index => $posterAndPlansProduct)
                             @php

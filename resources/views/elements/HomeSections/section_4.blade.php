@@ -22,7 +22,7 @@
     right: 0;
     bottom: 0;
     z-index: 1;
-    background-color: #f6f7f8;
+    background-color: #f8f9fa;
 }
 
 .book-printing-section .container {
@@ -95,7 +95,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    /* object-fit: contain; */
 }
 
 .book-printing-section .product-info {
@@ -172,11 +172,19 @@
     margin-top: 40px;
 }
 
-.product-block-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #183e73;
+.product-block header {
+    text-align: center;
     margin-bottom: 20px;
+}
+
+.product-block-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #484848;
+    margin-bottom: 0;
+    position: relative;
+    display: inline-block;
+    letter-spacing: -0.5px;
 }
 
 /* Responsive */
@@ -239,7 +247,7 @@
 
 <section class="book-printing-section" id="section-4-main">
     <div class="container">
-        <div class="section-header fade-in">
+        {{-- <div class="section-header fade-in">
             <div class="section-badge">
                 {{ $language_name == 'french' ? 'Impression de Livres' : 'Book Printing' }}
             </div>
@@ -264,7 +272,7 @@
                     {!! $section_4->content ?? '' !!}
                 @endif
             </p>
-        </div>
+        </div> --}}
 
         <div class="product-content">
             @foreach($montreal_book_printing_tags as $key => $val)
@@ -272,21 +280,38 @@
                     $tag_id = $val->id;
                     $label = ucwords($language_name == 'french' ? $val->name_french : $val->name);
                     
-                    // Get products by tag using FIND_IN_SET (CI line 303)
-                    // Limit to 4 products per tag (CI model getProductByTagId default limit)
-                    $cartNameProducts = DB::table('products')
-                        ->join('categories', 'products.category_id', '=', 'categories.id')
-                        ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
-                        ->where('products.status', 1)
-                        ->orderBy('products.updated', 'desc')
-                        ->select('products.*', 'categories.name as category_name')
-                        ->limit(4)
-                        ->get();
+                    // For Booklets tag, use the Booklets - Catalogs category to match header menu bar
+                    if ($label == 'Booklets') {
+                        $bookletsCatalogsCategoryId = DB::table('categories')
+                            ->where('name', 'Booklets - Catalogs')
+                            ->value('id');
+                        $cartNameProducts = DB::table('products')
+                            ->join('categories', 'products.category_id', '=', 'categories.id')
+                            ->where('products.category_id', $bookletsCatalogsCategoryId)
+                            ->where('products.status', 1)
+                            ->orderBy('products.updated', 'desc')
+                            ->select('products.*', 'categories.name as category_name')
+                            ->limit(15)
+                            ->get();
+                    } else {
+                        // Get products by tag using FIND_IN_SET (CI line 303)
+                        // Limit to 4 products per tag (CI model getProductByTagId default limit)
+                        $cartNameProducts = DB::table('products')
+                            ->join('categories', 'products.category_id', '=', 'categories.id')
+                            ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
+                            ->where('products.status', 1)
+                            ->orderBy('products.updated', 'desc')
+                            ->select('products.*', 'categories.name as category_name')
+                            ->limit(15)
+                            ->get();
+                    }
                 @endphp
                 
                 @if($cartNameProducts && count($cartNameProducts) > 0)
                     <div class="product-block" id="section-4-tag-{{ $tag_id }}">
-                        <h3 class="product-block-title">{{ $label }}</h3>
+                        <header style="text-align: center;">
+                            <h3 class="product-block-title">{{ $label }}</h3>
+                        </header>
                         <div class="product-grid">
                             @foreach($cartNameProducts as $key => $cartNameProduct)
                                 @php

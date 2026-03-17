@@ -297,7 +297,7 @@
         }
 
         .quant-cart input[type="text"] {
-            width: 100%;
+            width: 50%;
             padding: 0.875rem 1rem;
             border: 2px solid var(--border-color);
             border-radius: 12px;
@@ -867,7 +867,7 @@
                                             </div>
                                             <div class="col-6 col-md-6">
                                                 <div class="quant-cart">
-                                                    <label>{{ $language_name == 'french' ? "Combien d'ensembles" : 'How many sets' }}</label>
+                                                    {{-- <label>{{ $language_name == 'french' ? "Combien d'ensembles" : 'How many sets' }}</label> --}}
                                                     <input type="text" value="1" id="quantity" name="quantity"
                                                         onkeypress="javascript:return isNumber(event)"
                                                         onchange="setQuantity()">
