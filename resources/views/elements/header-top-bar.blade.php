@@ -228,7 +228,7 @@
     }
 
     /* Wishlist Link */
-    .right-menu ul li:nth-child(2) a::before {
+    .right-menu ul li:nth-child(3) a::before {
         content: '\f004';
         font-family: 'Line Awesome Free';
         font-weight: 900;
@@ -286,6 +286,58 @@
     @media (max-width: 576px) {
         .header-top-bar {
             display: none;
+        }
+    }
+
+    /* Subdomain Links Styles */
+    .subdomain-links .subdomain-links-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 0;
+    }
+
+    .subdomain-link {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        font-weight: 400;
+        background: transparent;
+        border: 1px solid transparent;
+    }
+
+    .subdomain-link:hover {
+        background: var(--bg-light);
+        color: var(--primary-color) !important;
+        border-color: var(--border-color);
+        transform: translateY(-1px);
+    }
+
+    .link-icon {
+        font-size: 0.75rem;
+        opacity: 0.8;
+    }
+
+    .link-text {
+        font-weight: 500;
+        color: var(--text-dark) !important;
+    }
+
+    @media (max-width: 768px) {
+        .subdomain-links .subdomain-links-group {
+            flex-direction: column;
+            gap: 0.25rem;
+            align-items: flex-start;
+        }
+        
+        .subdomain-link {
+            padding: 0.25rem 0.5rem;
         }
     }
 </style>
@@ -350,6 +402,20 @@
                                     </div>
                                 </li>
                             @endif
+                            
+                            {{-- Subdomain Links --}}
+                            <li class="subdomain-links">
+                                <div class="subdomain-links-group">
+                                    <a href="https://pod.printing.coop" target="_blank" class="subdomain-link">
+                                        <span class="link-icon">📦</span>
+                                        <span class="link-text">{{ $language_name == 'french' ? 'POD' : 'POD' }}</span>
+                                    </a>
+                                    <a href="https://store.printing.coop" target="_blank" class="subdomain-link">
+                                        <span class="link-icon">🛍️</span>
+                                        <span class="link-text">{{ $language_name == 'french' ? 'Magasin' : 'Store' }}</span>
+                                    </a>
+                                </div>
+                            </li>
                             
                             {{-- Wishlist (CI lines 83-89) --}}
                             @php
