@@ -1,5 +1,28 @@
 {{-- CI: application/views/elements/header-mid-bar.php --}}
 <style>
+/* ===== Combined Header Bar (Logo + Search + Actions) ===== */
+.header-mid-bar {
+    background: #ffffff;
+    /* border-bottom: 1px solid #e9ecef; */
+    position: relative;
+    z-index: 1000;
+}
+
+.header-mid-bar .container {
+    max-width: 1400px;
+}
+
+.header-mid-bar-inner {
+    padding: 10px 0;
+}
+
+/* Logo */
+.header-mid-bar .site-logo img {
+    max-height: 45px;
+    width: auto;
+}
+
+/* Search Bar */
 .mid-search-bar {
     position: relative;
     width: 100%;
@@ -11,20 +34,19 @@
     background: #ffffff;
     border: 1px solid #e0e0e0;
     border-radius: 25px;
-    padding: 8px 15px;
+    padding: 6px 15px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
-.mid-search-bar span:hover {
-    /* border-color: #d0d0d0; */
+.mid-search-bar span:focus-within {
+    border-color: #387dde;
+    outline: 3px solid #d8e6ff;
 }
 
-.mid-search-bar span:focus-within {
-    /* border-color: #c0c0c0; */
-    border-color: #387dde;
-    outline: 4px solid #d8e6ff;
+.header-mid-bar .mid-search-bar input {
+    height: 32px;
 }
 
 .mid-search-bar input[type="text"] {
@@ -32,7 +54,7 @@
     outline: none;
     background: transparent;
     flex: 1;
-    font-size: 16px;
+    font-size: 14px;
     color: #333;
     padding: 0 8px;
     font-weight: 500;
@@ -45,33 +67,13 @@
 
 .mid-search-bar .la-search {
     color: #999;
-    font-size: 20px;
-    min-width: 24px;
+    font-size: 18px;
+    min-width: 20px;
     border: none;
     background: transparent;
-    position: relative;
 }
 
-.mid-search-bar .shortcut-button {
-    background-color: #f0f0f0;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-    padding: 3px 6px;
-    margin-left: 10px;
-    font-size: 12px;
-    color: #666;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.mid-search-bar .shortcut-button:hover {
-    background-color: #e5e5e5;
-    border-color: #d5d5d5;
-    color: #555;
-}
-
-/* Search Dropdown Styles */
+/* Search Dropdown */
 .open-search-dropdown {
     position: absolute;
     top: 100%;
@@ -89,114 +91,194 @@
 }
 
 @keyframes dropdownSlide {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.search-product-section {
-    padding: 16px;
-}
-
+.search-product-section { padding: 16px; }
 .search-product-section-title {
     padding-bottom: 12px;
     border-bottom: 1px solid #f0f0f0;
     margin-bottom: 12px;
 }
-
 .search-product-section-title span {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 14px; font-weight: 600; color: #333;
+    text-transform: uppercase; letter-spacing: 0.5px;
 }
-
-.search-product-result {
-    min-height: 60px;
-}
-
+.search-product-result { min-height: 60px; }
 .search-product-result #coming-res-data {
-    display: block;
-    text-align: center;
-    color: #999;
-    font-size: 14px;
-    padding: 20px;
-    font-style: italic;
+    display: block; text-align: center; color: #999;
+    font-size: 14px; padding: 20px; font-style: italic;
 }
-
-.search-product-result #ProductListUl {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
+.search-product-result #ProductListUl { list-style: none; margin: 0; padding: 0; }
 .search-product-result #ProductListUl li {
-    padding: 12px 16px;
-    border-bottom: 1px solid #f5f5f5;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    padding: 12px 16px; border-bottom: 1px solid #f5f5f5;
+    cursor: pointer; transition: all 0.3s ease;
+    display: flex; align-items: center; gap: 12px;
+}
+.search-product-result #ProductListUl li:hover { background-color: #f8f9fa; padding-left: 20px; }
+.search-product-result #ProductListUl li:last-child { border-bottom: none; }
+.search-product-result #ProductListUl li .product-image {
+    width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: #f0f0f0;
+}
+.search-product-result #ProductListUl li .product-info { flex: 1; }
+.search-product-result #ProductListUl li .product-name {
+    font-size: 14px; font-weight: 500; color: #333; margin-bottom: 4px;
+}
+.search-product-result #ProductListUl li .product-price { font-size: 12px; color: #666; }
+.search-product-result #ProductListUl li .product-category {
+    font-size: 11px; color: #999; background: #f0f0f0;
+    padding: 2px 8px; border-radius: 12px;
+}
+
+/* ===== Right Actions Area ===== */
+.header-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: flex-end;
+    gap: 4px;
+    flex-wrap: nowrap;
 }
 
-.search-product-result #ProductListUl li:hover {
-    background-color: #f8f9fa;
-    padding-left: 20px;
-}
-
-.search-product-result #ProductListUl li:last-child {
-    border-bottom: none;
-}
-
-.search-product-result #ProductListUl li .product-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    object-fit: cover;
-    background: #f0f0f0;
-}
-
-.search-product-result #ProductListUl li .product-info {
-    flex: 1;
-}
-
-.search-product-result #ProductListUl li .product-name {
-    font-size: 14px;
+.header-actions .action-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #2d3436;
+    text-decoration: none;
+    font-size: 0.8rem;
     font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.header-actions .action-link:hover {
+    color: #f28738;
+    background: rgba(242, 135, 56, 0.08);
+}
+
+.header-actions .action-link i {
+    font-size: 1rem;
+    color: #f28738;
+}
+
+.header-actions .action-divider {
+    width: 1px;
+    height: 16px;
+    background: #ddd;
+    margin: 0 2px;
+}
+
+/* Language Dropdown */
+.header-actions .lang-dropdown {
+    position: relative;
+}
+
+.header-actions .lang-dropdown-content {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    min-width: 120px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: all 0.2s ease;
+    z-index: 1001;
+}
+
+.header-actions .lang-dropdown:hover .lang-dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.header-actions .lang-dropdown-content a {
+    display: block;
+    padding: 8px 12px;
     color: #333;
-    margin-bottom: 4px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: background 0.2s;
 }
 
-.search-product-result #ProductListUl li .product-price {
-    font-size: 12px;
-    color: #666;
+.header-actions .lang-dropdown-content a:hover {
+    background: #f8f9fa;
+    color: #f28738;
 }
 
-.search-product-result #ProductListUl li .product-category {
-    font-size: 11px;
-    color: #999;
-    background: #f0f0f0;
-    padding: 2px 8px;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+/* Cart Icon */
+.header-actions .cart-action {
+    position: relative;
 }
 
-.header-mid-bar .container {
-    max-width: 1200px;
+.header-actions .cart-action .cart-contents-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #f28738;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .header-actions {
+        gap: 2px;
+    }
+    .header-actions .action-link {
+        font-size: 0.75rem;
+        padding: 3px 5px;
+    }
+    .header-actions .action-divider {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-actions .hide-mobile {
+        display: none;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-xl-3 {
+        flex: 0 0 22%;
+        max-width: 22%;
+    }
+    .col-xl-4 {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+    .col-xl-5 {
+        flex: 0 0 51%;
+        max-width: 51%;
+    }
+}
+
+.mid-action-icon {
+    transform: none;
 }
 </style>
+
 <div class="header-mid-bar">
     <div class="container" style="z-index: 6">
         <div class="header-mid-bar-inner">
             <div class="row align-items-center">
+                {{-- Logo --}}
                 <div class="col-md-12 col-lg-3 col-xl-3">
                     <div class="site-logo">
                         <div class="menu-bar">
@@ -216,7 +298,6 @@
                                     }
                                 }
                             @endphp
-                            
                             @if($imageurl)
                                 <img src="{{ $imageurl }}" width="100" alt="{{ $alt }}">
                             @else
@@ -226,9 +307,8 @@
                     </div>
                 </div>
 
-                
-                
-                <div class="col-md-6 col-lg-4 col-xl-5">
+                {{-- Search --}}
+                <div class="col-md-6 col-lg-4 col-xl-4">
                     <div class="mid-search-bar">
                         <span style="padding: 5px 15px">
                             <input type="text" placeholder="Search..." onkeyup="searchProduct($(this).val())" id="ToSeachBoxes">
@@ -237,9 +317,7 @@
                         <div class="open-search-dropdown" style="display:none" id="searchDiv">
                             <div class="search-product-section">
                                 <div class="search-product-section-title">
-                                    <span>
-                                        {{ $language_name == 'french' ? 'Résultats de recherche' : 'Search Results' }}
-                                    </span>
+                                    <span>{{ $language_name == 'french' ? 'Résultats de recherche' : 'Search Results' }}</span>
                                 </div>
                                 <div class="search-product-result">
                                     <span style="color:black; border:0px;" id="coming-res-data">
@@ -251,192 +329,97 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-6 col-lg-5 col-xl-4">
-                    <div class="mid-action-area">
-                        <ul>
-                            {{-- Help/Contact (CI lines 61-124) --}}
-                            <li>
-                                <div class="mid-action-single">
-                                    <a href="tel:18773848043">
-                                        <div class="mid-action-single-inner">
-                                            @if($website_store_id == 1)
-                                                <div class="mid-action-icon">
-                                                    <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                        <g>
-                                                            <path fill="#f58634" d="M26.2,19.9L26,20.7c-0.9,3-2.7,5.4-5.2,7c-0.2-1.2-1.3-2.1-2.5-2.1h-2c-1.4,0-2.6,1.2-2.6,2.6v0.4c0,1.4,1.2,2.6,2.6,2.6h2c0.8,0,1.6-0.4,2-1l0.3-0.2c3.4-1.8,5.9-4.8,7-8.6l0.3-0.9L26.2,19.9z M18.3,29.3h-2c-0.4,0-0.8-0.3-0.8-0.8v-0.4c0-0.4,0.3-0.8,0.8-0.8h2c0.4,0,0.8,0.3,0.8,0.8v0.4c0,0.1,0,0.1,0,0.2l0,0l0,0C18.9,29.1,18.6,29.3,18.3,29.3z"></path>
-                                                            <path fill="#38454F" d="M28.4,13.5c0-6.9-5.6-12.5-12.5-12.5S3.4,6.7,3.4,13.5v1.1c0,0,0,0.1,0,0.1v3.8c0,2.2,1.8,4,4,4s4-1.8,4-4v-3.8c0-2.2-1.8-4-4-4c-0.7,0-1.3,0.2-1.9,0.5c1-4.8,5.3-8.4,10.4-8.4c5.1,0,9.4,3.6,10.4,8.4c-0.6-0.3-1.2-0.5-1.9-0.5c-2.2,0-4,1.8-4,4v3.8c0,2.2,1.8,4,4,4c2,0,3.7-1.5,3.9-3.5h0V13.5z M7.4,12.6c1.2,0,2.2,1,2.2,2.2v3.8c0,1.2-1,2.2-2.2,2.2s-2.2-1-2.2-2.2v-0.8h0v-3.1C5.3,13.5,6.2,12.6,7.4,12.6z M26.6,18.5c0,1.2-1,2.2-2.2,2.2s-2.2-1-2.2-2.2v-3.8c0-1.2,1-2.2,2.2-2.2s2.2,1,2.2,2.2V18.5z"></path>
-                                                        </g>
-                                                    </svg>
-                                                </div>
-                                            @elseif($website_store_id == 3)
-                                                <div class="mid-action-icon">
-                                                    <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                        <g>
-                                                            <path fill="#e72582" d="M26.2,19.9L26,20.7c-0.9,3-2.7,5.4-5.2,7c-0.2-1.2-1.3-2.1-2.5-2.1h-2c-1.4,0-2.6,1.2-2.6,2.6v0.4c0,1.4,1.2,2.6,2.6,2.6h2c0.8,0,1.6-0.4,2-1l0.3-0.2c3.4-1.8,5.9-4.8,7-8.6l0.3-0.9L26.2,19.9z M18.3,29.3h-2c-0.4,0-0.8-0.3-0.8-0.8v-0.4c0-0.4,0.3-0.8,0.8-0.8h2c0.4,0,0.8,0.3,0.8,0.8v0.4c0,0.1,0,0.1,0,0.2l0,0l0,0C18.9,29.1,18.6,29.3,18.3,29.3z"></path>
-                                                            <path fill="#38454F" d="M28.4,13.5c0-6.9-5.6-12.5-12.5-12.5S3.4,6.7,3.4,13.5v1.1c0,0,0,0.1,0,0.1v3.8c0,2.2,1.8,4,4,4s4-1.8,4-4v-3.8c0-2.2-1.8-4-4-4c-0.7,0-1.3,0.2-1.9,0.5c1-4.8,5.3-8.4,10.4-8.4c5.1,0,9.4,3.6,10.4,8.4c-0.6-0.3-1.2-0.5-1.9-0.5c-2.2,0-4,1.8-4,4v3.8c0,2.2,1.8,4,4,4c2,0,3.7-1.5,3.9-3.5h0V13.5z M7.4,12.6c1.2,0,2.2,1,2.2,2.2v3.8c0,1.2-1,2.2-2.2,2.2s-2.2-1-2.2-2.2v-0.8h0v-3.1C5.3,13.5,6.2,12.6,7.4,12.6z M26.6,18.5c0,1.2-1,2.2-2.2,2.2s-2.2-1-2.2-2.2v-3.8c0-1.2,1-2.2,2.2-2.2s2.2,1,2.2,2.2V18.5z"></path>
-                                                        </g>
-                                                    </svg>
-                                                </div>
-                                            @elseif($website_store_id == 5)
-                                                <div class="mid-action-icon">
-                                                    <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                        <g>
-                                                            <path fill="#7aa93c" d="M26.2,19.9L26,20.7c-0.9,3-2.7,5.4-5.2,7c-0.2-1.2-1.3-2.1-2.5-2.1h-2c-1.4,0-2.6,1.2-2.6,2.6v0.4c0,1.4,1.2,2.6,2.6,2.6h2c0.8,0,1.6-0.4,2-1l0.3-0.2c3.4-1.8,5.9-4.8,7-8.6l0.3-0.9L26.2,19.9z M18.3,29.3h-2c-0.4,0-0.8-0.3-0.8-0.8v-0.4c0-0.4,0.3-0.8,0.8-0.8h2c0.4,0,0.8,0.3,0.8,0.8v0.4c0,0.1,0,0.1,0,0.2l0,0l0,0C18.9,29.1,18.6,29.3,18.3,29.3z"></path>
-                                                            <path fill="#38454F" d="M28.4,13.5c0-6.9-5.6-12.5-12.5-12.5S3.4,6.7,3.4,13.5v1.1c0,0,0,0.1,0,0.1v3.8c0,2.2,1.8,4,4,4s4-1.8,4-4v-3.8c0-2.2-1.8-4-4-4c-0.7,0-1.3,0.2-1.9,0.5c1-4.8,5.3-8.4,10.4-8.4c5.1,0,9.4,3.6,10.4,8.4c-0.6-0.3-1.2-0.5-1.9-0.5c-2.2,0-4,1.8-4,4v3.8c0,2.2,1.8,4,4,4c2,0,3.7-1.5,3.9-3.5h0V13.5z M7.4,12.6c1.2,0,2.2,1,2.2,2.2v3.8c0,1.2-1,2.2-2.2,2.2s-2.2-1-2.2-2.2v-0.8h0v-3.1C5.3,13.5,6.2,12.6,7.4,12.6z M26.6,18.5c0,1.2-1,2.2-2.2,2.2s-2.2-1-2.2-2.2v-3.8c0-1.2,1-2.2,2.2-2.2s2.2,1,2.2,2.2V18.5z"></path>
-                                                        </g>
-                                                    </svg>
-                                                </div>
-                                            @endif
-                                            <div class="mid-action-content">
-                                                <span>
-                                                    <strong>{{ $language_name == 'french' ? "L'aide est là." : 'Help is here.' }}</strong>
-                                                    {{ $configurations['contact_no'] ?? '1-877-384-8043' }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </a>
+
+                {{-- All Actions (merged from top-bar + mid-bar) --}}
+                <div class="col-md-6 col-lg-5 col-xl-5">
+                    <div class="header-actions">
+
+                        {{-- Language Selector --}}
+                        @if(($MainStoreData['show_language_translation'] ?? 1) == 1)
+                            <div class="lang-dropdown">
+                                <a href="javascript:void(0)" class="action-link">
+                                    {{ $MainStoreData['language_name'] ?? 'English' }}
+                                    <i class="las la-angle-down" style="font-size: 0.7rem;"></i>
+                                </a>
+                                <div class="lang-dropdown-content">
+                                    @if(!empty($StoreListData) && is_array($StoreListData))
+                                        @foreach($StoreListData as $key => $language)
+                                            <a href="{{ $language['url'] ?? '#' }}">{{ $language['language_name'] ?? '' }}</a>
+                                        @endforeach
+                                    @endif
                                 </div>
-                            </li>
-                            
-                            {{-- My Account (CI lines 125-188) --}}
-                            @if(!empty($loginId))
-                                <li>
-                                    <div class="mid-action-single">
-                                        <a href="{{ url('MyAccounts') }}">
-                                            <div class="mid-action-single-inner">
-                                                @if($website_store_id == 1)
-                                                    <div class="mid-action-icon">
-                                                        <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                            <g>
-                                                                <path fill="#f58634" d="M27.6,29.5L27,28.8c-2.8-3.3-6.8-5.1-11.2-5.1s-8.4,1.8-11.2,5.1L4,29.5l-1.4-1.2l0.6-0.7c3.1-3.7,7.6-5.7,12.6-5.7s9.4,2,12.6,5.7l0.6,0.7L27.6,29.5z"></path>
-                                                                <path fill="#38454F" d="M15.8,19.3c-4.8,0-8.7-3.9-8.7-8.7C7.2,5.9,11,2,15.8,2s8.7,3.9,8.7,8.7C24.5,15.4,20.6,19.3,15.8,19.3z M15.8,3.8C12,3.8,9,6.8,9,10.6s3.1,6.9,6.9,6.9s6.9-3.1,6.9-6.9S19.6,3.8,15.8,3.8z"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </div>
-                                                @elseif($website_store_id == 3)
-                                                    <div class="mid-action-icon">
-                                                        <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                            <g>
-                                                                <path fill="#e72582" d="M27.6,29.5L27,28.8c-2.8-3.3-6.8-5.1-11.2-5.1s-8.4,1.8-11.2,5.1L4,29.5l-1.4-1.2l0.6-0.7c3.1-3.7,7.6-5.7,12.6-5.7s9.4,2,12.6,5.7l0.6,0.7L27.6,29.5z"></path>
-                                                                <path fill="#38454F" d="M15.8,19.3c-4.8,0-8.7-3.9-8.7-8.7C7.2,5.9,11,2,15.8,2s8.7,3.9,8.7,8.7C24.5,15.4,20.6,19.3,15.8,19.3z M15.8,3.8C12,3.8,9,6.8,9,10.6s3.1,6.9,6.9,6.9s6.9-3.1,6.9-6.9S19.6,3.8,15.8,3.8z"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </div>
-                                                @elseif($website_store_id == 5)
-                                                    <div class="mid-action-icon">
-                                                        <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                            <g>
-                                                                <path fill="#7aa93c" d="M27.6,29.5L27,28.8c-2.8-3.3-6.8-5.1-11.2-5.1s-8.4,1.8-11.2,5.1L4,29.5l-1.4-1.2l0.6-0.7c3.1-3.7,7.6-5.7,12.6-5.7s9.4,2,12.6,5.7l0.6,0.7L27.6,29.5z"></path>
-                                                                <path fill="#38454F" d="M15.8,19.3c-4.8,0-8.7-3.9-8.7-8.7C7.2,5.9,11,2,15.8,2s8.7,3.9,8.7,8.7C24.5,15.4,20.6,19.3,15.8,19.3z M15.8,3.8C12,3.8,9,6.8,9,10.6s3.1,6.9,6.9,6.9s6.9-3.1,6.9-6.9S19.6,3.8,15.8,3.8z"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </div>
-                                                @endif
-                                                <div class="mid-action-content">
-                                                    <span>
-                                                        <strong>{{ $loginName ?? 'User' }}</strong>
-                                                        {{ $language_name == 'french' ? 'Mon compte' : 'My account' }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </li>
-                            @endif
-                            
-                            {{-- Cart (CI lines 189-267) --}}
-                            <li>
-                                <div class="mid-action-single">
-                                    <div class="mid-action-single-inner">
+                            </div>
+                            <span class="action-divider"></span>
+                        @endif
 
-                                        @php
-                                            // Use CartService to get cart count
-                                            $cartService = new \App\Services\CartService();
-                                            $cartCount = $cartService->totalItems();
-                                        @endphp
+                        {{-- POD --}}
+                        <a href="https://pod.printing.coop" target="_blank" class="action-link hide-mobile">
+                            <i class="las la-box"></i> POD
+                        </a>
+                        <span class="action-divider hide-mobile"></span>
 
-                                        @if($website_store_id == 1)
-                                            <div class="mid-action-icon">
-                                                <svg version="1.2" baseProfile="tiny" id="Layer_1" xmlns="https://www.w3.org/2000/svg"
-                                                    xmlns:xlink="https://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 35 35"
-                                                    height="35" width="35" class="header-link-icon" xml:space="preserve">
-                                                    <g>
-                                                        <g>
-                                                            <path fill="#38454F" d="M27.5,22.3H11.1c-0.4,0-0.7-0.2-0.9-0.6L4.5,4.4H0V2.6h5.1c0.4,0,0.7,0.2,0.9,0.6l2.2,6.4h23
-                                                                c0.3,0,0.6,0.1,0.7,0.4c0.2,0.2,0.2,0.5,0.1,0.8l-3.6,10.9C28.2,22.1,27.9,22.3,27.5,22.3z M11.8,20.5h15.1l3-9.1H8.7L11.8,20.5z">
-                                                            </path>
-                                                        </g>
-                                                        <g>
-                                                            <circle fill="#f58634" cx="13.5" cy="26.7" r="2.2"></circle>
-                                                        </g>
-                                                        <g>
-                                                            <circle fill="#f58634" cx="25" cy="26.7" r="2.2"></circle>
-                                                        </g>
-                                                    </g>
-                                                </svg>
-                                                <span class="cart-contents-count">{{ $cartCount }}</span>
-                                            </div>
+                        {{-- Store --}}
+                        <a href="https://store.printing.coop" target="_blank" class="action-link hide-mobile">
+                            <i class="las la-store"></i> {{ $language_name == 'french' ? 'Magasin' : 'Store' }}
+                        </a>
+                        <span class="action-divider"></span>
 
-                                        @elseif($website_store_id == 3)
-                                            <div class="mid-action-icon">
-                                                <svg version="1.2" baseProfile="tiny" id="Layer_1" xmlns="https://www.w3.org/2000/svg"
-                                                    xmlns:xlink="https://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 35 35"
-                                                    height="35" width="35" class="header-link-icon" xml:space="preserve">
-                                                    <g>
-                                                        <g>
-                                                            <path fill="#38454F" d="M27.5,22.3H11.1c-0.4,0-0.7-0.2-0.9-0.6L4.5,4.4H0V2.6h5.1c0.4,0,0.7,0.2,0.9,0.6l2.2,6.4h23
-                                                                c0.3,0,0.6,0.1,0.7,0.4c0.2,0.2,0.2,0.5,0.1,0.8l-3.6,10.9C28.2,22.1,27.9,22.3,27.5,22.3z M11.8,20.5h15.1l3-9.1H8.7L11.8,20.5z">
-                                                            </path>
-                                                        </g>
-                                                        <g>
-                                                            <circle fill="#e72582" cx="13.5" cy="26.7" r="2.2"></circle>
-                                                        </g>
-                                                        <g>
-                                                            <circle fill="#e72582" cx="25" cy="26.7" r="2.2"></circle>
-                                                        </g>
-                                                    </g>
-                                                </svg>
-                                                <span class="cart-contents-count">{{ $cartCount }}</span>
-                                            </div>
+                        {{-- Wishlist --}}
+                        @php
+                            $totalWishListCount = 0;
+                            if (!empty($loginId)) {
+                                $totalWishListCount = DB::table('wishlists')
+                                    ->where('user_id', $loginId)
+                                    ->count();
+                            }
+                        @endphp
+                        <a href="{{ url('Wishlists') }}" class="action-link hide-mobile">
+                            <i class="las la-heart"></i>
+                            {{ $language_name == 'french' ? "Souhaits" : 'Wishlist' }}
+                            (<strong id="WishlistsCount">{{ $totalWishListCount }}</strong>)
+                        </a>
+                        <span class="action-divider"></span>
 
-                                        @elseif($website_store_id == 5)
-                                            <div class="mid-action-icon">
-                                                <svg version="1.2" baseProfile="tiny" id="Layer_1" xmlns="https://www.w3.org/2000/svg"
-                                                    xmlns:xlink="https://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 35 35"
-                                                    height="35" width="35" class="header-link-icon" xml:space="preserve">
-                                                    <g>
-                                                        <g>
-                                                            <path fill="#38454F" d="M27.5,22.3H11.1c-0.4,0-0.7-0.2-0.9-0.6L4.5,4.4H0V2.6h5.1c0.4,0,0.7,0.2,0.9,0.6l2.2,6.4h23
-                                                                c0.3,0,0.6,0.1,0.7,0.4c0.2,0.2,0.2,0.5,0.1,0.8l-3.6,10.9C28.2,22.1,27.9,22.3,27.5,22.3z M11.8,20.5h15.1l3-9.1H8.7L11.8,20.5z">
-                                                            </path>
-                                                        </g>
-                                                        <g>
-                                                            <circle fill="#7aa93c" cx="13.5" cy="26.7" r="2.2"></circle>
-                                                        </g>
-                                                        <g>
-                                                            <circle fill="#7aa93c" cx="25" cy="26.7" r="2.2"></circle>
-                                                        </g>
-                                                    </g>
-                                                </svg>
-                                                <span class="cart-contents-count">{{ $cartCount }}</span>
-                                            </div>
-                                        @endif
+                        {{-- Login/Logout --}}
+                        @if(empty($loginId))
+                            <a href="{{ url('Logins') }}" class="action-link">
+                                <i class="las la-user"></i>
+                                {{ $language_name == 'french' ? "S'identifier" : 'Login' }}
+                            </a>
+                        @else
+                            <a href="{{ url('MyAccounts') }}" class="action-link">
+                                <i class="las la-user"></i>
+                                {{ $loginName ?? 'User' }}
+                            </a>
+                        @endif
+                        <span class="action-divider"></span>
 
-                                        <div class="mid-action-content">
-                                            <span>
-                                                <strong>{{ $language_name == 'French' ? 'Chariot' : 'Cart' }}</strong>
-                                            </span>
-                                        </div>
+                        {{-- Help --}}
+                        <a href="tel:{{ $configurations['contact_no'] ?? '18773848043' }}" class="action-link hide-mobile" title="{{ $configurations['contact_no'] ?? '1-877-384-8043' }}">
+                            <i class="las la-headset"></i>
+                            <span>{{ $language_name == 'french' ? 'Aide' : 'Help' }}</span>
+                        </a>
 
-                                    </div>
-
-                                    <div class="cart-items-table">
-                                        @include('elements.cart-items')
-                                    </div>
+                        {{-- Cart --}}
+                        @php
+                            $cartService = new \App\Services\CartService();
+                            $cartCount = $cartService->totalItems();
+                        @endphp
+                        <div class="mid-action-single cart-action">
+                            <div class="mid-action-single-inner" style="display: flex; align-items: center; cursor: pointer;">
+                                <div class="mid-action-icon" style="position: relative;">
+                                    <i class="las la-shopping-cart" style="font-size: 1.5rem; color: #f28738;"></i>
+                                    <span class="cart-contents-count">{{ $cartCount }}</span>
                                 </div>
-                            </li>
-                        </ul>
+                                <span style="font-size: 0.8rem; font-weight: 500; margin-left: 4px; color: #2d3436;">
+                                    {{ $language_name == 'French' ? 'Chariot' : 'Cart' }}
+                                </span>
+                            </div>
+                            <div class="cart-items-table">
+                                @include('elements.cart-items')
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
