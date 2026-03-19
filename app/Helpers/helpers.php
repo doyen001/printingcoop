@@ -351,14 +351,22 @@ if (!function_exists('sina_options')) {
         if ($providerProduct->information_type == 1) { // Normal
             $optionValueIds = array_values((array)$itemInfo->provider_options);
             
-            $data = DB::table('provider_options')
+            // Get all provider options for this provider
+            $providerOptions = DB::table('provider_options')
                 ->where('provider_id', $itemInfo->provider_id)
-                ->where('provider_product_id', $itemInfo->provider_product_id)
+                ->get()
+                ->keyBy('id');
+            
+            // Get option values and map them to option names
+            $data = DB::table('provider_option_values')
+                ->where('option_id', array_keys($providerOptions->toArray()))
                 ->whereIn('provider_option_value_id', $optionValueIds)
                 ->get();
 
             foreach ($data as $option) {
-                $itemInfo->options[$option->name] = $option->provider_option_value_id;
+                // Get the option name from provider_options using option_id
+                $optionName = $providerOptions[$option->option_id]->name ?? 'unknown';
+                $itemInfo->options[$optionName] = $option->provider_option_value_id;
             }
         } else if ($providerProduct->information_type == 2) { // RollLabel
             $itemInfo->options = $itemInfo->provider_options;
@@ -395,11 +403,24 @@ if (!function_exists('sina_options_raw')) {
         if ($providerProduct->information_type == 1) { // Normal
             $optionValueIds = array_values((array)$itemInfo->provider_options);
             
-            $itemInfo->options = DB::table('provider_options')
+            // Get all provider options for this provider
+            $providerOptions = DB::table('provider_options')
                 ->where('provider_id', $itemInfo->provider_id)
-                ->where('provider_product_id', $itemInfo->provider_product_id)
+                ->get()
+                ->keyBy('id');
+            
+            // Get option values and map them to option names
+            $data = DB::table('provider_option_values')
+                ->where('option_id', array_keys($providerOptions->toArray()))
                 ->whereIn('provider_option_value_id', $optionValueIds)
                 ->get();
+            
+            $itemInfo->options = [];
+            foreach ($data as $option) {
+                // Get the option name from provider_options using option_id
+                $optionName = $providerOptions[$option->option_id]->name ?? 'unknown';
+                $itemInfo->options[$optionName] = $option->provider_option_value_id;
+            }
         } else if ($providerProduct->information_type == 2) { // RollLabel
             $itemInfo->options = $itemInfo->provider_options;
         }

@@ -1380,9 +1380,51 @@ class ProductsController extends Controller
                 unset($productOptions['turnaround']);
                 $options = array_values((array) $productOptions);
             } else if ($providerProduct->information_type == 1) {
-                $options = $productOptions;
+                // For information_type 1, the form sends numeric provider_option_value_id
+                // but the Sina API expects actual text values. Map all IDs to text values.
+                $providerOpts = DB::table('provider_options')
+                    ->where('provider_id', $provider_id)
+                    ->get()
+                    ->keyBy('name');
+
+                $options = [];
+                foreach ($productOptions as $key => $value) {
+                    // Normalize key: replace spaces with underscores for API
+                    $apiKey = str_replace(' ', '_', $key);
+
+                    // If value is numeric and the option exists in provider_options, map it
+                    if (is_numeric($value) && isset($providerOpts[$key])) {
+                        $optVal = DB::table('provider_option_values')
+                            ->where('option_id', $providerOpts[$key]->id)
+                            ->where('provider_option_value_id', $value)
+                            ->first();
+
+                        $options[$apiKey] = $optVal ? $optVal->value : $value;
+                    } else {
+                        $options[$apiKey] = $value;
+                    }
+                }
             }
             
+            // Handle diameter: only circle needs diameter instead of width/length
+            if (isset($options['shape']) && strtolower($options['shape']) === 'circle') {
+                if (!isset($options['diameter']) || empty($options['diameter'])) {
+                    // Derive diameter from width/length if available
+                    if (isset($options['width']) && !empty($options['width'])) {
+                        $options['diameter'] = $options['width'];
+                    } elseif (isset($options['length']) && !empty($options['length'])) {
+                        $options['diameter'] = $options['length'];
+                    }
+                }
+                // Remove width/length for circle since API expects diameter
+                unset($options['width'], $options['length']);
+            } else {
+                // Remove empty diameter for non-circle shapes (oval, square, rectangle use width/length)
+                if (isset($options['diameter']) && empty($options['diameter'])) {
+                    unset($options['diameter']);
+                }
+            }
+
             $price = sina_price($providerProduct->provider_product_id, $options);
             $result = ['success' => true, 'price' => $price];
         } else {

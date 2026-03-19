@@ -77,14 +77,17 @@
         
         if ($(this).attr('name') == 'productOptions[shape]') {
             var value = $(this).val();
-            if (value == 'circle') {
-                $('.option-width').hide();
-                $('.option-length').hide();
-                $('.option-diameter').show();
+            var label = $(this).closest('.shape-icon').find('div').text().trim().toLowerCase();
+            // Only circle (ID: 1) needs diameter instead of width/length
+            // Oval needs width AND length
+            if (value == 'circle' || label == 'circle' || value == '1') {
+                $('.option-width').hide().find('input').prop('required', false);
+                $('.option-length').hide().find('input').prop('required', false);
+                $('.option-diameter').show().find('input').prop('required', true);
             } else {
-                $('.option-width').show();
-                $('.option-length').show();
-                $('.option-diameter').hide();
+                $('.option-width').show().find('input').prop('required', true);
+                $('.option-length').show().find('input').prop('required', true);
+                $('.option-diameter').hide().find('input').prop('required', false);
             }
         }
 
@@ -153,4 +156,24 @@
             }
         }
    }
+
+// Initialize shape field visibility on page load
+$(document).ready(function() {
+    var selectedShape = $('input[name="productOptions[shape]"]:checked');
+    if (selectedShape.length > 0) {
+        var value = selectedShape.val();
+        var label = selectedShape.closest('.shape-icon').find('div').text().trim().toLowerCase();
+        // Only circle (ID: 1) needs diameter instead of width/length
+        // Oval needs width AND length
+        if (value == 'circle' || label == 'circle' || value == '1') {
+            $('.option-width').hide().find('input').prop('required', false);
+            $('.option-length').hide().find('input').prop('required', false);
+            $('.option-diameter').show().find('input').prop('required', true);
+        } else {
+            $('.option-width').show().find('input').prop('required', true);
+            $('.option-length').show().find('input').prop('required', true);
+            $('.option-diameter').hide().find('input').prop('required', false);
+        }
+    }
+});
 </script>

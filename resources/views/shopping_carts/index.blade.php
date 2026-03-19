@@ -361,6 +361,7 @@
                                 $Product = DB::table('products')->where('id', $product_id)->first();
 
                                 $attribute_ids = $item['options']['attribute_ids'];
+                                $original_attribute_ids = $attribute_ids; // Keep original for provider options display
                                 $provider_id = 1;
                                 $provider_product = \App\Models\ProviderProduct::where('provider_id', $provider_id)
                                     ->where('product_id', $item['options']['product_id'])
@@ -515,7 +516,108 @@
                                                 @endif
                                             @endif
 
-                                            @include('products.expand_attribute_ids', ['attribute_ids' => $attribute_ids, 'language_name' => $language_name])
+                                            {{-- Display Provider Options for information_type == 1 --}}
+                                            @if(isset($original_attribute_ids->information_type) && $original_attribute_ids->information_type == 1 && isset($original_attribute_ids->provider_options))
+                                                @php
+                                                    // Get option names and values mapping
+                                                    $providerOptions = DB::table('provider_options')
+                                                        ->where('provider_id', $original_attribute_ids->provider_id)
+                                                        ->get()
+                                                        ->keyBy('name');
+                                                    
+                                                    $optionValues = [];
+                                                    foreach($original_attribute_ids->provider_options as $optionName => $optionValueId) {
+                                                        if ($optionName === 'turnaround') continue; // Skip turnaround
+                                                        
+                                                        // For width/length/diameter, if they're numeric values, use them directly
+                                                        if (in_array($optionName, ['width', 'length', 'diameter']) && is_numeric($optionValueId)) {
+                                                            $optionValues[$optionName] = $optionValueId;
+                                                            continue;
+                                                        }
+                                                        
+                                                        // Get the option value from database
+                                                        if (isset($providerOptions[$optionName])) {
+                                                            $optVal = DB::table('provider_option_values')
+                                                                ->where('option_id', $providerOptions[$optionName]->id)
+                                                                ->where('provider_option_value_id', $optionValueId)
+                                                                ->first();
+                                                            
+                                                            if ($optVal) {
+                                                                $optionValues[$optionName] = $optVal->value;
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    // For oval shapes, ensure width and length are shown (not diameter)
+                                                    if (isset($optionValues['shape']) && strtolower($optionValues['shape']) === 'oval') {
+                                                        // Remove diameter if it exists, oval doesn't use diameter
+                                                        unset($optionValues['diameter']);
+                                                    }
+                                                @endphp
+                                                
+                                                @foreach($optionValues as $optionName => $optionValue)
+                                                    @php
+                                                        // Format option name for display to match CI project
+                                                        if ($language_name == 'French') {
+                                                            $translations = [
+                                                                'qty' => 'Quantité',
+                                                                'shape' => 'Forme',
+                                                                'width' => 'Largeur (pouces)',
+                                                                'length' => 'Longueur (pouces)',
+                                                                'diameter' => 'Diamètre (pouces)',
+                                                                'color' => 'Couleur',
+                                                                'stock' => 'Stock',
+                                                                'wind' => 'Vent',
+                                                                'labels per roll' => 'Étiquettes par rouleau',
+                                                                'perforation' => 'Perforation',
+                                                                'finishing' => 'Finition'
+                                                            ];
+                                                            $displayName = $translations[$optionName] ?? ucwords(str_replace('_', ' ', $optionName));
+                                                        } else {
+                                                            $translations = [
+                                                                'qty' => 'Quantity',
+                                                                'shape' => 'Shape',
+                                                                'width' => 'Width (inches)',
+                                                                'length' => 'Length (inches)',
+                                                                'diameter' => 'Diameter (inches)',
+                                                                'color' => 'Ink color',
+                                                                'stock' => 'Stock',
+                                                                'wind' => 'Wind',
+                                                                'labels per roll' => 'Labels_per_roll',
+                                                                'perforation' => 'Perforation',
+                                                                'finishing' => 'Finishing'
+                                                            ];
+                                                            $displayName = $translations[$optionName] ?? ucwords(str_replace('_', ' ', $optionName));
+                                                        }
+                                                    @endphp
+                                                    <div class="col-md-12 col-lg-6 col-xl-6">
+                                                        <span><strong>{{ $displayName }}: {{ $optionValue }}</strong></span>
+                                                    </div>
+                                                @endforeach
+                                                
+                                                @php
+                                                    // Add turnaround time if available
+                                                    if (isset($original_attribute_ids->provider_options['turnaround'])) {
+                                                        $turnaroundId = $original_attribute_ids->provider_options['turnaround'];
+                                                        $turnaroundOpt = DB::table('provider_option_values')
+                                                            ->where('option_id', $providerOptions['turnaround']->id ?? null)
+                                                            ->where('provider_option_value_id', $turnaroundId)
+                                                            ->first();
+                                                        
+                                                        if ($turnaroundOpt) {
+                                                            $turnaroundLabel = $language_name == 'French' ? 
+                                                                'Prêt à expédier en:' : 'Ready to ship in: ';
+                                                            @endphp
+                                                                <div class="col-md-12 col-lg-6 col-xl-6">
+                                                                    <span><strong>{{ $turnaroundLabel }}{{ $turnaroundOpt->value }}</strong></span>
+                                                                </div>
+                                                            @php
+                                                        }
+                                                    }
+                                                @endphp
+                                            @else
+                                                @include('products.expand_attribute_ids', ['attribute_ids' => $attribute_ids, 'language_name' => $language_name])
+                                            @endif
 
                                             @if(!empty($recto_verso))
                                                 <div class="col-md-12 col-lg-6 col-xl-6">
