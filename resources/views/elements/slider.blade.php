@@ -29,7 +29,7 @@
         display: block;
     }
 
-    .banner-image::after {
+    /* .banner-image::after {
         content: '';
         position: absolute;
         top: 0;
@@ -38,7 +38,7 @@
         bottom: 0;
         background: rgba(0, 0, 0, 0.1);
         z-index: 1;
-    }
+    } */
 
     /* Mobile Optimization */
     @media (max-width: 768px) {
@@ -130,10 +130,11 @@
         padding: 4px 12px;
         top: 8px;
         left: 8px;
-        font-size: 11px;
+        font-size: 0.7rem;
         text-transform: uppercase;
         font-family: Sans-serif;
         font-weight: bold;
+        width: 70%;
     }
 </style>
 
@@ -197,9 +198,9 @@
 .tab-nav-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 20px;
+    gap: 40px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 90px;
 }
 
 .tab-nav-item {
@@ -285,11 +286,13 @@
                     $tag_id = $val->id;
                     $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
                     
-                    // Get first product for this tag
+                    // Get second product for this tag (skip first, take second)
                     $firstProduct = DB::table('products')
                         ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
                         ->where('products.status', 1)
                         ->orderBy('products.updated', 'desc')
+                        ->skip(4)
+                        ->take(4)
                         ->first();
                 @endphp
                 

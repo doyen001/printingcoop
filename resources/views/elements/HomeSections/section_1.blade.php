@@ -47,7 +47,7 @@
 .showcase-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px 20px;
+    gap: 40px 30px;
     margin-top: 40px;
 }
 
@@ -60,7 +60,7 @@
     /* transition: box-shadow 0.2s ease, transform 0.15s ease; */
     transform: translateY(0) !important;
     transition: transform 0.1s ease;
-    height: 340px;
+    height: 100%;
 }
 
 .product-card:hover {
@@ -134,7 +134,7 @@
 /* Tag blocks (formerly tabs) */
 .showcase-tag-block {
     margin: 40px 0 100px 0;
-    padding: 0 100px;
+    padding: 0 200px;
 }
 
 .showcase-tag-title {
@@ -173,9 +173,9 @@
         gap: 20px;
     }
     
-    .product-card {
+    /* .product-card {
         height: 320px;
-    }
+    } */
 }
 
 @media (max-width: 767px) {
@@ -185,7 +185,7 @@
     }
 
     .product-card {
-        height: 300px;
+        /* height: 300px; */
         /* padding: 4px; */
     }
     
@@ -228,9 +228,9 @@
 }
 
 @media (max-width: 480px) {
-    .product-card {
+    /* .product-card {
         height: 280px;
-    }
+    } */
     
     .product-title {
         font-size: 1.2rem;

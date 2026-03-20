@@ -42,7 +42,7 @@
 
     .printed-products-content {
         position: relative;
-        padding: 0 100px;
+        padding: 0 200px;
     }
 
     .printed-products-header {
@@ -87,7 +87,7 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(3, auto);
-        gap: 20px;
+        gap: 30px;
         margin-bottom: 60px;
     }
 
@@ -97,7 +97,7 @@
         /* transform: translateY(0) !important;
         transition: transform 0.3s ease;
         opacity: 0; */
-        height: 340px;
+        /* height: 340px; */
     }
 
     /* .product-card.animate {

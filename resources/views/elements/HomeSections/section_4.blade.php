@@ -64,8 +64,8 @@
 /* Product Grid */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 40px 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px 30px;
     padding: 40px 0;
 }
 
@@ -240,7 +240,7 @@
 }
 
 .product-content {
-    padding: 0 100px;
+    padding: 0 150px;
 }
 
 </style>
