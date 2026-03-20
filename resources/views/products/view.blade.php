@@ -229,6 +229,7 @@
             color: var(--primary-color);
             font-weight: 600;
             font-size: 0.9rem;
+            width: auto;
         }
 
         .availability-pill {
@@ -737,7 +738,7 @@
         <div class="container">
             <div class="shop-single-section-inner">
                 <div class="row">
-                    <div class="col-md-5 col-lg-6 col-xl-6">
+                    <div class="col-md-5 col-lg-6 col-xl-6" style="flex: 0 0 40%; max-width: 40%;">
                         <div class="swiper-container-gallery-top">
                             <div class="swiper-wrapper">
                                 @foreach ($ProductImages as $key => $ProductImage)
@@ -781,7 +782,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7 col-lg-6 col-xl-6">
+                    <div class="col-md-7 col-lg-6 col-xl-6" style="flex: 0 0 60%; max-width: 60%;">
                         <div class="shop-product-detail-section">
                             <div class="shop-product-detail">
                                 <h1>{{ $language_name == 'french' ? $Product['name_french'] : $Product['name'] }}</h1>
