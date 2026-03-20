@@ -81,7 +81,7 @@
                     <div class="row g-3">
                         @foreach($footerCategory as $category)
                             <div class="col-sm-6">
-                                <a href="{{ url('Products/' . ($category->category_slug ?? '')) }}" class="footer-category-link">
+                                <a href="{{ url('Products?category_id=' . (base64_encode($category->id) ?? '')) }}" class="footer-category-link">
                                     {{ $language_name == 'french' ? ucfirst($category->name_french) : ucfirst($category->name) }}
                                 </a>
                             </div>
