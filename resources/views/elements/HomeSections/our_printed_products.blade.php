@@ -28,7 +28,7 @@
         right: 0;
         width: 100%;
         height: 100%;
-        background-color: #f8f9fa;
+        background-color: #fff;
         z-index: 1;
     }
 
@@ -42,7 +42,7 @@
 
     .printed-products-content {
         position: relative;
-        padding: 0 200px;
+        padding: 0 100px;
     }
 
     .printed-products-header {
@@ -68,7 +68,7 @@
         color: #484848;
         font-weight: 100;
         font-size: 18px;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
     }
 
     /* .printed-products-title::after {
@@ -87,7 +87,7 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(3, auto);
-        gap: 30px;
+        gap: 20px;
         margin-bottom: 60px;
     }
 
@@ -421,8 +421,8 @@
                             $filenameWithoutExtension = pathinfo($alt_img, PATHINFO_FILENAME);
                             
                             // Hide cards after 9th item
-                            $hiddenClass = $key >= 15 ? 'category-card-hidden' : '';
-                            $delay = ($key % 15) * 100;
+                            $hiddenClass = $key >= 9 ? 'category-card-hidden' : '';
+                            $delay = ($key % 9) * 100;
 
                             //encode
                             $categoryId = base64_encode($category['id']);
@@ -430,7 +430,7 @@
                         
                         <div class="product-card {{ $hiddenClass }}" style="animation-delay: {{ $delay }}ms">
                             <a href="{{ url('Products?category_id=' . $categoryId) }}" class="product-image">
-                                <img src="{{ $src }}" alt="{{ $filenameWithoutExtension }}" loading="lazy" style="transform: scale(1.06);">
+                                <img src="{{ $src }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
                             </a>
                             <div class="product-info">
                                 {{-- <div class="product-category">Category</div> --}}

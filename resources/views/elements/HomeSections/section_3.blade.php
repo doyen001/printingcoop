@@ -64,7 +64,7 @@
  .services-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 90px;
+    gap: 20px;
     margin-top: 40px;
 }
 
@@ -153,7 +153,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transform: scale(1.06);
+    /* transform: scale(1.06); */
 }
 
 

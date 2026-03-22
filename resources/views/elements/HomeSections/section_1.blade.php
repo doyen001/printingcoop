@@ -5,7 +5,7 @@
 <style>
 .showcase-section {
     /* padding: 80px 0; */
-    background-color: #f8f9fa;
+    background-color: white;
     position: relative;
     overflow: hidden;
 }
@@ -47,7 +47,7 @@
 .showcase-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px 30px;
+    gap: 30px 20px;
     margin-top: 40px;
 }
 
@@ -134,7 +134,7 @@
 /* Tag blocks (formerly tabs) */
 .showcase-tag-block {
     margin: 40px 0 100px 0;
-    padding: 0 200px;
+    padding: 0 100px;
 }
 
 .showcase-tag-title {
@@ -287,7 +287,7 @@
                     ->where('products.status', 1)
                     ->orderBy('products.updated', 'desc')
                     ->select('products.*', 'categories.name as category_name')
-                    ->limit(9)
+                    ->limit(6)
                     ->get();
             @endphp
 

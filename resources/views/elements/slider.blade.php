@@ -50,7 +50,7 @@
 
     /* Tab Navigation Section - Using Section 2 Product Card Styles */
     .tab-navigation-section {
-        padding: 40px 0;
+        padding: 30px 0;
         background: #f8f9fa;
         height: 100%;
     }
@@ -190,17 +190,17 @@
 <style>
 /* Tab Navigation Section - Using Section 2 Product Card Styles */
 .tab-navigation-section {
-    padding: 40px 0;
-    background: #f8f9fa;
+    padding: 30px 0;
+    background: #fff;
     height: 100%;
 }
 
 .tab-nav-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 40px;
+    gap: 20px;
     margin: 0 auto;
-    padding: 0 90px;
+    padding: 0 40px;
 }
 
 .tab-nav-item {

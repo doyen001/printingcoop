@@ -12,9 +12,12 @@
         --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
-    /* Header Top Bar - Hidden (merged into mid-bar) */
+    /* Header Top Bar Container - matches section backgrounds (f8f9fa, light gradients) */
     .header-top-bar {
-        display: none;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #f0f4f8 100%);
+        border-bottom: 1px solid #e9ecef;
+        position: relative;
+        z-index: 1000;
     }
 
     .top-inner-bar {

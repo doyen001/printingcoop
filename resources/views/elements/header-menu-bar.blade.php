@@ -175,11 +175,10 @@
 
 /* Header menu bar styling */
 .header-menu-bar {
-    background-color: white !important;
-    box-shadow: none;
-    border-top: 1px #d8d8d8 solid;
-    border-bottom: 1px #f3f3f3ff solid;
-    height: 60px;
+    background-color: #f58634 !important;
+    /* border-top: 1px #e67e22 solid;
+    border-bottom: 1px #e67e22 solid; */
+    height: 50px;
 }
 
 .header-menu-bar-inner {
@@ -187,16 +186,16 @@
 }
 
 .header-menu-bar .all-menu li a {
-    color: rgb(72, 72, 72) !important;
+    color: #ffffff !important;
 }
 
 .header-menu-bar .all-menu li a:hover {
-    color: rgb(72, 72, 72) !important;
+    color: #2c3e50 !important;
 }
 
-.header-menu-bar.sticky {
+/* .header-menu-bar.sticky {
     box-shadow: 0 5px 15px rgba(168, 168, 168, 0.3);
-}
+} */
 </style>
 <div class="container-fluid header-menu-bar">
     <div class="header-menu-bar-inner">

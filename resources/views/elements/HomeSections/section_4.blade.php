@@ -22,7 +22,7 @@
     right: 0;
     bottom: 0;
     z-index: 1;
-    background-color: #f8f9fa;
+    background-color: white;
 }
 
 .book-printing-section .container {
@@ -64,8 +64,8 @@
 /* Product Grid */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 40px 30px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 30px 20px;
     padding: 40px 0;
 }
 
@@ -240,7 +240,7 @@
 }
 
 .product-content {
-    padding: 0 150px;
+    padding: 0 100px;
 }
 
 </style>
