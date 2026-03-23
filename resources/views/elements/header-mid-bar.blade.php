@@ -190,7 +190,15 @@
 }
 
 .header-mid-bar .container {
-    max-width: 1200px;
+    max-width: 1300px;
+}
+
+.header-mid-bar .mid-action-single-inner {
+    padding-left: 40px;
+}
+
+.header-mid-bar .mid-action-area ul li {
+    padding-left: 10px;
 }
 
 /* Mobile Responsive Styles */
@@ -466,27 +474,60 @@
                                             @if($website_store_id == 1)
                                                 <div class="mid-action-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                        <g>
-                                                            <path fill="#f58634" d="M28,12h-4V9c0-2.2-1.8-4-4-4h-5c-2.2,0-4,1.8-4,4v3H7c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h21c1.7,0,3-1.3,3-3V15C31,13.3,29.7,12,28,12z M13,9c0-1.1,0.9-2,2-2h5c1.1,0,2,0.9,2,2v3h-9V9z M29,28c0,0.6-0.4,1-1,1H7c-0.6,0-1-0.4-1-1V15c0-0.6,0.4-1,1-1h21c0.6,0,1,0.4,1,1V28z"/>
-                                                            <path fill="#38454F" d="M17.5,18c-1.9,0-3.5,1.6-3.5,3.5c0,1.3,0.7,2.4,1.8,3v2.3c0,0.9,0.8,1.7,1.7,1.7s1.7-0.8,1.7-1.7v-2.3c1.1-0.6,1.8-1.7,1.8-3C21,19.6,19.4,18,17.5,18z M17.5,23c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S18.3,23,17.5,23z"/>
+                                                        <g fill="none" stroke="#f58634" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <!-- Person icon -->
+                                                            <circle cx="17.5" cy="10.5" r="4"/>
+                                                            <path d="M11.5,23c0-3.3,2.7-6,6-6s6,2.7,6,6"/>
+                                                            
+                                                            <!-- Distribution lines and circles -->
+                                                            <line x1="17.5" y1="23" x2="17.5" y2="27"/>
+                                                            <circle cx="17.5" cy="29" r="1.5"/>
+                                                            
+                                                            <line x1="17.5" y1="23" x2="10" y2="27"/>
+                                                            <circle cx="8" cy="29" r="1.5"/>
+                                                            
+                                                            <line x1="17.5" y1="23" x2="25" y2="27"/>
+                                                            <circle cx="27" cy="29" r="1.5"/>
                                                         </g>
                                                     </svg>
                                                 </div>
                                             @elseif($website_store_id == 3)
                                                 <div class="mid-action-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                        <g>
-                                                            <path fill="#e72582" d="M28,12h-4V9c0-2.2-1.8-4-4-4h-5c-2.2,0-4,1.8-4,4v3H7c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h21c1.7,0,3-1.3,3-3V15C31,13.3,29.7,12,28,12z M13,9c0-1.1,0.9-2,2-2h5c1.1,0,2,0.9,2,2v3h-9V9z M29,28c0,0.6-0.4,1-1,1H7c-0.6,0-1-0.4-1-1V15c0-0.6,0.4-1,1-1h21c0.6,0,1,0.4,1,1V28z"/>
-                                                            <path fill="#38454F" d="M17.5,18c-1.9,0-3.5,1.6-3.5,3.5c0,1.3,0.7,2.4,1.8,3v2.3c0,0.9,0.8,1.7,1.7,1.7s1.7-0.8,1.7-1.7v-2.3c1.1-0.6,1.8-1.7,1.8-3C21,19.6,19.4,18,17.5,18z M17.5,23c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S18.3,23,17.5,23z"/>
+                                                        <g fill="none" stroke="#e72582" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <!-- Person icon -->
+                                                            <circle cx="17.5" cy="10.5" r="4"/>
+                                                            <path d="M11.5,23c0-3.3,2.7-6,6-6s6,2.7,6,6"/>
+                                                            
+                                                            <!-- Distribution lines and circles -->
+                                                            <line x1="17.5" y1="23" x2="17.5" y2="27"/>
+                                                            <circle cx="17.5" cy="29" r="1.5"/>
+                                                            
+                                                            <line x1="17.5" y1="23" x2="10" y2="27"/>
+                                                            <circle cx="8" cy="29" r="1.5"/>
+                                                            
+                                                            <line x1="17.5" y1="23" x2="25" y2="27"/>
+                                                            <circle cx="27" cy="29" r="1.5"/>
                                                         </g>
                                                     </svg>
                                                 </div>
                                             @elseif($website_store_id == 5)
                                                 <div class="mid-action-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" height="35" width="35" class="header-link-icon">
-                                                        <g>
-                                                            <path fill="#7aa93c" d="M28,12h-4V9c0-2.2-1.8-4-4-4h-5c-2.2,0-4,1.8-4,4v3H7c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h21c1.7,0,3-1.3,3-3V15C31,13.3,29.7,12,28,12z M13,9c0-1.1,0.9-2,2-2h5c1.1,0,2,0.9,2,2v3h-9V9z M29,28c0,0.6-0.4,1-1,1H7c-0.6,0-1-0.4-1-1V15c0-0.6,0.4-1,1-1h21c0.6,0,1,0.4,1,1V28z"/>
-                                                            <path fill="#38454F" d="M17.5,18c-1.9,0-3.5,1.6-3.5,3.5c0,1.3,0.7,2.4,1.8,3v2.3c0,0.9,0.8,1.7,1.7,1.7s1.7-0.8,1.7-1.7v-2.3c1.1-0.6,1.8-1.7,1.8-3C21,19.6,19.4,18,17.5,18z M17.5,23c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S18.3,23,17.5,23z"/>
+                                                        <g fill="none" stroke="#7aa93c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <!-- Person icon -->
+                                                            <circle cx="17.5" cy="10.5" r="4"/>
+                                                            <path d="M11.5,23c0-3.3,2.7-6,6-6s6,2.7,6,6"/>
+                                                            
+                                                            <!-- Distribution lines and circles -->
+                                                            <line x1="17.5" y1="23" x2="17.5" y2="27"/>
+                                                            <circle cx="17.5" cy="29" r="1.5"/>
+                                                            
+                                                            <line x1="17.5" y1="23" x2="10" y2="27"/>
+                                                            <circle cx="8" cy="29" r="1.5"/>
+                                                            
+                                                            <line x1="17.5" y1="23" x2="25" y2="27"/>
+                                                            <circle cx="27" cy="29" r="1.5"/>
                                                         </g>
                                                     </svg>
                                                 </div>
