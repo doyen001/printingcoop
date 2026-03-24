@@ -403,20 +403,6 @@
                                 </li>
                             @endif
                             
-                            {{-- Subdomain Links --}}
-                            <li class="subdomain-links">
-                                <div class="subdomain-links-group">
-                                    <a href="https://pod.printing.coop" target="_blank" class="subdomain-link">
-                                        <span class="link-icon">📦</span>
-                                        <span class="link-text">{{ $language_name == 'french' ? 'POD' : 'POD' }}</span>
-                                    </a>
-                                    <a href="https://store.printing.coop" target="_blank" class="subdomain-link">
-                                        <span class="link-icon">🛍️</span>
-                                        <span class="link-text">{{ $language_name == 'french' ? 'Magasin' : 'Store' }}</span>
-                                    </a>
-                                </div>
-                            </li>
-                            
                             {{-- Wishlist (CI lines 83-89) --}}
                             @php
                                 $totalWishListCount = 0;

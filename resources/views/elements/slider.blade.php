@@ -268,8 +268,8 @@
     position: absolute;
     border-radius: 5px;
     padding: 4px 12px;
-    top: 8px;
-    left: 8px;
+    top: 12px;
+    left: 12px;
     font-size: 11px;
     text-transform: uppercase;
     font-family: Sans-serif;

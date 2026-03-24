@@ -33,6 +33,11 @@ class AppServiceProvider extends ServiceProvider
                     ->where('status', 1)
                     ->where('display_on_top_menu', 1)
                     ->where('main_store_id', $website_store_id)
+                    ->where(function($query) {
+                        $query->where('title', 'NOT LIKE', '%Wholesale Trade Printer%')
+                              ->where('title_french', 'NOT LIKE', '%Wholesale Trade Printer%')
+                              ->where('slug', '!=', 'wholesale-trade-printer');
+                    })
                     ->orderBy('shortOrder', 'asc')
                     ->get()
                     ->map(function($page) {
