@@ -29,22 +29,66 @@
         display: block;
     }
 
-    /* .banner-image::after {
-        content: '';
+    /* Banner Button Overlays */
+    .banner-buttons {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.1);
-        z-index: 1;
-    } */
+        bottom: 4%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        z-index: 10;
+        background: linear-gradient(135deg, rgb(233 230 223) 0%, rgb(246 244 231) 100%);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 30px;
+        padding: 4px 28px;
+        backdrop-filter: blur(4px);
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .banner-btn {
+        font-size: 15px;
+        font-weight: 400;
+        text-decoration: none;
+        color: #2c2c2c;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        font-family: roboto;
+        white-space: nowrap;
+        transition: color 0.2s ease;
+    }
+
+    .banner-btn:hover {
+        color: #000000;
+    }
+
+    .banner-divider {
+        width: 1px;
+        height: 18px;
+        background: #555;
+        margin: 0 16px;
+    }
 
     /* Mobile Optimization */
     @media (max-width: 768px) {
         .banner-image img {
             min-height: 400px;
             object-fit: cover;
+        }
+
+        .banner-buttons {
+            bottom: 5%;
+            padding: 8px 20px;
+        }
+
+        .banner-btn {
+            font-size: 13px;
+        }
+
+        .banner-divider {
+            margin: 0 10px;
+            height: 14px;
         }
     }
 
@@ -176,11 +220,21 @@
             <img src="{{ $imageUrl }}"
                  alt="{{ $filenameWithoutExtension }}"
                  loading="eager">
+            <div class="banner-buttons">
+                <a href="{{ site_url('Pages/estimate') }}" class="banner-btn">{{ $language_name == 'French' ? 'Demander un devis' : 'Request a Quote' }}</a>
+                <span class="banner-divider"></span>
+                <a href="{{ site_url('Products') }}" class="banner-btn">{{ $language_name == 'French' ? 'Explorer les services' : 'Explore Services' }}</a>
+            </div>
         </div>
     @else
         <!-- Default Banner -->
         <div class="banner-image">
             <img src="{{ BANNER_DEFAULT_IMAGE_URL }}" alt="{{ __('Default Banner') }}">
+            <div class="banner-buttons">
+                <a href="{{ site_url('Pages/estimate') }}" class="banner-btn">{{ $language_name == 'French' ? 'Demander un devis' : 'Request a Quote' }}</a>
+                <span class="banner-divider"></span>
+                <a href="{{ site_url('Products') }}" class="banner-btn">{{ $language_name == 'French' ? 'Explorer les services' : 'Explore Services' }}</a>
+            </div>
         </div>
     @endif
 </section>

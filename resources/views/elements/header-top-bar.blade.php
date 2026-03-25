@@ -137,26 +137,28 @@
     .language-selector-box > a {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.25rem;
         color: var(--text-dark) !important;
         font-size: 0.875rem;
-        font-weight: 500;
-        padding: 0.375rem 0.75rem !important;
-        background: #ffffff;
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
+        font-weight: 600;
+        padding: 0.375rem 0.5rem !important;
+        background: transparent;
+        border: none;
+        border-radius: 0;
         transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .language-selector-box > a:hover {
-        background: rgba(242, 135, 56, 0.12) !important;
+        background: transparent !important;
         color: var(--primary-color) !important;
-        border-color: rgba(242, 135, 56, 0.3);
     }
 
     .language-selector-box > a i {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         transition: transform 0.2s ease;
+        color: var(--text-dark);
     }
 
     .language-selector:hover .language-selector-box > a i {

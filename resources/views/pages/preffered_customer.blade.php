@@ -22,8 +22,8 @@
     align-items: center;
 }
 
-.container {
-    max-width: 1400px;
+.preferred-customer-section .container {
+    max-width: 1200px !important;
     margin: 0 auto;
     padding: 0;
 }
@@ -43,6 +43,8 @@
     padding: 3rem;
     position: relative;
     min-width: 400px;
+    display: flex;
+    flex-direction: column;
 }
 
 .info-section::after {
@@ -53,18 +55,110 @@
     width: 50px;
     height: 100%;
     background: linear-gradient(to left, rgba(255,255,255,0.1), transparent);
+    z-index: 1;
 }
 
 .info-content {
-    position: sticky;
-    top: 3rem;
+    padding-right: 2rem;
 }
 
 .page-description {
-    font-size: 10px;
-    line-height: 2.5;
+    font-size: 0.9rem;
+    line-height: 1.6;
     margin-bottom: 2rem;
+    margin-top: 1rem;
     color: #1b1a19;
+    max-height: 1100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.page-description::-webkit-scrollbar {
+    display: none;
+}
+
+.page-description::-webkit-scrollbar-track {
+    display: none;
+}
+
+.page-description::-webkit-scrollbar-thumb {
+    display: none;
+}
+
+.page-description .contact-section-detail {
+    padding-top: 0;
+}
+
+.page-description .customer-detail-single {
+    font-family: 'Calibri', 'Arial', sans-serif;
+}
+
+.page-description h3 {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+    margin-top: 1.5rem;
+    color: #183e73;
+    font-weight: 700;
+}
+
+.page-description h3:first-child {
+    margin-top: 0;
+}
+
+.page-description h3 strong {
+    font-weight: 700;
+    color: inherit;
+    display: block;
+}
+
+.page-description p {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    margin-bottom: 1rem;
+    color: #1b1a19;
+    text-align: justify;
+}
+
+.page-description ul {
+    margin: 1rem 0 1.5rem 0;
+    padding-left: 2rem;
+    list-style-type: disc;
+}
+
+.page-description li {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    margin-bottom: 0.6rem;
+    color: #1b1a19;
+}
+
+.page-description b,
+.page-description strong {
+    font-weight: 600;
+}
+
+.page-description b span[style*="font-size:22.5pt"] {
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    color: #59595c !important;
+    display: block;
+    margin: 1.5rem 0 1rem 0;
+    line-height: 1.4;
+}
+
+.page-description span[style*="font-size:14.0pt"] {
+    font-size: 0.875rem !important;
+    line-height: 1.65 !important;
+    font-family: 'Calibri Light', 'Calibri', sans-serif !important;
+}
+
+.page-description span[style*="font-size:10.0pt"] {
+    font-size: 0.8rem !important;
+    line-height: 1.6 !important;
+    font-family: 'Arial', sans-serif !important;
 }
 
 .benefits-list {
@@ -88,7 +182,7 @@
 }
 
 .form-section {
-    flex: 1.5;
+    flex: 1;
     padding: 3rem;
     background: #183e73;
     min-width: 600px;
@@ -105,6 +199,26 @@
 }
 
 .page-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: var(--secondary-color);
+    border-radius: 2px;
+}
+
+.side-bar-title {
+    color: #183e73;
+    font-size: 2rem;
+    font-weight: 600;
+    position: relative;
+    text-align: left;
+    padding-bottom: 1rem;
+}
+
+.side-bar-title::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -219,6 +333,10 @@ textarea:focus {
         padding: 2rem;
     }
 }
+
+.universal-spacing {
+    padding-top: 20px !important;
+}
 </style>
 
 @section('content')
@@ -228,10 +346,10 @@ textarea:focus {
         <div class="customer-form-container">
             <div class="info-section">
                 <div class="info-content">
-                    <h2 class="page-title" style="color: #183e73; margin-bottom: 1.5rem;">
+                    <h2 class="side-bar-title">
                         {!! ($language_name == 'French') ? 'Avantages des Membres Privilèges' : 'Preferred Customer Benefits' !!}
                     </h2>
-                    <div class="page-description" style="padding-top: 0px!important;">
+                    <div class="page-description">
                         @if ($language_name == 'French')
                             {!! $pageData->description_french ?? '' !!}
                         @else
