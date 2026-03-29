@@ -392,9 +392,9 @@
                                         @foreach($StoreListData as $key => $language)
                                             <a href="{{ $language['url'] ?? '#' }}">
                                                 @if($language['language_name'] == 'English') 
-                                                    <span style="margin-right: 4px;">🇬🇧</span>EN
+                                                    <span style="margin-right: 4px; font-family: Arial, sans-serif;">&#127468;&#127463;</span>EN
                                                 @else 
-                                                    <span style="margin-right: 4px;">🇫🇷</span>FR
+                                                    <span style="margin-right: 4px; font-family: Arial, sans-serif;">&#127467;&#127479;</span>FR
                                                 @endif
                                             </a>
                                             @if(!$loop->last)
