@@ -202,6 +202,9 @@ Route::match(['get', 'post'], '/Pages/estimate', [PagesController::class, 'estim
 Route::get('/Pages/estimate_submitted', [PagesController::class, 'estimateSubmitted'])->name('estimate.submitted');
 Route::get('/Pages/faq', [PagesController::class, 'faq']);
 Route::post('/Pages/saveContactUs', [PagesController::class, 'saveContactUs']);
+Route::get('/Pages/privacyPolicy', [PagesController::class, 'privacyPolicy']);
+Route::get('/Pages/termsOfUse', [PagesController::class, 'termsOfUse']);
+Route::get('/Pages/interestBasedAdvertising', [PagesController::class, 'interestBasedAdvertising']);
 
 // Blogs Routes (CI: Blogs controller)
 Route::prefix('Blogs')->group(function () {

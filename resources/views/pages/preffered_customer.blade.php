@@ -571,13 +571,11 @@ textarea:focus {
                         <div class="contact-info">
                             @if ($language_name == 'French')
                                 <p>Pour plus d'informations ou de questions, appelez-nous directement au 
-                                1.877.922.7374, ou envoyez-nous un e-mail à
-                                brokersprogram@printograph.com.</p>
+                                1.877.922.7374.</p>
                                 <p>Veuillez nous permettre jusqu'à 1-2 jours ouvrables pour répondre à votre e-mail.</p>
                             @else
                                 <p>For more info or questions, call us directly at 
-                                1-888-384-8043, or email us at
-                                brokersprogram@printograph.com.</p>
+                                1-888-384-8043.</p>
                                 <p>Please allow us up to 1-2 business days to respond to
                                 your email.</p>
                             @endif

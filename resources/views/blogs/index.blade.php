@@ -232,6 +232,13 @@
         font-weight: 500;
     }
 
+    @media (min-width: 1200px) {
+        .col-xl-4 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;  
+        }
+    }
+    
     /* Responsive */
     @media (max-width: 768px) {
         .blog-boxes-section {

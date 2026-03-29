@@ -534,6 +534,51 @@ class PagesController extends Controller
     }
     
     /**
+     * Display Privacy Policy page
+     */
+    public function privacyPolicy()
+    {
+        $language_name = config('store.language_name', 'english');
+        
+        $data = [
+            'page_title' => $language_name == 'french' ? 'Politique de confidentialité' : 'Privacy Policy',
+            'language_name' => $language_name,
+        ];
+        
+        return view('pages.privacy_policy', $data);
+    }
+    
+    /**
+     * Display Terms of Use page
+     */
+    public function termsOfUse()
+    {
+        $language_name = config('store.language_name', 'english');
+        
+        $data = [
+            'page_title' => $language_name == 'french' ? "Conditions d'utilisation" : 'Terms of Use',
+            'language_name' => $language_name,
+        ];
+        
+        return view('pages.terms_of_use', $data);
+    }
+    
+    /**
+     * Display Interest-Based Advertising page
+     */
+    public function interestBasedAdvertising()
+    {
+        $language_name = config('store.language_name', 'english');
+        
+        $data = [
+            'page_title' => $language_name == 'french' ? 'Publicité ciblée' : 'Interest-Based Advertising',
+            'language_name' => $language_name,
+        ];
+        
+        return view('pages.interest_based_advertising', $data);
+    }
+    
+    /**
      * Display Estimate Submitted page
      * CI: Pages->estimate_submitted() lines 148-152
      */
