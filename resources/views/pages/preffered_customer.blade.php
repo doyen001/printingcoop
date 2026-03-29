@@ -38,7 +38,7 @@
 
 .info-section {
     flex: 1;
-    background: #fafafa;
+    background: #fff;
     color: #183e73;
     padding: 3rem;
     position: relative;
@@ -167,38 +167,81 @@
     margin: 2rem 0;
 }
 
-.benefits-list li {
-    padding-left: 2rem;
-    position: relative;
-    margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.9);
+.benefits-list {
+    display: flex;
+    flex-direction: column;
 }
 
-.benefits-list li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--secondary-color);
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.25rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* .benefit-item:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(5px);
+} */
+
+.benefit-icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.benefit-item span {
+    color: #333;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.contact-info {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border-left: 4px solid #f28738;
+}
+
+.contact-info p {
+    margin: 0.5rem 0;
+    color: #333;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.contact-info p:first-child {
+    font-weight: 500;
+}
+
+.benefit-item p {
+    font-size: 0.75rem;
+    margin-bottom: 0;
 }
 
 .form-section {
     flex: 1;
-    padding: 3rem;
-    background: #183e73;
+    padding: 2rem;
+    background: #ffffff;
     min-width: 600px;
+    border-right: 1px solid #e9ecef;
 }
 
 .page-title {
-    color: #fff;
-    font-size: 2.2rem;
+    color: #333;
+    font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 2rem;
-    position: relative;
-    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-align: left;
 }
 
-.page-title::after {
+/* .page-title::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -207,7 +250,7 @@
     height: 4px;
     background: var(--secondary-color);
     border-radius: 2px;
-}
+} */
 
 .side-bar-title {
     color: #183e73;
@@ -218,7 +261,7 @@
     padding-bottom: 1rem;
 }
 
-.side-bar-title::after {
+/* .side-bar-title::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -227,7 +270,7 @@
     height: 4px;
     background: var(--secondary-color);
     border-radius: 2px;
-}
+} */
 
 #signup-msg {
     margin-bottom: 1.5rem;
@@ -250,64 +293,64 @@
 }
 
 .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .form-field {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .form-field.full-width {
-    grid-column: 1 / -1;
+    width: 100%;
 }
 
 label {
     display: block;
-    margin-bottom: 0.75rem;
-    color: #fff;
+    margin-bottom: 0.5rem;
+    color: #333;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
+.preferred-customer-section
 input,
 select,
 textarea {
     width: 100%;
-    padding: 0.85rem;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: var(--transition);
+    padding: 0.5rem .75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
     background: white;
 }
 
+.preferred-customer-section
 input:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 4px rgba(255,107,0,0.1);
+    border-color: #f58634;
 }
 
 .button-submit {
-    background: #f28738;
+    background: #f58634;
     color: white;
-    padding: 1rem 2.5rem;
+    padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: var(--transition);
-    width: auto;
-    margin-top: 1rem;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
 .button-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover);
+    background: #db762eff;
 }
 
 @media (max-width: 1200px) {
@@ -344,21 +387,6 @@ textarea:focus {
 <div class="preferred-customer-section">
     <div class="container">
         <div class="customer-form-container">
-            <div class="info-section">
-                <div class="info-content">
-                    <h2 class="side-bar-title">
-                        {!! ($language_name == 'French') ? 'Avantages des Membres Privilèges' : 'Preferred Customer Benefits' !!}
-                    </h2>
-                    <div class="page-description">
-                        @if ($language_name == 'French')
-                            {!! $pageData->description_french ?? '' !!}
-                        @else
-                            {!! $pageData->description ?? '' !!}
-                        @endif
-                    </div>
-                </div>
-            </div>
-
             <div class="form-section">
                 <h1 class="page-title">
                     {!! ($language_name == 'French') ? 'Devenez un membre Privilège' : 'Become a Preferred Customer' !!}
@@ -369,57 +397,50 @@ textarea:focus {
                 <form action="" method="post" id="Preferred-Customer">
                     <div class="form-grid">
                         <div class="form-field">
-                            <label class="label-style" for="fname">{!! ($language_name == 'French') ? 'Prénom' : 'First Name'!!}</label>
-                            <input class="input-style" type="text" id="fname" name="fname" required>
+                            <input class="input-style" type="text" id="fname" name="fname" placeholder="{!! ($language_name == 'French') ? 'Prénom' : 'First Name'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="lname">{!! ($language_name == 'French') ? 'Nom de famille' : 'Last Name'!!}</label>
-                            <input class="input-style" type="text" id="lname" name="lname" required>
+                            <input class="input-style" type="text" id="lname" name="lname" placeholder="{!! ($language_name == 'French') ? 'Nom de famille' : 'Last Name'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="company_name">{!! ($language_name == 'French') ? 'Nom de la compagnie' : 'Company Name'!!}</label>
-                            <input class="input-style" type="text" id="company_name" name="company_name" required>
+                            <input class="input-style" type="text" id="company_name" name="company_name" placeholder="{!! ($language_name == 'French') ? 'Nom de la compagnie' : 'Company Name'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="email">Email</label>
-                            <input class="input-style" type="email" id="email" name="email" required>
+                            <input class="input-style" type="email" id="email" name="email" placeholder="Email" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="signup-password">{!! ($language_name == 'French') ? 'Mot de passe' : 'Password'!!}</label>
-                            <input class="input-style" type="password" id="signup-password" name="password" required>
+                            <input class="input-style" type="password" id="signup-password" name="password" placeholder="{!! ($language_name == 'French') ? 'Mot de passe' : 'Password'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="responsible_name">{!! ($language_name == 'French') ? 'Nom du responsable' : 'Responsible Name'!!}</label>
-                            <input class="input-style" type="text" id="responsible_name" name="responsible_name" required>
+                            <input class="input-style" type="password" id="confirm-password" name="confirm_password" placeholder="{!! ($language_name == 'French') ? 'Confirmer le mot de passe' : 'Confirm Password'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="cp">{!! ($language_name == 'French') ? 'CP' : 'CP'!!}</label>
-                            <input class="input-style" type="text" id="cp" name="cp" required>
+                            <input class="input-style" type="text" id="responsible_name" name="responsible_name" placeholder="{!! ($language_name == 'French') ? 'Nom du responsable' : 'Responsible Name'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="active_area">{!! ($language_name == 'French') ? 'Zone active' : 'Active Area'!!}</label>
-                            <input class="input-style" type="text" id="active_area" name="active_area" required>
+                            <input class="input-style" type="text" id="cp" name="cp" placeholder="CP" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="address">{!! ($language_name == 'French') ? 'Adresse' : 'Address'!!}</label>
-                            <input class="input-style" type="text" id="address" name="address" required>
+                            <input class="input-style" type="text" id="active_area" name="active_area" placeholder="{!! ($language_name == 'French') ? 'Zone active' : 'Active Area'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="mobile">{!! ($language_name == 'French') ? 'Numéro de téléphone' : 'Phone Number'!!}</label>
-                            <input class="input-style" type="tel" id="mobile" name="mobile" required>
+                            <input class="input-style" type="text" id="address" name="address" placeholder="{!! ($language_name == 'French') ? 'Adresse' : 'Address'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <label class="label-style" for="country">{!! ($language_name == 'French') ? 'Pays' : 'Country'!!}</label>
+                            <input class="input-style" type="tel" id="mobile" name="mobile" placeholder="{!! ($language_name == 'French') ? 'Numéro de téléphone' : 'Phone Number'!!}" required>
+                        </div>
+                        
+                        <div class="form-field">
                             <select id="country" name="country" onchange="getState($(this).val())" class="crs-country" required>
                                 <option value="">{!! ($language_name == 'French') ? '-- Choisissez le pays --' : '-- Select Country --'!!}</option>
                                 @foreach ($countries as $country) 
@@ -436,25 +457,23 @@ textarea:focus {
                         </div>
 
                         <div class="form-field">
-                            <label class="label-style" for="stateiD">{!! ($language_name == 'French') ? 'État/Province' : 'State/Province' !!}</label>
                             <select id="stateiD" name="region" required>
                                 <option value="">{!! ($language_name == 'French') ? '-- Sélectionnez l\'état --' : '-- Select State --' !!}</option>
                             </select>
                         </div>
                         
-                        <div class="form-field">
-                            <label class="label-style" for="city">{!! ($language_name == 'French') ? 'Ville' : 'City'!!}</label>
-                            <input class="input-style" type="text" id="city" name="city" required>
+                        <div style="display: grid; grid-template-columns: 6fr 4fr; gap: 10px;">
+                            <div class="form-field">
+                                <input class="input-style" type="text" id="city" name="city" placeholder="{!! ($language_name == 'French') ? 'Ville' : 'City'!!}" required>
+                            </div>
+                            
+                            <div class="form-field">
+                                <input class="input-style" type="text" id="zip_code" name="zip_code" placeholder="{!! ($language_name == 'French') ? 'Code postal' : 'Postal Code'!!}" required>
+                            </div>
                         </div>
-                        
-                        <div class="form-field">
-                            <label class="label-style" for="zip_code">{!! ($language_name == 'French') ? 'Code postal' : 'Postal Code'!!}</label>
-                            <input class="input-style" type="text" id="zip_code" name="zip_code" required>
-                        </div>
-                        
+
                         <div class="form-field full-width">
-                            <label class="label-style" for="request">{!! ($language_name == 'French') ? 'Demande' : 'Request'!!}</label>
-                            <textarea id="request" name="request" required></textarea>
+                            <textarea id="request" name="request" placeholder="{!! ($language_name == 'French') ? 'Demande' : 'Request'!!}" required></textarea>
                         </div>
                         
                         <div class="submit-container">
@@ -464,6 +483,108 @@ textarea:focus {
                         </div>
                     </div>
                 </form>
+            </div>
+
+            <div class="info-section">
+                <div class="info-content">
+                    <h2 class="page-title">
+                        {!! ($language_name == 'French') ? 'Avantages des Membres Privilèges' : 'Preferred Customer Benefits' !!}
+                    </h2>
+                    <div class="page-description">
+                        @if ($language_name == 'French')
+                            <div class="benefits-list">
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/wholesale_icon.svg" alt="Prix de Gros" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Prix de Gros</span>
+                                        <p>Accès aux économies avec des prix exclusifs pour les courtiers.</p>
+                                    </div>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/offers_pog_icon.svg" alt="Offres Exclusives" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Offres Exclusives</span>
+                                        <p>Remises spéciales, points de récompense, & accès anticipé aux produits.</p>
+                                    </div>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/order_pickup_icon.svg" alt="Retrait de Commande" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Retrait de Commande</span>
+                                        <p>Économisez de l'argent en retirant les commandes de nos bureaux en CA, TX, et KY.</p>
+                                    </div>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/quotes_icon.svg" alt="Devis Personnalisés" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Devis Personnalisés</span>
+                                        <p>Créez un produit personnalisé non offert sur le site.</p>
+                                    </div>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/blind_drop_shipping_icon.svg" alt="Expédition Discrète" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Expédition Discrète</span>
+                                        <p>Nous expédions directement à vos clients dans un emballage non marqué</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="benefits-list">
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/wholesale_icon.svg" alt="Discounted Prices" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Wholesale Pricing</span>
+                                        <p>Access to savings with pricing exclusive to brokers.</p>
+                                    </div>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/offers_pog_icon.svg" alt="Free Shipping" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Exclusive Offers</span>
+                                        <p>Special discounts, rewards points, & early access to products.</p>
+                                    </div>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/order_pickup_icon.svg" alt="Priority Support" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Order Pickup</span>
+                                        <p>Save money by picking up orders from our offices in CA, TX, and KY.</p>
+                                    </div>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/quotes_icon.svg" alt="Exclusive Access" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Custom Quotes</span>
+                                        <p>Create a custom product not offered on the site.</p>
+                                    </div>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="/uploads/preferred_customer/blind_drop_shipping_icon.svg" alt="Special Discounts" class="benefit-icon">
+                                    <div style="display: flex; justify-content: center; flex-direction: column">
+                                        <span>Blind Drop Shipping</span>
+                                        <p>We ship non-branded packaging directly to your customers</p>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        <div class="contact-info">
+                            @if ($language_name == 'French')
+                                <p>Pour plus d'informations ou de questions, appelez-nous directement au 
+                                1.877.922.7374, ou envoyez-nous un e-mail à
+                                brokersprogram@printograph.com.</p>
+                                <p>Veuillez nous permettre jusqu'à 1-2 jours ouvrables pour répondre à votre e-mail.</p>
+                            @else
+                                <p>For more info or questions, call us directly at 
+                                1-888-384-8043, or email us at
+                                brokersprogram@printograph.com.</p>
+                                <p>Please allow us up to 1-2 business days to respond to
+                                your email.</p>
+                            @endif
+                        </div>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -492,5 +613,42 @@ function getState(country_id) {
         $('#stateiD').html('<option value="">{!! ($language_name == "French") ? "-- Sélectionnez l\'état --" : "-- Select State --" !!}</option>');
     }
 }
+
+// Password confirmation validation
+$(document).ready(function() {
+    $('#Preferred-Customer').on('submit', function(e) {
+        var password = $('#signup-password').val();
+        var confirmPassword = $('#confirm-password').val();
+        
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            
+            // Show error message
+            var errorMsg = '{!! ($language_name == "French") ? "Les mots de passe ne correspondent pas." : "Passwords do not match." !!}';
+            $('#signup-msg').html('<div class="alert alert-danger">' + errorMsg + '</div>');
+            
+            // Clear confirm password field
+            $('#confirm-password').val('');
+            $('#confirm-password').focus();
+            
+            return false;
+        }
+    });
+    
+    // Real-time validation
+    $('#confirm-password').on('input', function() {
+        var password = $('#signup-password').val();
+        var confirmPassword = $(this).val();
+        
+        if (confirmPassword.length > 0 && password !== confirmPassword) {
+            $(this).css('border-color', '#dc3545');
+            var errorMsg = '{!! ($language_name == "French") ? "Les mots de passe ne correspondent pas." : "Passwords do not match." !!}';
+            $('#signup-msg').html('<div class="alert alert-danger">' + errorMsg + '</div>');
+        } else {
+            $(this).css('border-color', '#28a745');
+            $('#signup-msg').html('');
+        }
+    });
+});
 </script>
 @endpush

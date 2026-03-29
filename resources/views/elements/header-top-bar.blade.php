@@ -21,7 +21,7 @@
     }
 
     .top-inner-bar {
-        padding: 0.75rem 0;
+        padding: 0.25rem 0;
     }
 
     /* Top Bar Menu */
@@ -115,8 +115,8 @@
 
     .right-menu ul li a:hover {
         color: var(--primary-color);
-        background: rgba(242, 135, 56, 0.12);
-        transform: translateY(-1px);
+        /* background: rgba(242, 135, 56, 0.12);
+        transform: translateY(-1px); */
     }
 
     .right-menu ul li a strong {
@@ -137,28 +137,26 @@
     .language-selector-box > a {
         display: flex;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.5rem;
         color: var(--text-dark) !important;
         font-size: 0.875rem;
-        font-weight: 600;
-        padding: 0.375rem 0.5rem !important;
-        background: transparent;
-        border: none;
-        border-radius: 0;
+        font-weight: 500;
+        padding: 0.375rem 0.75rem !important;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
         transition: all 0.2s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 
     .language-selector-box > a:hover {
-        background: transparent !important;
+        background: rgba(242, 135, 56, 0.12) !important;
         color: var(--primary-color) !important;
+        border-color: rgba(242, 135, 56, 0.3);
     }
 
     .language-selector-box > a i {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         transition: transform 0.2s ease;
-        color: var(--text-dark);
     }
 
     .language-selector:hover .language-selector-box > a i {
@@ -230,27 +228,35 @@
     }
 
     /* Wishlist Link */
-    .right-menu ul li:nth-child(3) a::before {
+    /* .right-menu ul li:nth-child(3) a::before {
         content: '\f004';
         font-family: 'Line Awesome Free';
         font-weight: 900;
         font-size: 0.9rem;
         color: var(--primary-color);
-    }
+    } */
 
     /* Login/Logout Links */
-    .right-menu ul li:last-child a::before {
+    /* .right-menu ul li:last-child a::before {
         content: '\f2bd';
         font-family: 'Line Awesome Free';
         font-weight: 900;
         font-size: 0.9rem;
         color: var(--primary-color);
-    }
+    } */
 
     .header-top-bar .container {
         /* flex: 0 0 41.666667%;
         max-width: 41.666667%; */
         max-width: 1200px;
+    }
+
+    .header-top-bar .action-divider {
+        width: 1px;
+        height: 16px;
+        background: #ddd;
+        /* margin: 0 2px; */
+        margin: 6px 0;
     }
 
     /* Responsive Design */
@@ -295,7 +301,7 @@
     .subdomain-links .subdomain-links-group {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        /* gap: 0.5rem; */
         padding: 0.25rem 0;
     }
 
@@ -381,8 +387,22 @@
                         <ul>
                             {{-- Language Selector (CI lines 35-58) --}}
                             @if(($MainStoreData['show_language_translation'] ?? 1) == 1)
-                                <li>
-                                    <div class="language-selector">
+                                <li style="display: flex">
+                                    @if(!empty($StoreListData) && is_array($StoreListData))
+                                        @foreach($StoreListData as $key => $language)
+                                            <a href="{{ $language['url'] ?? '#' }}">
+                                                @if($language['language_name'] == 'English') 
+                                                    <span style="margin-right: 4px;">🇬🇧</span>EN
+                                                @else 
+                                                    <span style="margin-right: 4px;">🇫🇷</span>FR
+                                                @endif
+                                            </a>
+                                            @if(!$loop->last)
+                                                <span class="action-divider"></span>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    {{-- <div class="language-selector">
                                         <div class="language-selector-box">
                                             <a href="javascript:void(0)">
                                                 {{ $MainStoreData['language_name'] ?? 'English' }}
@@ -401,12 +421,27 @@
                                                 @endif
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </li>
                             @endif
                             
+                            {{-- Subdomain Links --}}
+                            <li class="subdomain-links">
+                                <div class="subdomain-links-group">
+                                    <a href="https://pod.printing.coop" target="_blank" class="subdomain-link">
+                                        {{-- <span class="link-icon">📦</span> --}}
+                                        <span class="link-text">{{ $language_name == 'french' ? 'Impression à la demande' : 'Print on demand' }}</span>
+                                    </a>
+                                    <span class="action-divider"></span>
+                                    <a href="https://store.printing.coop" target="_blank" class="subdomain-link">
+                                        {{-- <span class="link-icon">🛍️</span> --}}
+                                        <span class="link-text">{{ $language_name == 'french' ? 'Magasin' : 'Store' }}</span>
+                                    </a>
+                                </div>
+                            </li>
+                            
                             {{-- Wishlist (CI lines 83-89) --}}
-                            @php
+                            {{-- @php
                                 $totalWishListCount = 0;
                                 if (!empty($loginId)) {
                                     $totalWishListCount = DB::table('wishlists')
@@ -419,15 +454,15 @@
                                     {{ $language_name == 'french' ? "Ma liste d'envies" : 'My Wish List' }} 
                                     (<strong id="WishlistsCount">{{ $totalWishListCount }}</strong>)
                                 </a>
-                            </li>
+                            </li> --}}
                             
                             {{-- Login/Logout (CI lines 91-98) --}}
                             @if(empty($loginId))
-                                <li>
+                                {{-- <li>
                                     <a href="{{ url('Logins') }}">
                                         {{ $language_name == 'french' ? "S'identifier" : 'Login' }}
                                     </a>
-                                </li>
+                                </li> --}}
                             @else
                                 <li>
                                     <a href="{{ url('MyAccounts/logout') }}">

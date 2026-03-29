@@ -196,64 +196,6 @@
 /* .header-menu-bar.sticky {
     box-shadow: 0 5px 15px rgba(168, 168, 168, 0.3);
 } */
-
-/* Subdomain Links Styles for Header Menu Bar */
-.header-menu-bar .subdomain-links {
-    display: flex;
-    align-items: center;
-}
-
-.header-menu-bar .subdomain-links-group {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.header-menu-bar .subdomain-link {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.5rem 0.75rem;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff !important;
-}
-
-.header-menu-bar .subdomain-link:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-1px);
-}
-
-.header-menu-bar .link-icon {
-    font-size: 0.75rem;
-    opacity: 0.9;
-}
-
-.header-menu-bar .link-text {
-    font-weight: 500;
-    color: #ffffff !important;
-}
-
-/* Responsive adjustments for subdomain links in menu bar */
-@media (max-width: 991px) {
-    .header-menu-bar .subdomain-links-group {
-        flex-direction: column;
-        gap: 0.25rem;
-        align-items: flex-start;
-    }
-    
-    .header-menu-bar .subdomain-link {
-        padding: 0.375rem 0.5rem;
-        font-size: 0.8rem;
-    }
-}
 </style>
 <div class="container-fluid header-menu-bar">
     <div class="header-menu-bar-inner">
@@ -263,7 +205,6 @@
                     {{ $language_name == 'french' ? 'Accueil' : 'Home' }}
                 </a>
             </li>
-
             <li>
                 <a href="{{ site_url('Products') }}" id="products">
                     {{ $language_name == 'french' ? 'Des produits' : 'Products' }}
@@ -339,18 +280,6 @@
                     </div>
                 </div>
             </li>
-                        
-            {{-- Subdomain Links --}}
-            <li>
-                <a href="https://pod.printing.coop">
-                    {{ $language_name == 'french' ? 'POD' : 'POD' }}
-                </a>
-            </li>
-            <li>
-                <a href="https://store.printing.coop">
-                    {{ $language_name == 'french' ? 'Magasin' : 'Store' }}
-                </a>
-            </li>
             
             {{-- Dynamic Pages (CI lines 83-104) --}}
             @if(isset($pages))
@@ -377,7 +306,12 @@
                     @endphp
                     <li>
                         <a href="{{ $url }}">
-                            {{ $language_name == 'french' ? ucfirst($page['title_french']) : ucfirst($page['title']) }}
+                            {{-- {{ $language_name == 'french' ? ucfirst($page['title_french']) : ucfirst($page['title']) }} --}}
+                            @if($slug == 'estimate')
+                                {{ $language_name == 'french' ? 'Demande de devis' : 'Quote Request' }}
+                            @else
+                                {{ $language_name == 'french' ? ucfirst($page['title_french']) : ucfirst($page['title']) }}
+                            @endif
                         </a>
                     </li>
                 @endforeach
@@ -401,19 +335,6 @@
                         {{ $language_name == 'french' ? 'Accueil' : 'Home' }}
                     </a>
                 </li>
-                
-                {{-- Subdomain Links for Mobile --}}
-                <li>
-                    <a href="https://pod.printing.coop" target="_blank">
-                        {{ $language_name == 'french' ? 'POD' : 'POD' }}
-                    </a>
-                </li>
-                <li>
-                    <a href="https://store.printing.coop" target="_blank">
-                        {{ $language_name == 'french' ? 'Magasin' : 'Store' }}
-                    </a>
-                </li>
-                
                 <li class="mobile-drop">
                     <a href="{{ site_url('Products') }}" id="products">
                         {{ $language_name == 'french' ? 'Des produits' : 'Products' }}
@@ -483,7 +404,11 @@
                         @endphp
                         <li>
                             <a href="{{ $url }}">
-                                {{ $language_name == 'french' ? ucfirst($page['title_french']) : ucfirst($page['title']) }}
+                                @if($slug == 'estimate')
+                                    {{ $language_name == 'french' ? 'Demande de devis' : 'Quote Request' }}
+                                @else
+                                    {{ $language_name == 'french' ? ucfirst($page['title_french']) : ucfirst($page['title']) }}
+                                @endif
                             </a>
                         </li>
                     @endforeach

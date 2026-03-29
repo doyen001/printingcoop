@@ -37,6 +37,6 @@
 @include('elements.HomeSections.section_6')
 
 {{-- Section 7: REGISTER FOR FREE! (CI line 18) --}}
-@include('elements.HomeSections.section_7')
+{{-- @include('elements.HomeSections.section_7') --}}
 
 @endsection
