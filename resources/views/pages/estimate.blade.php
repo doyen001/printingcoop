@@ -6,8 +6,9 @@
 @section('content')
 
 <style>
+/* CSS Variables */
 :root {
-    /* --primary-color: #183e73; */
+    --primary-color: #183e73;
     --secondary-color: #ff6b00;
     --light-gray: #f8f9fa;
     --border-color: #dcdcdc;
@@ -19,6 +20,7 @@
     --transition: all 0.3s ease-in-out;
 }
 
+/* Main Layout */
 .estimate-section {
     padding: 4rem 2rem;
     background: var(--light-gray);
@@ -27,13 +29,9 @@
     align-items: center;
 }
 
-.container {
+.estimate-form-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0;
-}
-
-.estimate-form-container {
     display: flex;
     background: white;
     border-radius: 20px;
@@ -41,10 +39,11 @@
     overflow: hidden;
 }
 
+/* Info Section */
 .info-section {
     flex: 1;
     background: #fafafa;
-    color: #183e73;
+    color: var(--primary-color);
     padding: 3rem;
     position: relative;
     min-width: 400px;
@@ -65,11 +64,17 @@
     top: 3rem;
 }
 
+.info-section .page-title {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
 .page-description {
     font-size: 1rem;
     line-height: 1.6;
     margin-bottom: 2rem;
     color: #1b1a19;
+    padding-top: 0 !important;
 }
 
 .benefits-list {
@@ -92,14 +97,15 @@
     color: var(--secondary-color);
 }
 
+/* Form Section */
 .form-section {
     flex: 1.5;
     padding: 3rem;
-    background: #183e73;
+    background: var(--primary-color);
     min-width: 600px;
 }
 
-.page-title {
+.form-section .page-title {
     color: #fff;
     font-size: 2.2rem;
     font-weight: 600;
@@ -109,7 +115,7 @@
     text-align: left;
 }
 
-.page-title::after {
+.form-section .page-title::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -120,6 +126,7 @@
     border-radius: 2px;
 }
 
+/* Messages */
 #estimate-msg {
     margin-bottom: 1.5rem;
     padding: 1rem;
@@ -140,6 +147,7 @@
     border: 1px solid #f5c6cb;
 }
 
+/* Form Elements */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -187,6 +195,7 @@ textarea:focus {
     box-shadow: 0 0 0 4px rgba(255,107,0,0.1);
 }
 
+/* Radio Buttons */
 .radio-group {
     display: flex;
     gap: 2rem;
@@ -244,6 +253,7 @@ textarea:focus {
     display: block;
 }
 
+/* Buttons */
 .submit-btn {
     background: linear-gradient(135deg, var(--secondary-color), #e65c00);
     color: white;
@@ -263,12 +273,14 @@ textarea:focus {
     box-shadow: var(--shadow-hover);
 }
 
+/* Helper Text */
 .helper-text {
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.9rem;
     margin-top: 0.5rem;
 }
 
+/* Captcha */
 .captcha-section {
     background: rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
@@ -310,11 +322,13 @@ textarea:focus {
     margin-top: 0.5rem;
 }
 
+/* Section Titles */
 .form-section-title {
     color: white;
     font-size: 24px;
 }
 
+/* Checkboxes */
 .checkbox-label {
     display: flex;
     align-items: center;
@@ -333,6 +347,7 @@ textarea:focus {
     margin: 0;
 }
 
+/* Responsive Design */
 @media (max-width: 1200px) {
     .estimate-form-container {
         flex-direction: column;
@@ -363,10 +378,10 @@ textarea:focus {
         <div class="estimate-form-container">
             <div class="info-section">
                 <div class="info-content">
-                    <h2 class="page-title" style="color: #183e73; margin-bottom: 1.5rem;">
+                    <h2 class="page-title">
                         {{ $language_name == 'french' ? 'Informations importantes' : 'Important Information' }}
                     </h2>
-                    <div class="page-description" style="padding-top: 0px!important;">
+                    <div class="page-description">
                         @if($language_name == 'french')
                             {!! $pageData->description_french ?? '' !!}
                         @else
