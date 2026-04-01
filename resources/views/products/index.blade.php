@@ -284,10 +284,17 @@
                 </a>
                 
                 @if(empty($sub_category_name) && empty($category_name))
-                    /
-                    <span class="current gg">
-                        {{ __('all categories') }}
-                    </span>
+                    @if(request()->has('tag_id') && base64_decode(request('tag_id')) == '6')
+                        /
+                        <span class="current gg">
+                            {{ app()->getLocale() == 'fr' ? 'Marketing&Papeterie' : 'Marketing&Stationery' }}
+                        </span>
+                    @else
+                        /
+                        <span class="current gg">
+                            {{ __('all categories') }}
+                        </span>
+                    @endif
                 @endif
                 
                 @if(!empty($sub_category_name))

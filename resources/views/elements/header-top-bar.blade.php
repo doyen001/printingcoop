@@ -443,13 +443,11 @@
                             <li class="subdomain-links">
                                 <div class="subdomain-links-group">
                                     <a href="https://pod.printing.coop" target="_blank" class="subdomain-link">
-                                        {{-- <span class="link-icon">📦</span> --}}
-                                        <span class="link-text">{{ $language_name == 'french' ? 'Impression à la demande' : 'Print on demand' }}</span>
+                                        {{-- <span class="link-text">{{ $language_name == 'french' ? 'Impression à la demande' : 'Print on demand' }}</span> --}}
                                     </a>
-                                    <span class="action-divider"></span>
+                                    {{-- <span class="action-divider"></span> --}}
                                     <a href="https://store.printing.coop" target="_blank" class="subdomain-link">
-                                        {{-- <span class="link-icon">🛍️</span> --}}
-                                        <span class="link-text">{{ $language_name == 'french' ? 'Magasin' : 'Store' }}</span>
+                                        {{-- <span class="link-text">{{ $language_name == 'french' ? 'Magasin' : 'Store' }}</span> --}}
                                     </a>
                                 </div>
                             </li>

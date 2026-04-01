@@ -44,6 +44,12 @@ class ProductsController extends Controller
             $category_id = base64_decode($request->input('category_id'));
         }
         
+        // Get tag_id from query string for tag-based filtering
+        $tag_id = '';
+        if ($request->has('tag_id')) {
+            $tag_id = base64_decode($request->input('tag_id'));
+        }
+        
         // Check condition for ecoink (CI lines 44-49)
         if ($main_store_data->show_all_categories == 0 && $category_id != 13 && $website_store_id == 5) {
             $category_id = 13;
@@ -144,7 +150,7 @@ class ProductsController extends Controller
         $type = $sortByOptions[$sortBy]['type'] ?? 'asc';
         
         // Pagination (CI lines 130-152)
-        $total = $this->getTotalActiveProduct($category_id, $sub_category_id, $printer_brand, $printer_series, $printer_models);
+        $total = $this->getTotalActiveProduct($category_id, $sub_category_id, $printer_brand, $printer_series, $printer_models, $tag_id);
         
         $pageno = $request->input('pageno', 1);
         $no_of_records_per_page = 30;
@@ -152,7 +158,7 @@ class ProductsController extends Controller
         $total_pages = ceil($total / $no_of_records_per_page);
         
         // Get products (CI line 141)
-        $lists = $this->getActiveProductList($category_id, $sub_category_id, $order_by, $type, $offset, $no_of_records_per_page, $printer_brand, $printer_series, $printer_models);
+        $lists = $this->getActiveProductList($category_id, $sub_category_id, $order_by, $type, $offset, $no_of_records_per_page, $printer_brand, $printer_series, $printer_models, $tag_id);
         
         $prevPage = $pageno - 1;
         $NextPage = $pageno + 1;
@@ -225,9 +231,9 @@ class ProductsController extends Controller
      * Get total active products count
      * Helper method for pagination
      */
-    private function getTotalActiveProduct($category_id, $sub_category_id, $printer_brand, $printer_series, $printer_models)
+    private function getTotalActiveProduct($category_id, $sub_category_id, $printer_brand, $printer_series, $printer_models, $tag_id = null)
     {
-        // Use product_subcategory junction table (CI Product_Model lines 311-326)
+        // Use product_subcategory junction table (CI Product_Model lines 192-228)
         if (!empty($sub_category_id)) {
             $productIds = $this->getProductIdsBySubCategory($category_id, $sub_category_id);
             if (empty($productIds)) {
@@ -244,6 +250,12 @@ class ProductsController extends Controller
             $query = DB::table('products')
                 ->where('status', 1)
                 ->whereIn('id', $productIds);
+        } else if (!empty($tag_id)) {
+            // Tag-based filtering like section_4.blade.php
+            $query = DB::table('products')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
+                ->where('products.status', 1);
         } else {
             $query = DB::table('products')->where('status', 1);
         }
@@ -267,7 +279,7 @@ class ProductsController extends Controller
      * Get active product list
      * Helper method for product listing
      */
-    private function getActiveProductList($category_id, $sub_category_id, $order_by, $type, $offset, $limit, $printer_brand, $printer_series, $printer_models)
+    private function getActiveProductList($category_id, $sub_category_id, $order_by, $type, $offset, $limit, $printer_brand, $printer_series, $printer_models, $tag_id = null)
     {
         // Use product_subcategory junction table (CI Product_Model lines 192-228)
         if (!empty($sub_category_id)) {
@@ -286,6 +298,13 @@ class ProductsController extends Controller
             $query = DB::table('products')
                 ->where('status', 1)
                 ->whereIn('id', $productIds);
+        } else if (!empty($tag_id)) {
+            // Tag-based filtering like section_4.blade.php
+            $query = DB::table('products')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
+                ->where('products.status', 1)
+                ->select('products.*', 'categories.name as category_name');
         } else {
             $query = DB::table('products')->where('status', 1);
         }

@@ -60,16 +60,19 @@
                 <ul class="footer-links list-unstyled">
                     <li><a href="{{ url('/') }}">{{ $language_name == 'french' ? 'Accueil' : 'Home' }}</a></li>
                     <li><a href="{{ url('Products') }}">{{ $language_name == 'french' ? 'Des produits' : 'Products' }}</a></li>
+                    <li><a href="{{ url('Pages/estimate') }}">{{ $language_name == 'french' ? 'Demande de devis' : 'Quote Request' }}</a></li>
                     @foreach($pages as $page)
                         @php
                             $slug = $page['slug'];
                             $url = url('Page/' . $slug);
                         @endphp
-                        <li>
-                            <a href="{{ $url }}">
-                                {{ $language_name == 'french' ? ucfirst($page['title_french']) : ucfirst($page['title']) }}
-                            </a>
-                        </li>
+                        @if($slug != 'estimate')
+                            <li>
+                                <a href="{{ $url }}">
+                                    {{ $language_name == 'french' ? ucfirst($page['title_french']) : ucfirst($page['title']) }}
+                                </a>
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
             </div>
