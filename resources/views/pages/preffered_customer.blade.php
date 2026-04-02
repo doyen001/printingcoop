@@ -389,7 +389,7 @@ textarea:focus {
         <div class="customer-form-container">
             <div class="form-section">
                 <h1 class="page-title">
-                    {!! ($language_name == 'French') ? 'Devenez un membre Privilège' : 'Become a Preferred Customer' !!}
+                    {!! ($language_name == 'french') ? 'Devenez un membre Privilège' : 'Become a Preferred Customer' !!}
                 </h1>
                 
                 <div id="signup-msg"></div>
@@ -397,15 +397,15 @@ textarea:focus {
                 <form action="" method="post" id="Preferred-Customer">
                     <div class="form-grid">
                         <div class="form-field">
-                            <input class="input-style" type="text" id="fname" name="fname" placeholder="{!! ($language_name == 'French') ? 'Prénom' : 'First Name'!!}" required>
+                            <input class="input-style" type="text" id="fname" name="fname" placeholder="{!! ($language_name == 'french') ? 'Prénom' : 'First Name'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <input class="input-style" type="text" id="lname" name="lname" placeholder="{!! ($language_name == 'French') ? 'Nom de famille' : 'Last Name'!!}" required>
+                            <input class="input-style" type="text" id="lname" name="lname" placeholder="{!! ($language_name == 'french') ? 'Nom de famille' : 'Last Name'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <input class="input-style" type="text" id="company_name" name="company_name" placeholder="{!! ($language_name == 'French') ? 'Nom de la compagnie' : 'Company Name'!!}" required>
+                            <input class="input-style" type="text" id="company_name" name="company_name" placeholder="{!! ($language_name == 'french') ? 'Nom de la compagnie' : 'Company Name'!!}" required>
                         </div>
                         
                         <div class="form-field">
@@ -413,15 +413,15 @@ textarea:focus {
                         </div>
                         
                         <div class="form-field">
-                            <input class="input-style" type="password" id="signup-password" name="password" placeholder="{!! ($language_name == 'French') ? 'Mot de passe' : 'Password'!!}" required>
+                            <input class="input-style" type="password" id="signup-password" name="password" placeholder="{!! ($language_name == 'french') ? 'Mot de passe' : 'Password'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <input class="input-style" type="password" id="confirm-password" name="confirm_password" placeholder="{!! ($language_name == 'French') ? 'Confirmer le mot de passe' : 'Confirm Password'!!}" required>
+                            <input class="input-style" type="password" id="confirm-password" name="confirm_password" placeholder="{!! ($language_name == 'french') ? 'Confirmer le mot de passe' : 'Confirm Password'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <input class="input-style" type="text" id="responsible_name" name="responsible_name" placeholder="{!! ($language_name == 'French') ? 'Nom du responsable' : 'Responsible Name'!!}" required>
+                            <input class="input-style" type="text" id="responsible_name" name="responsible_name" placeholder="{!! ($language_name == 'french') ? 'Nom du responsable' : 'Responsible Name'!!}" required>
                         </div>
                         
                         <div class="form-field">
@@ -429,20 +429,20 @@ textarea:focus {
                         </div>
                         
                         <div class="form-field">
-                            <input class="input-style" type="text" id="active_area" name="active_area" placeholder="{!! ($language_name == 'French') ? 'Zone active' : 'Active Area'!!}" required>
+                            <input class="input-style" type="text" id="active_area" name="active_area" placeholder="{!! ($language_name == 'french') ? 'Zone active' : 'Active Area'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <input class="input-style" type="text" id="address" name="address" placeholder="{!! ($language_name == 'French') ? 'Adresse' : 'Address'!!}" required>
+                            <input class="input-style" type="text" id="address" name="address" placeholder="{!! ($language_name == 'french') ? 'Adresse' : 'Address'!!}" required>
                         </div>
                         
                         <div class="form-field">
-                            <input class="input-style" type="tel" id="mobile" name="mobile" placeholder="{!! ($language_name == 'French') ? 'Numéro de téléphone' : 'Phone Number'!!}" required>
+                            <input class="input-style" type="tel" id="mobile" name="mobile" placeholder="{!! ($language_name == 'french') ? 'Numéro de téléphone' : 'Phone Number'!!}" required>
                         </div>
                         
                         <div class="form-field">
                             <select id="country" name="country" onchange="getState($(this).val())" class="crs-country" required>
-                                <option value="">{!! ($language_name == 'French') ? '-- Choisissez le pays --' : '-- Select Country --'!!}</option>
+                                <option value="">{!! ($language_name == 'french') ? '-- Choisissez le pays --' : '-- Select Country --'!!}</option>
                                 @foreach ($countries as $country) 
                                     @php
                                     $selected = '';
@@ -458,27 +458,27 @@ textarea:focus {
 
                         <div class="form-field">
                             <select id="stateiD" name="region" required>
-                                <option value="">{!! ($language_name == 'French') ? '-- Sélectionnez l\'état --' : '-- Select State --' !!}</option>
+                                <option value="">{!! ($language_name == 'french') ? '-- Sélectionnez l\'état --' : '-- Select State --' !!}</option>
                             </select>
                         </div>
                         
                         <div style="display: grid; grid-template-columns: 6fr 4fr; gap: 10px;">
                             <div class="form-field">
-                                <input class="input-style" type="text" id="city" name="city" placeholder="{!! ($language_name == 'French') ? 'Ville' : 'City'!!}" required>
+                                <input class="input-style" type="text" id="city" name="city" placeholder="{!! ($language_name == 'french') ? 'Ville' : 'City'!!}" required>
                             </div>
                             
                             <div class="form-field">
-                                <input class="input-style" type="text" id="zip_code" name="zip_code" placeholder="{!! ($language_name == 'French') ? 'Code postal' : 'Postal Code'!!}" required>
+                                <input class="input-style" type="text" id="zip_code" name="zip_code" placeholder="{!! ($language_name == 'french') ? 'Code postal' : 'Postal Code'!!}" required>
                             </div>
                         </div>
 
                         <div class="form-field full-width">
-                            <textarea id="request" name="request" placeholder="{!! ($language_name == 'French') ? 'Demande' : 'Request'!!}" required></textarea>
+                            <textarea id="request" name="request" placeholder="{!! ($language_name == 'french') ? 'Demande' : 'Request'!!}" required></textarea>
                         </div>
                         
                         <div class="submit-container">
                             <button class="button-submit" type="submit">
-                                {!! ($language_name == 'French') ? 'Devenir membre' : 'Become a Member'!!}
+                                {!! ($language_name == 'french') ? 'Devenir membre' : 'Become a Member'!!}
                             </button>
                         </div>
                     </div>
@@ -488,10 +488,10 @@ textarea:focus {
             <div class="info-section">
                 <div class="info-content">
                     <h2 class="page-title">
-                        {!! ($language_name == 'French') ? 'Avantages des Membres Privilèges' : 'Preferred Customer Benefits' !!}
+                        {!! ($language_name == 'french') ? 'Avantages des Membres Privilèges' : 'Preferred Customer Benefits' !!}
                     </h2>
                     <div class="page-description">
-                        @if ($language_name == 'French')
+                        @if ($language_name == 'french')
                             <div class="benefits-list">
                                 <div class="benefit-item">
                                     <img src="/uploads/preferred_customer/wholesale_icon.svg" alt="Prix de Gros" class="benefit-icon">
@@ -569,7 +569,7 @@ textarea:focus {
                             </div>
                         
                         <div class="contact-info">
-                            @if ($language_name == 'French')
+                            @if ($language_name == 'french')
                                 <p>Pour plus d'informations ou de questions, appelez-nous directement au 
                                 1.877.922.7374.</p>
                                 <p>Veuillez nous permettre jusqu'à 1-2 jours ouvrables pour répondre à votre e-mail.</p>
@@ -608,7 +608,7 @@ function getState(country_id) {
             }
         });
     } else {
-        $('#stateiD').html('<option value="">{!! ($language_name == "French") ? "-- Sélectionnez l\'état --" : "-- Select State --" !!}</option>');
+        $('#stateiD').html('<option value="">{!! ($language_name == "french") ? "-- Sélectionnez l\'état --" : "-- Select State --" !!}</option>');
     }
 }
 
@@ -622,7 +622,7 @@ $(document).ready(function() {
             e.preventDefault();
             
             // Show error message
-            var errorMsg = '{!! ($language_name == "French") ? "Les mots de passe ne correspondent pas." : "Passwords do not match." !!}';
+            var errorMsg = '{!! ($language_name == "french") ? "Les mots de passe ne correspondent pas." : "Passwords do not match." !!}';
             $('#signup-msg').html('<div class="alert alert-danger">' + errorMsg + '</div>');
             
             // Clear confirm password field
@@ -640,7 +640,7 @@ $(document).ready(function() {
         
         if (confirmPassword.length > 0 && password !== confirmPassword) {
             $(this).css('border-color', '#dc3545');
-            var errorMsg = '{!! ($language_name == "French") ? "Les mots de passe ne correspondent pas." : "Passwords do not match." !!}';
+            var errorMsg = '{!! ($language_name == "french") ? "Les mots de passe ne correspondent pas." : "Passwords do not match." !!}';
             $('#signup-msg').html('<div class="alert alert-danger">' + errorMsg + '</div>');
         } else {
             $(this).css('border-color', '#28a745');

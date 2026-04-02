@@ -383,7 +383,7 @@
                             
                             // Get image using geCategoryImage logic (CI function equivalent)
                             if ($categoryImage) {
-                                $imageName = $language_name == 'french' && !empty($categoryImage['image_french'])
+                                $imageName = $language_name == 'French' && !empty($categoryImage['image_french'])
                                     ? $categoryImage['image_french']
                                     : $categoryImage['image'];
                                     

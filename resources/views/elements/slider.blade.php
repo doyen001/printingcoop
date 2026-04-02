@@ -204,7 +204,7 @@
             }
             
             // Determine which image to use
-            if ($language_name == 'French') {
+            if ($language_name == 'french') {
                 $imageUrl = !empty($bannerImageFrench) ? url('uploads/banners/large/' . $bannerImageFrench) : 
                            (!empty($bannerImage) ? url('uploads/banners/large/' . $bannerImage) : BANNER_DEFAULT_IMAGE_URL);
                 $filename = !empty($bannerImageFrench) ? $bannerImageFrench : 
@@ -221,9 +221,9 @@
                  alt="{{ $filenameWithoutExtension }}"
                  loading="eager">
             <div class="banner-buttons">
-                <a href="{{ site_url('Pages/estimate') }}" class="banner-btn">{{ $language_name == 'French' ? 'Demander un devis' : 'Request a Quote' }}</a>
+                <a href="{{ site_url('Pages/estimate') }}" class="banner-btn">{{ $language_name == 'french' ? 'Demander un devis' : 'Request a Quote' }}</a>
                 <span class="banner-divider"></span>
-                <a href="{{ site_url('Products') }}" class="banner-btn">{{ $language_name == 'French' ? 'Explorer les services' : 'Explore Services' }}</a>
+                <a href="{{ site_url('Products') }}" class="banner-btn">{{ $language_name == 'french' ? 'Explorer les services' : 'Explore Services' }}</a>
             </div>
         </div>
     @else
@@ -231,9 +231,9 @@
         <div class="banner-image">
             <img src="{{ BANNER_DEFAULT_IMAGE_URL }}" alt="{{ __('Default Banner') }}">
             <div class="banner-buttons">
-                <a href="{{ site_url('Pages/estimate') }}" class="banner-btn">{{ $language_name == 'French' ? 'Demander un devis' : 'Request a Quote' }}</a>
+                <a href="{{ site_url('Pages/estimate') }}" class="banner-btn">{{ $language_name == 'french' ? 'Demander un devis' : 'Request a Quote' }}</a>
                 <span class="banner-divider"></span>
-                <a href="{{ site_url('Products') }}" class="banner-btn">{{ $language_name == 'French' ? 'Explorer les services' : 'Explore Services' }}</a>
+                <a href="{{ site_url('Products') }}" class="banner-btn">{{ $language_name == 'french' ? 'Explorer les services' : 'Explore Services' }}</a>
             </div>
         </div>
     @endif
@@ -341,7 +341,7 @@
                     $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
                     
                     // Replace Ink-Toner Cartridges And Drums with Professional or Personal Apparel
-                    if ($label == 'Ink-Toner Cartridges And Drums') {
+                    if ($label == 'Ink-Toner Cartridges And Drums' || $label == 'Cartouches D&#39;encre-toner Et Tambours') {
                         $label = $language_name == 'french' ? 'Vêtements Professionnels Ou Personnels' : 'Professional or Personal Apparel';
                     }
                     
@@ -390,7 +390,7 @@
                     $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
                     
                     // Replace Overnight with Personalized Office & Home Décor
-                    if ($label == 'Overnight') {
+                    if ($label == 'Overnight' || $label == 'Pendant La Nuit') {
                         $label = $language_name == 'french' ? 'Décoration De Bureau Et Maison Personnalisée' : 'Personalized Office & Home Décor';
                     }
                     

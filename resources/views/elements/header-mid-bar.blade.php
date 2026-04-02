@@ -350,62 +350,13 @@
                 <div class="col-md-6 col-lg-5 col-xl-5">
                     <div class="header-actions">
 
-                        {{-- Language Selector --}}
-                        {{-- @if(($MainStoreData['show_language_translation'] ?? 1) == 1)
-                            <div class="lang-dropdown">
-                                <a href="javascript:void(0)" class="action-link">
-                                    {{ $MainStoreData['language_name'] ?? 'English' }}
-                                    <i class="las la-angle-down" style="font-size: 0.7rem;"></i>
-                                </a>
-                                <div class="lang-dropdown-content">
-                                    @if(!empty($StoreListData) && is_array($StoreListData))
-                                        @foreach($StoreListData as $key => $language)
-                                            <a href="{{ $language['url'] ?? '#' }}">{{ $language['language_name'] ?? '' }}</a>
-                                        @endforeach
-                                    @endif
-                                </div>
-                            </div>
-                            <span class="action-divider"></span>
-                        @endif --}}
-
-                        {{-- POD --}}
-                        {{-- <a href="https://pod.printing.coop" target="_blank" class="action-link hide-mobile">
-                            <i class="las la-box"></i> 
-                            POD
-                        </a>
-                        <span class="action-divider hide-mobile"></span> --}}
-
-                        {{-- Store --}}
-                        {{-- <a href="https://store.printing.coop" target="_blank" class="action-link hide-mobile">
-                            <i class="las la-store"></i> 
-                            {{ $language_name == 'french' ? 'Magasin' : 'Store' }}
-                        </a>
-                        <span class="action-divider"></span> --}}
                         {{-- reseller --}}
                         <a href="{{ url('Pages/prefferedCustomer') }}" target="" class="action-link hide-mobile">
-                            {{-- <i class="las la-box"></i>  --}}
-                            Reseller/NPO
+                            <span>{{ $language_name == 'french' ? 'Revendeur/NPO' : 'Reseller/NPO' }}</span>
                         </a>
                         <span class="action-divider hide-mobile"></span>
 
-                        {{-- Wishlist --}}
-                        {{-- @php
-                            $totalWishListCount = 0;
-                            if (!empty($loginId)) {
-                                $totalWishListCount = DB::table('wishlists')
-                                    ->where('user_id', $loginId)
-                                    ->count();
-                            }
-                        @endphp
-                        <a href="{{ url('Wishlists') }}" class="action-link hide-mobile">
-                            <i class="las la-heart"></i>
-                            {{ $language_name == 'french' ? "Souhaits" : 'Wishlist' }}
-                            (<strong id="WishlistsCount">{{ $totalWishListCount }}</strong>)
-                        </a>
-                        <span class="action-divider"></span> --}}
-                        
-
-                        {{-- Help --}}
+                        {{-- Contact --}}
                         <a href="{{ url('Pages/contactUs') }}" class="action-link hide-mobile">
                             {{-- <i class="las la-headset"></i> --}}
                             <span>{{ $language_name == 'french' ? 'Contact' : 'Contact' }}</span>

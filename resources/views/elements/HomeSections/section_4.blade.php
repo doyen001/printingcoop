@@ -281,12 +281,12 @@
                     $label = ucwords($language_name == 'french' ? $val->name_french : $val->name);
                     
                     // Replace Overnight with Personalized Office & Home Décor
-                    if ($label == 'Overnight') {
+                    if ($label == 'Overnight' || $label == 'Pendant La Nuit') {
                         $label = $language_name == 'french' ? 'Décoration De Bureau Et Maison Personnalisée' : 'Personalized Office & Home Décor';
                     }
                     
                     // For Booklets tag, use the Booklets - Catalogs category to match header menu bar
-                    if ($label == 'Booklets') {
+                    if ($label == 'Booklets' || $label == 'Livrets') {
                         $bookletsCatalogsCategoryId = DB::table('categories')
                             ->where('name', 'Booklets - Catalogs')
                             ->value('id');
@@ -372,11 +372,11 @@
                                             <img src="{{ url('uploads/' . $product['url']) }}" alt="{{ $product['name'] }}" loading="lazy">
                                         </a>
                                         <div class="product-info">
-                                            <div class="category">
+                                            {{-- <div class="category">
                                                 <a href="{{ $product['url'] }}">
                                                     {{ $product['category'] }}
                                                 </a>
-                                            </div>
+                                            </div> --}}
                                             <h3 class="product-title">
                                                 <a href="{{ $product['url'] }}">
                                                     {{ $product['name'] }}
@@ -402,11 +402,11 @@
                                             <img src="{{ $imageurl }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
                                         </a>
                                         <div class="product-info">
-                                            <div class="category">
+                                            {{-- <div class="category">
                                                 <a href="{{ $productUrl }}">
                                                     {{ $cartNameProduct->category_name }}
                                                 </a>
-                                            </div>
+                                            </div> --}}
                                             <h3 class="product-title">
                                                 <a href="{{ $productUrl }}">
                                                     {{ $cartNameProduct->name }}

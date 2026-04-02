@@ -281,7 +281,7 @@
                 $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
                 
                 // Replace Ink-Toner Cartridges And Drums with Professional or Personal Apparel
-                if ($label == 'Ink-Toner Cartridges And Drums') {
+                if ($label == 'Ink-Toner Cartridges And Drums' || $label == 'Cartouches D&#39;encre-toner Et Tambours') {
                     $label = $language_name == 'french' ? 'Vêtements Professionnels Ou Personnels' : 'Professional or Personal Apparel';
                 }
                 
