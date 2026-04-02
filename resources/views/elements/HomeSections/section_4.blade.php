@@ -7,7 +7,7 @@
 
 .book-printing-section {
     position: relative;
-    padding: 80px 0;
+    /* padding: 80px 0; */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -280,6 +280,11 @@
                     $tag_id = $val->id;
                     $label = ucwords($language_name == 'french' ? $val->name_french : $val->name);
                     
+                    // Replace Overnight with Personalized Office & Home Décor
+                    if ($label == 'Overnight') {
+                        $label = $language_name == 'french' ? 'Décoration De Bureau Et Maison Personnalisée' : 'Personalized Office & Home Décor';
+                    }
+                    
                     // For Booklets tag, use the Booklets - Catalogs category to match header menu bar
                     if ($label == 'Booklets') {
                         $bookletsCatalogsCategoryId = DB::table('categories')
@@ -313,34 +318,107 @@
                             <h3 class="product-block-title">{{ $label }}</h3>
                         </header>
                         <div class="product-grid">
-                            @foreach($cartNameProducts as $key => $cartNameProduct)
+                            @if($label == 'Personalized Office & Home Décor' || $label == 'Décoration De Bureau Et Maison Personnalisée')
+                                {{-- Manual images for Personalized Office & Home Décor --}}
                                 @php
-                                    $imageurl = url('uploads/products/' . $cartNameProduct->product_image);
-                                    $filename = $cartNameProduct->product_image;
-                                    $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
-                                    $productUrl = url('Products/view/' . base64_encode($cartNameProduct->id));
+                                    $manualProducts = [
+                                        [
+                                            'image' => 'office-decor-1.jpg',
+                                            'name' => $language_name == 'french' ? 'Bureau Personnalisé' : 'Custom Desk',
+                                            'category' => $language_name == 'french' ? 'Bureau' : 'Office',
+                                            'price' => 299.99,
+                                            'url' => 'banners/store_images/unisex-basic-softstyle-t-shirt-white-front-69b7e1cd59d55-rkl8xuhek6qti4nm3dd59zs5190c2hrdpqm9yi207c.jpg'
+                                        ],
+                                        [
+                                            'image' => 'home-decor-1.jpg', 
+                                            'name' => $language_name == 'french' ? 'Décoration Murale' : 'Wall Decoration',
+                                            'category' => $language_name == 'french' ? 'Maison' : 'Home',
+                                            'price' => 199.99,
+                                            'url' => 'banners/store_images/decor_top-247x296.jpg'
+                                        ],
+                                        [
+                                            'image' => 'office-decor-2.jpg',
+                                            'name' => $language_name == 'french' ? 'Organiseur de Bureau' : 'Desk Organizer',
+                                            'category' => $language_name == 'french' ? 'Bureau' : 'Office',
+                                            'price' => 149.99,
+                                            'url' => 'banners/store_images/hats_multiple-247x296.jpg'
+                                        ],
+                                        [
+                                            'image' => 'home-decor-2.jpg',
+                                            'name' => $language_name == 'french' ? 'Cadre Photo Personnalisé' : 'Custom Photo Frame',
+                                            'category' => $language_name == 'french' ? 'Maison' : 'Home',
+                                            'price' => 89.99,
+                                            'url' => 'banners/store_images/magsafe-tough-case-for-iphone-glossy-iphone-15-front-69c48844ccf2b-rl1y8bin0n4ut5y1w6f6bky1t4aqlcrb5u1122m3yg.jpg'
+                                        ],
+                                        [
+                                            'image' => 'home-decor-2.jpg',
+                                            'name' => $language_name == 'french' ? 'Cadre Photo Personnalisé' : 'Custom Photo Frame',
+                                            'category' => $language_name == 'french' ? 'Maison' : 'Home',
+                                            'price' => 89.99,
+                                            'url' => 'banners/store_images/all-over-print-utility-crossbody-bag-white-back-69b7e47ab4a4b-rkl9fgygpcvd6x206hmbj1oa0c53e6q74yz0w9x9jc.jpg'
+                                        ],
+                                        [
+                                            'image' => 'home-decor-2.jpg',
+                                            'name' => $language_name == 'french' ? 'Cadre Photo Personnalisé' : 'Custom Photo Frame',
+                                            'category' => $language_name == 'french' ? 'Maison' : 'Home',
+                                            'price' => 89.99,
+                                            'url' => 'banners/store_images/baby-staple-tee-black-front-69b7dae088be5-rkl7npkl3xl5n5o6hxfde4wndeer9bloddvaykgnm0.jpg'
+                                        ]
+                                    ];
                                 @endphp
-                                <div class="product-card fade-in">
-                                    <a href="{{ $productUrl }}" class="product-image">
-                                        <img src="{{ $imageurl }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
-                                    </a>
-                                    <div class="product-info">
-                                        <div class="category">
-                                            <a href="{{ $productUrl }}">
-                                                {{ $cartNameProduct->category_name }}
-                                            </a>
-                                        </div>
-                                        <h3 class="product-title">
-                                            <a href="{{ $productUrl }}">
-                                                {{ $cartNameProduct->name }}
-                                            </a>
-                                        </h3>
-                                        <div class="price">
-                                            <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($cartNameProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
+                                @foreach($manualProducts as $key => $product)
+                                    <div class="product-card fade-in">
+                                        <a href="{{ $product['url'] }}" class="product-image">
+                                            <img src="{{ url('uploads/' . $product['url']) }}" alt="{{ $product['name'] }}" loading="lazy">
+                                        </a>
+                                        <div class="product-info">
+                                            <div class="category">
+                                                <a href="{{ $product['url'] }}">
+                                                    {{ $product['category'] }}
+                                                </a>
+                                            </div>
+                                            <h3 class="product-title">
+                                                <a href="{{ $product['url'] }}">
+                                                    {{ $product['name'] }}
+                                                </a>
+                                            </h3>
+                                            <div class="price">
+                                                <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($product['price'], 2) }}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @else
+                                {{-- Regular database products --}}
+                                @foreach($cartNameProducts as $key => $cartNameProduct)
+                                    @php
+                                        $imageurl = url('uploads/products/' . $cartNameProduct->product_image);
+                                        $filename = $cartNameProduct->product_image;
+                                        $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
+                                        $productUrl = url('Products/view/' . base64_encode($cartNameProduct->id));
+                                    @endphp
+                                    <div class="product-card fade-in">
+                                        <a href="{{ $productUrl }}" class="product-image">
+                                            <img src="{{ $imageurl }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
+                                        </a>
+                                        <div class="product-info">
+                                            <div class="category">
+                                                <a href="{{ $productUrl }}">
+                                                    {{ $cartNameProduct->category_name }}
+                                                </a>
+                                            </div>
+                                            <h3 class="product-title">
+                                                <a href="{{ $productUrl }}">
+                                                    {{ $cartNameProduct->name }}
+                                                </a>
+                                            </h3>
+                                            <div class="price">
+                                                <span class="amount">{{ $product_price_currency_symbol ?? '$' }}{{ number_format($cartNameProduct->{$product_price_currency ?? 'price_cad'}, 2) }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 @else

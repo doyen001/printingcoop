@@ -74,6 +74,8 @@
                             </li>
                         @endif
                     @endforeach
+                    <h5 class="footer-heading mb-4">{{ $language_name == 'french' ? 'Apprendre encore plus' : 'Learn more' }}</h5>
+                    <li><a href="{{ url('Sitemap') }}">{{ $language_name == 'french' ? 'Plan du site' : 'Sitemap' }}</a></li>
                 </ul>
             </div>
 

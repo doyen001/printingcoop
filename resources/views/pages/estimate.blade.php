@@ -66,6 +66,7 @@
             height: 100%;
             background: linear-gradient(to left, rgba(255,255,255,0.1), transparent);
             z-index: 1;
+            border-right: 1px solid #e0e0e0;
         }
 
         .info-content {
@@ -301,14 +302,14 @@
         }
 
         /* Form section spacing */
-        .form-section .page-title {
+        /* .form-section .page-title {
             margin-top: 2rem;
             margin-bottom: 1rem;
         }
 
         .form-section .page-title:first-child {
             margin-top: 0;
-        }
+        } */
 
         label {
             display: block;

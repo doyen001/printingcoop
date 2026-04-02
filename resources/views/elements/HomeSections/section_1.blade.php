@@ -279,7 +279,12 @@
             @php
                 $tag_id = $val->id;
                 $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
-
+                
+                // Replace Ink-Toner Cartridges And Drums with Professional or Personal Apparel
+                if ($label == 'Ink-Toner Cartridges And Drums') {
+                    $label = $language_name == 'french' ? 'Vêtements Professionnels Ou Personnels' : 'Professional or Personal Apparel';
+                }
+                
                 // Get products by tag using FIND_IN_SET (CI line 340), limit 30 per tag
                 $posterAndPlansProducts = DB::table('products')
                     ->join('categories', 'products.category_id', '=', 'categories.id')
@@ -300,26 +305,93 @@
                         </p> --}}
                     </header>
                     <div class="showcase-grid">
-                        @foreach($posterAndPlansProducts as $index => $posterAndPlansProduct)
+                        @if($label == 'Professional or Personal Apparel' || $label == 'Vêtements Professionnels Ou Personnels')
+                            {{-- Manual images for Professional or Personal Apparel --}}
                             @php
-                                $imageurl = url('uploads/products/' . $posterAndPlansProduct->product_image);
-                                $productUrl = url('Products/view/' . base64_encode($posterAndPlansProduct->id));
+                                $manualProducts = [
+                                    [
+                                        'image' => 'apparel-1.jpg',
+                                        'name' => $language_name == 'french' ? 'T-shirt Personnalisé' : 'Custom T-Shirt',
+                                        'category' => $language_name == 'french' ? 'Vêtements' : 'Apparel',
+                                        'price' => 24.99,
+                                        'url' => 'banners/pod_images/11273188-copy.jpg'
+                                    ],
+                                    [
+                                        'image' => 'apparel-2.jpg', 
+                                        'name' => $language_name == 'french' ? 'Sweat à Capuche Personnalisé' : 'Custom Hoodie',
+                                        'category' => $language_name == 'french' ? 'Vêtements' : 'Apparel',
+                                        'price' => 49.99,
+                                        'url' => 'banners/pod_images/Bottles-768x768.jpg'
+                                    ],
+                                    [
+                                        'image' => 'apparel-3.jpg',
+                                        'name' => $language_name == 'french' ? 'Polo Personnalisé' : 'Custom Polo',
+                                        'category' => $language_name == 'french' ? 'Vêtements' : 'Apparel',
+                                        'price' => 34.99,
+                                        'url' => 'banners/pod_images/Photo-Panels-768x768.jpg'
+                                    ],
+                                    [
+                                        'image' => 'apparel-4.jpg',
+                                        'name' => $language_name == 'french' ? 'Casquette Personnalisée' : 'Custom Cap',
+                                        'category' => $language_name == 'french' ? 'Vêtements' : 'Apparel',
+                                        'price' => 19.99,
+                                        'url' => 'banners/pod_images/Puzzles-768x768.jpg'
+                                    ],
+                                    [
+                                        'image' => 'apparel-5.jpg',
+                                        'name' => $language_name == 'french' ? 'Veste Personnalisée' : 'Custom Jacket',
+                                        'category' => $language_name == 'french' ? 'Vêtements' : 'Apparel',
+                                        'price' => 79.99,
+                                        'url' => 'banners/pod_images/Long-Sleeve-Shirts-Wo-1-768x768.jpg'
+                                    ],
+                                    [
+                                        'image' => 'apparel-6.jpg',
+                                        'name' => $language_name == 'french' ? 'Sac Personnalisé' : 'Custom Bag',
+                                        'category' => $language_name == 'french' ? 'Accessoires' : 'Accessories',
+                                        'price' => 39.99,
+                                        'url' => 'banners/pod_images/T-sh-2048x2048.jpg'
+                                    ]
+                                ];
                             @endphp
-                            <div class="product-card">
-                                <a href="{{ $productUrl }}" class="product-image">
-                                    <img src="{{ $imageurl }}" alt="{{ $posterAndPlansProduct->name }}" loading="lazy">
-                                </a>
-                                <div class="product-info">
-                                    <div class="product-category">{{ $posterAndPlansProduct->category_name }}</div>
-                                    <h3 class="product-title">
-                                        <a href="{{ $productUrl }}">{{ $posterAndPlansProduct->name }}</a>
-                                    </h3>
-                                    <div class="product-starting-price">
-                                        {{ $product_price_currency_symbol ?? '$' }}{{ number_format($posterAndPlansProduct->{$product_price_currency ?? 'price_cad'}, 2) }}
+                            @foreach($manualProducts as $index => $product)
+                                <div class="product-card">
+                                    <a href="{{ $product['url'] }}" class="product-image">
+                                        <img src="{{ url('uploads/' . $product['url']) }}" alt="{{ $product['name'] }}" loading="lazy">
+                                    </a>
+                                    <div class="product-info">
+                                        {{-- <div class="product-category">{{ $product['category'] }}</div> --}}
+                                        <h3 class="product-title">
+                                            <a href="{{ $product['url'] }}">{{ $product['name'] }}</a>
+                                        </h3>
+                                        <div class="product-starting-price">
+                                            {{ $product_price_currency_symbol ?? '$' }}{{ number_format($product['price'], 2) }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        @else
+                            {{-- Regular database products --}}
+                            @foreach($posterAndPlansProducts as $index => $posterAndPlansProduct)
+                                @php
+                                    $imageurl = url('uploads/products/' . $posterAndPlansProduct->product_image);
+                                    $productUrl = url('Products/view/' . base64_encode($posterAndPlansProduct->id));
+                                @endphp
+                                <div class="product-card">
+                                    <a href="{{ $productUrl }}" class="product-image">
+                                        <img src="{{ $imageurl }}" alt="{{ $posterAndPlansProduct->name }}" loading="lazy">
+                                    </a>
+                                    <div class="product-info">
+                                        {{-- <div class="product-category">{{ $posterAndPlansProduct->category_name }}</div> --}}
+                                        <h3 class="product-title">
+                                            <a href="{{ $productUrl }}">{{ $posterAndPlansProduct->name }}</a>
+                                        </h3>
+                                        <div class="product-starting-price">
+                                            {{ $product_price_currency_symbol ?? '$' }}{{ number_format($posterAndPlansProduct->{$product_price_currency ?? 'price_cad'}, 2) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             @endif

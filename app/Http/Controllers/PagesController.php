@@ -620,4 +620,68 @@ class PagesController extends Controller
         
         return view('pages.estimate_submitted', $data);
     }
+    
+    /**
+     * Display sitemap page
+     */
+    public function sitemap()
+    {
+        $language_name = config('store.language_name', 'english');
+        $website_store_id = config('store.website_store_id', 1);
+        $main_store_id = config('store.main_store_id', 1);
+        
+        // Get main navigation pages
+        $pages = DB::table('pages')
+            ->where('status', 1)
+            ->orderBy('id', 'asc')
+            ->get();
+        
+        // Get categories
+        $categories = [];
+        if (in_array($website_store_id, [1, 3])) {
+            $categories['categories'] = DB::table('categories')
+                ->where('status', 1)
+                ->orderBy('id', 'asc')
+                ->get();
+            
+            foreach ($categories['categories'] as &$category) {
+                $category->sub_categories = DB::table('sub_categories')
+                    ->where('category_id', $category->id)
+                    ->where('status', 1)
+                    ->orderBy('id', 'asc')
+                    ->get();
+            }
+        }
+        
+        // Get tags for sections
+        $proudly_display_your_brand_tags = DB::table('tags')
+            ->where('status', 1)
+            ->where('proudly_display_your_brand', 1)
+            ->orderBy('id', 'asc')
+            ->get();
+            
+        $montreal_book_printing_tags = DB::table('tags')
+            ->where('status', 1)
+            ->where('montreal_book_printing', 1)
+            ->orderBy('id', 'asc')
+            ->get();
+        
+        $data = [
+            'page_title' => $language_name == 'french' ? 'Plan du site' : 'Sitemap',
+            'meta_page_title' => $language_name == 'french' ? 'Plan du site' : 'Sitemap',
+            'meta_description_content' => $language_name == 'french' 
+                ? 'Plan du site de Printing - Navigation complète de toutes les pages et catégories' 
+                : 'Printing Sitemap - Complete navigation of all pages and categories',
+            'meta_keywords_content' => $language_name == 'french' 
+                ? 'plan du site, navigation, pages, catégories, printing' 
+                : 'sitemap, navigation, pages, categories, printing',
+            'language_name' => $language_name,
+            'pages' => $pages,
+            'categories' => $categories,
+            'proudly_display_your_brand_tags' => $proudly_display_your_brand_tags,
+            'montreal_book_printing_tags' => $montreal_book_printing_tags,
+        ];
+        
+        return view('pages.sitemap', $data);
+    }
 }

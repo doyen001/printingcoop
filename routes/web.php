@@ -223,6 +223,9 @@ Route::prefix('Ajax')->group(function () {
     Route::get('/removeProductImage/{product_id}/{image_id?}/{imageName?}', [AjaxController::class, 'removeProductImage']);
 });
 
+// Sitemap Page
+Route::get('/Sitemap', [PagesController::class, 'sitemap']);
+
 // Public AJAX Routes (for forms accessible without login)
 Route::get('/getStateDropDownListByAjax/{country_id}', [MyAccountsController::class, 'getStateDropDownListByAjax']);
 Route::get('/getCityDropDownListByAjax/{state_id}', [MyAccountsController::class, 'getCityDropDownListByAjax']);

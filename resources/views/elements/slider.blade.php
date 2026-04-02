@@ -340,14 +340,26 @@
                     $tag_id = $val->id;
                     $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
                     
-                    // Get second product for this tag (skip first, take second)
-                    $firstProduct = DB::table('products')
-                        ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
-                        ->where('products.status', 1)
-                        ->orderBy('products.updated', 'desc')
-                        ->skip(4)
-                        ->take(4)
-                        ->first();
+                    // Replace Ink-Toner Cartridges And Drums with Professional or Personal Apparel
+                    if ($label == 'Ink-Toner Cartridges And Drums') {
+                        $label = $language_name == 'french' ? 'Vêtements Professionnels Ou Personnels' : 'Professional or Personal Apparel';
+                    }
+                    
+                    // For Professional or Personal Apparel, use manual image
+                    if ($label == 'Professional or Personal Apparel' || $label == 'Vêtements Professionnels Ou Personnels') {
+                        $firstProduct = (object) [
+                            'product_image' => 'pod_images/11273188-copy.jpg'
+                        ];
+                    } else {
+                        // Get second product for this tag (skip first, take second)
+                        $firstProduct = DB::table('products')
+                            ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
+                            ->where('products.status', 1)
+                            ->orderBy('products.updated', 'desc')
+                            ->skip(4)
+                            ->take(4)
+                            ->first();
+                    }
                 @endphp
                 
                 @if($firstProduct)
@@ -377,12 +389,24 @@
                     $tag_id = $val->id;
                     $label = $language_name == 'french' ? ucwords($val->name_french) : ucwords($val->name);
                     
-                    // Get first product for this tag
-                    $firstProduct = DB::table('products')
-                        ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
-                        ->where('products.status', 1)
-                        ->orderBy('products.updated', 'desc')
-                        ->first();
+                    // Replace Overnight with Personalized Office & Home Décor
+                    if ($label == 'Overnight') {
+                        $label = $language_name == 'french' ? 'Décoration De Bureau Et Maison Personnalisée' : 'Personalized Office & Home Décor';
+                    }
+                    
+                    // For Personalized Office & Home Décor, use manual image
+                    if ($label == 'Personalized Office & Home Décor' || $label == 'Décoration De Bureau Et Maison Personnalisée') {
+                        $firstProduct = (object) [
+                            'product_image' => 'store_images/decor_top-247x296.jpg'
+                        ];
+                    } else {
+                        // Get first product for this tag
+                        $firstProduct = DB::table('products')
+                            ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
+                            ->where('products.status', 1)
+                            ->orderBy('products.updated', 'desc')
+                            ->first();
+                    }
                 @endphp
                 
                 @if($firstProduct)

@@ -205,6 +205,76 @@
                 <a href="{{ site_url('Products') }}">
                     {{ $language_name == 'french' ? 'Tous les produits' : 'All products' }}
                 </a>
+                <div class="product-dropdown">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-3 col-xl-3" style="border-right: 1px solid #ccc;">
+                                <div class="menus-section">
+                                    <div class="all-menus">
+                                        @if(isset($categories['categories']))
+                                            @foreach($categories['categories'] as $key => $category)
+                                                @php
+                                                    $count = count($category['sub_categories'] ?? []);
+                                                    $url = site_url('Products?category_id=' . base64_encode($category['id']));
+                                                    $urlmain = $url;
+                                                    $data_toggle = '';
+                                                    if (!empty($count)) {
+                                                        $url = 'Cat' . $category['id'];
+                                                        $data_toggle = 'tab';
+                                                    }
+                                                @endphp
+                                                
+                                                @if(!empty($count))
+                                                    <a href="{{ $urlmain }}">
+                                                        <button class="drop-cat tablinks" onmouseover="openCity(event, '{{ $url }}')">
+                                                            {{ $language_name == 'french' ? ucfirst($category['name_french']) : ucfirst($category['name']) }}
+                                                            <i class="las la-angle-right"></i>
+                                                        </button>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ $urlmain }}">
+                                                        <button class="drop-cat tablinks" onmouseover="openCity(event, '{{ $url }}')">
+                                                            {{ $language_name == 'french' ? ucfirst($category['name_french']) : ucfirst($category['name']) }}
+                                                            <i class="las la-angle-right"></i>
+                                                        </button>
+                                                    </a>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-lg-9 col-xl-9">
+                                @if(isset($categories['categories']))
+                                    @foreach($categories['categories'] as $key => $category)
+                                        <div id="Cat{{ $category['id'] }}" class="tabcontent" style="display: none;">
+                                            <div class="row">
+                                                @if(isset($category['sub_categories']))
+                                                    @foreach($category['sub_categories'] as $key => $subCategory)
+                                                        @php
+                                                            $url = site_url('Products?category_id=' . base64_encode($category['id']) . '&sub_category_id=' . base64_encode($subCategory['id']));
+                                                        @endphp
+                                                        <div class="col-md-6 col-lg-4 col-xl-4">
+                                                            <div class="menus-section">
+                                                                <div class="menus-title">
+                                                                    <span>
+                                                                        <a href="{{ $url }}">
+                                                                            {{ $language_name == 'french' ? ucfirst($subCategory['name_french']) : ucfirst($subCategory['name']) }}
+                                                                        </a>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </li>
             <li>
                 <a href="{{ site_url('Products?category_id=' . base64_encode('1')) }}">

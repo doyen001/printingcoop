@@ -348,6 +348,17 @@
             padding: 0.25rem 0.5rem;
         }
     }
+    @media (min-width: 768px) {
+        .col-md-5 {
+            flex: 0 0 60%;
+            max-width: 60%;
+        }
+
+        .col-md-7 {
+            flex: 0 0 40%;
+            max-width: 40%;
+        }
+    }
 </style>
 
 <div class="header-top-bar">
