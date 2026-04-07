@@ -1,4 +1,5 @@
 {{-- CI: application/views/elements/header-top-bar.php --}}
+
 <style>
     :root {
         --primary-color: #f28738;
@@ -399,7 +400,7 @@
                             {{-- Language Selector (CI lines 35-58) --}}
                             @if(($MainStoreData['show_language_translation'] ?? 1) == 1)
                                 <li style="display: flex">
-                                    @if(!empty($StoreListData) && is_array($StoreListData))
+                                    @if(isset($StoreListData) && is_array($StoreListData) && count($StoreListData) > 0)
                                         @foreach($StoreListData as $key => $language)
                                             <a href="{{ $language['url'] ?? '#' }}" style="display: flex; align-items: center;">
                                                 @if($language['language_name'] == 'English') 
@@ -414,7 +415,7 @@
                                                             <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
                                                         </g>
                                                     </svg>EN
-                                                @else 
+                                                @else
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" style="width: 20px; height: 14px; margin-right: 4px;">
                                                         <rect width="900" height="600" fill="#ED2939"/>
                                                         <rect width="600" height="600" fill="#fff"/>

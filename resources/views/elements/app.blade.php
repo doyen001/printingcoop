@@ -18,11 +18,11 @@
     @php
         $website_store_id = config('store.main_store_id', 1);
     @endphp
-    @if($website_store_id == 1)
+    @if($website_store_id == 1||$website_store_id == 2)
         <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
-    @elseif($website_store_id == 3)
+    @elseif($website_store_id == 3||$website_store_id == 4)
         <link rel="stylesheet" href="{{ asset('assets/css/clickimprimerie.style.min.css') }}">
-    @elseif($website_store_id == 5)
+    @elseif($website_store_id == 5||$website_store_id == 6)
         <link rel="stylesheet" href="{{ asset('assets/css/ecoink.style.min.css') }}">
     @endif
     <link rel="stylesheet" href="{{ asset('assets/css/customslider.min.css') }}">

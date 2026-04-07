@@ -41,11 +41,14 @@ class SetLanguage
      */
     private function mapLanguageToLocale($language_name)
     {
+        // Normalize to lowercase for comparison
+        $normalizedLanguage = strtolower($language_name);
+        
         $localeMap = [
-            'English' => 'en',
-            'French' => 'fr',
+            'english' => 'en',
+            'french' => 'fr',
         ];
         
-        return $localeMap[$language_name] ?? 'en';
+        return $localeMap[$normalizedLanguage] ?? 'en';
     }
 }

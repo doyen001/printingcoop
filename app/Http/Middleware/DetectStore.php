@@ -37,7 +37,12 @@ class DetectStore
         
         // Find matching store by URL (lines 32-37)
         foreach ($StoreListData as $key => $val) {
-            if ($val['url'] == $FILE_BASE_URL || $val['http_url'] == $FILE_BASE_URL) {
+            // Normalize URLs for comparison (handle trailing slash variations)
+            $storeUrl = rtrim($val['url'] ?? '', '/') . '/';
+            $storeHttpUrl = rtrim($val['http_url'] ?? '', '/') . '/';
+            $currentUrl = rtrim($FILE_BASE_URL, '/') . '/';
+            
+            if ($storeUrl == $currentUrl || $storeHttpUrl == $currentUrl) {
                 $MainStoreData = $StoreListData[$key];
                 break;
             }
@@ -56,6 +61,19 @@ class DetectStore
         
         // Get store list data for website (line 51)
         $StoreListData = $this->getStoreListData($website_store_id);
+        
+        // Fallback: If StoreListData is empty, get all stores with same main_store_id
+        if (empty($StoreListData) && !empty($MainStoreData)) {
+            $allStores = $this->getStoreListData(null); // Get all stores
+            
+            // Filter to only stores with matching main_store_id
+            $filtered = array_filter($allStores, function($store) use ($website_store_id) {
+                return isset($store['main_store_id']) && $store['main_store_id'] == $website_store_id;
+            });
+            
+            // Preserve the original array structure (don't reset keys)
+            $StoreListData = $filtered;
+        }
         
         // Handle currency change via query parameter (lines 57-72)
         if ($request->has('currency_id') && !empty($request->get('currency_id'))) {

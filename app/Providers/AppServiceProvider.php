@@ -84,12 +84,12 @@ class AppServiceProvider extends ServiceProvider
             $MainStoreData['name'] = config('app.name', 'Printing Imprimeur');
             
             // StoreListData: Get language stores for language selector
-            // Cache for 1 hour
-            $StoreListData = Cache::remember("store_list_{$main_store_id}", 3600, function () use ($main_store_id) {
+            // Use website_store_id (parent store ID) so both EN and FR domains get the same store group
+            $StoreListData = Cache::remember("store_list_{$website_store_id}", 3600, function () use ($website_store_id) {
                 return \DB::table('stores')
                     ->join('language', 'language.id', '=', 'stores.langue_id')
                     ->where('stores.status', 1)
-                    ->where('stores.main_store_id', $main_store_id)
+                    ->where('stores.main_store_id', $website_store_id)
                     ->select('stores.*', 'language.name as language_name', 'language.id as language_id')
                     ->get()
                     ->map(function($store) {
