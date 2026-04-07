@@ -368,17 +368,17 @@
                                 @endphp
                                 @foreach($manualProducts as $key => $product)
                                     <div class="product-card fade-in">
-                                        <a href="{{ $product['url'] }}" class="product-image">
+                                        <a href="#" onclick="confirmRedirectToStore(event)" class="product-image">
                                             <img src="{{ url('uploads/' . $product['url']) }}" alt="{{ $product['name'] }}" loading="lazy">
                                         </a>
                                         <div class="product-info">
                                             {{-- <div class="category">
-                                                <a href="{{ $product['url'] }}">
+                                                <a href="#" onclick="confirmRedirectToStore(event)">
                                                     {{ $product['category'] }}
                                                 </a>
                                             </div> --}}
                                             <h3 class="product-title">
-                                                <a href="{{ $product['url'] }}">
+                                                <a href="#" onclick="confirmRedirectToStore(event)">
                                                     {{ $product['name'] }}
                                                 </a>
                                             </h3>
@@ -456,4 +456,83 @@
         //     card.style.transitionDelay = `${i * 0}s`;
         // });
     });
+
+    // Function to show confirmation modal for Store redirect
+    function confirmRedirectToStore(event) {
+        event.preventDefault();
+        
+        const message = '{{ $language_name == "french" ? "Êtes-vous sûr de vouloir visiter notre boutique pour des articles personnalisés?" : "Are you sure you want to visit our store for custom items?" }}';
+        const yesText = '{{ $language_name == "french" ? "Oui" : "Yes" }}';
+        const noText = '{{ $language_name == "french" ? "Non" : "No" }}';
+        
+        // Create modal HTML
+        const modalHtml = `
+            <div id="store-confirm-modal" style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            ">
+                <div style="
+                    background: white;
+                    padding: 30px;
+                    border-radius: 8px;
+                    max-width: 400px;
+                    text-align: center;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                ">
+                    <h3 style="margin: 0 0 15px 0; color: #333;">{{ $language_name == "french" ? "Confirmation" : "Confirmation" }}</h3>
+                    <p style="margin: 0 0 25px 0; color: #666; line-height: 1.5;">${message}</p>
+                    <div style="display: flex; gap: 15px; justify-content: center;">
+                        <button id="store-yes-btn" style="
+                            background: #f28738;
+                            color: white;
+                            border: none;
+                            padding: 10px 25px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 14px;
+                            font-weight: 500;
+                        ">${yesText}</button>
+                        <button id="store-no-btn" style="
+                            background: #6c757d;
+                            color: white;
+                            border: none;
+                            padding: 10px 25px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 14px;
+                            font-weight: 500;
+                        ">${noText}</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to page
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Add event listeners
+        document.getElementById('store-yes-btn').addEventListener('click', function() {
+            window.open('https://store.printing.coop/', '_blank');
+            document.getElementById('store-confirm-modal').remove();
+        });
+        
+        document.getElementById('store-no-btn').addEventListener('click', function() {
+            document.getElementById('store-confirm-modal').remove();
+        });
+        
+        // Close modal when clicking outside
+        document.getElementById('store-confirm-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.remove();
+            }
+        });
+    }
 </script>
