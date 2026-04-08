@@ -92,7 +92,7 @@
 
 /* Product card - vertical layout like screenshot */
 .product-card-alpha {
-    width: 220px;
+    width: 320px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -108,8 +108,8 @@
 }
 
 .product-card-image {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     margin-bottom: 6px;
     display: flex;
     align-items: center;
@@ -129,7 +129,7 @@
 }
 
 .product-card-name {
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 500;
     color: #111;
     line-height: 1.3;
@@ -137,7 +137,7 @@
 }
 
 .product-card-price {
-    font-size: 11px;
+    font-size: 13px;
     color: #666;
     line-height: 1.3;
 }
