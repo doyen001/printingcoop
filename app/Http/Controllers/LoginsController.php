@@ -487,6 +487,33 @@ class LoginsController extends Controller
             $response['status'] = 'error';
             $response['errors'] = $validator->errors()->toArray();
         } else {
+            // Captcha validation
+            $captcha_input = $request->input('captcha');
+            $user_ip = $request->ip();
+            if ($user_ip == '::1') {
+                $user_ip = '127.0.0.1';
+            }
+            
+            $expiration = time() - 7200; // 2 hour limit
+            $captcha_record = \DB::table('captcha')
+                ->where('word', $captcha_input)
+                ->where('ip_address', $user_ip)
+                ->where('captcha_time', '>', $expiration)
+                ->first();
+            
+            if (!$captcha_record) {
+                $response['status'] = 'error';
+                $response['msg'] = $language_name == 'french' 
+                    ? 'Le code anti-spam est incorrect. Veuillez réessayer.' 
+                    : 'The anti-spam code is incorrect. Please try again.';
+                return response()->json($response);
+            }
+            
+            // Clean up used captcha
+            \DB::table('captcha')
+                ->where('captcha_time', '<', $expiration)
+                ->delete();
+            
             $fname = $request->input('fname');
             $lname = $request->input('lname');
             $email = $request->input('email');

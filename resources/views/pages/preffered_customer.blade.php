@@ -380,6 +380,47 @@ textarea:focus {
 .universal-spacing {
     padding-top: 20px !important;
 }
+
+/* Captcha */
+.captcha-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.captcha-section label {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.captcha-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.captcha-image {
+    flex: 1;
+}
+
+.captcha-refresh {
+    margin-left: 0.5rem;
+}
+
+.captcha-refresh a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.captcha-refresh a:hover {
+    text-decoration: underline;
+}
+
+.captcha-input input {
+    margin-top: 0.5rem;
+}
 </style>
 
 @section('content')
@@ -474,6 +515,24 @@ textarea:focus {
 
                         <div class="form-field full-width">
                             <textarea id="request" name="request" placeholder="{!! ($language_name == 'french') ? 'Demande' : 'Request'!!}" required></textarea>
+                        </div>
+
+                        <div class="captcha-section">
+                            <label>{!! ($language_name == 'french') ? 'Entrez le mot que vous voyez ci-dessous:' : 'Enter the word you see below:' !!}</label>
+                            <div class="captcha-row">
+                                <div class="captcha-image">
+                                    {!! $cap->image ?? '' !!}
+                                </div>
+                                <div class="captcha-refresh">
+                                    <a href="javascript:void(0)" onClick="locdCapcha()">
+                                        <img src="{{ url('assets/images/refresh.png') }}"
+                                            style="width:15px;height:15px;">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="captcha-input">
+                                <input type="text" name="captcha" id="captcha-input" value="" required />
+                            </div>
                         </div>
                         
                         <div class="submit-container">
@@ -591,6 +650,25 @@ textarea:focus {
 
 @push('scripts')
 <script>
+// Captcha refresh function
+function locdCapcha() {
+    $.ajax({
+        url: "{{ url('Products/refreshCaptcha') }}",
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(data) {
+            if (data && data.captcha) {
+                $('.captcha-image').html(data.captcha);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error refreshing captcha:', error);
+        }
+    });
+}
+
 function getState(country_id) {
     $('#stateiD').val('');
     $('#stateiD').html('<option value="">Loading...</option>');
@@ -623,12 +701,22 @@ $(document).ready(function() {
             
             // Show error message
             var errorMsg = '{!! ($language_name == "french") ? "Les mots de passe ne correspondent pas." : "Passwords do not match." !!}';
-            $('#signup-msg').html('<div class="alert alert-danger">' + errorMsg + '</div>');
+            $('#signup-msg').html('<div class="alert alert-danger">' + errorMsg + '</div>').show();
             
             // Clear confirm password field
             $('#confirm-password').val('');
             $('#confirm-password').focus();
             
+            return false;
+        }
+
+        // Captcha validation
+        var captchaVal = $('#captcha-input').val().trim();
+        if (captchaVal === '') {
+            e.preventDefault();
+            var captchaMsg = '{!! ($language_name == "french") ? "Veuillez entrer le code anti-spam." : "Please enter the anti-spam code." !!}';
+            $('#signup-msg').html('<div class="alert alert-danger">' + captchaMsg + '</div>').show();
+            $('#captcha-input').focus();
             return false;
         }
     });
@@ -641,10 +729,10 @@ $(document).ready(function() {
         if (confirmPassword.length > 0 && password !== confirmPassword) {
             $(this).css('border-color', '#dc3545');
             var errorMsg = '{!! ($language_name == "french") ? "Les mots de passe ne correspondent pas." : "Passwords do not match." !!}';
-            $('#signup-msg').html('<div class="alert alert-danger">' + errorMsg + '</div>');
+            $('#signup-msg').html('<div class="alert alert-danger">' + errorMsg + '</div>').show();
         } else {
             $(this).css('border-color', '#28a745');
-            $('#signup-msg').html('');
+            $('#signup-msg').html('').hide();
         }
     });
 });

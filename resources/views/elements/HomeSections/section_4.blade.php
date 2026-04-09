@@ -396,10 +396,13 @@
                                         $filename = $cartNameProduct->product_image;
                                         $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
                                         $productUrl = url('Products/view/' . base64_encode($cartNameProduct->id));
+                                        $productName = $language_name == 'french'
+                                            ? ($cartNameProduct->name_french ?? $cartNameProduct->name ?? '')
+                                            : ($cartNameProduct->name ?? '');
                                     @endphp
                                     <div class="product-card fade-in">
                                         <a href="{{ $productUrl }}" class="product-image">
-                                            <img src="{{ $imageurl }}" alt="{{ $filenameWithoutExtension }}" loading="lazy">
+                                            <img src="{{ $imageurl }}" alt="{{ $productName }}" loading="lazy">
                                         </a>
                                         <div class="product-info">
                                             {{-- <div class="category">
@@ -409,7 +412,7 @@
                                             </div> --}}
                                             <h3 class="product-title">
                                                 <a href="{{ $productUrl }}">
-                                                    {{ $cartNameProduct->name }}
+                                                    {{ $productName }}
                                                 </a>
                                             </h3>
                                             <div class="price">

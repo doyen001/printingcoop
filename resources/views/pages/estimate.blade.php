@@ -635,7 +635,7 @@
                     @if ($language_name == 'french')
                         <form action="{{ url('products/saveEstimate') }}" method="post" id="estimate-form">
                             @csrf
-                            <h2 class="form-section-title">Informations de contact</h2>
+                            <h2 class="page-title">Informations de contact</h2>
                             <div class="form-grid">
                                 <div class="form-field">
                                     <label>Nom du contact <span class="">*</span></label>
@@ -656,150 +656,51 @@
                                     <input type="text" name="phone_number" required>
                                 </div>
                             </div>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label>rue <span class="">*</span></label>
-                                    <input type="text" name="street" required>
-                                </div>
-                                <div class="form-field">
-                                    <label>Ville <span class="">*</span></label>
-                                    <input type="text" name="city" required>
-                                </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label>Pays <span class="">*</span></label>
-                                    <select name="country" onchange="getState($(this).val())" required>
-                                        <option value="">-- Choisissez le pays --</option>
-                                        @foreach ($countries as $country)
-                                            @php
-                                                $selected = '';
-                                                $post_country = $postData['country'] ?? '';
-                                                if ($country->id == $post_country) {
-                                                    $selected = 'selected="selected"';
-                                                }
-                                            @endphp
-                                            <option value="{{ $country->id }}" {{ $selected }}>{{ $country->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-field">
-                                    <label>Etat</label>
-                                    <select name="province" id="stateiD">
-                                        <option value="">-- Sélectionnez l'état --</option>
-                                        @foreach ($states as $state)
-                                            @php
-                                                $selected = '';
-                                                $post_state = $postData['state'] ?? '';
-                                                if ($state->StateID == $post_state) {
-                                                    $selected = 'selected="selected"';
-                                                }
-                                            @endphp
-                                            <option value="{{ $state->StateID }}" {{ $selected }}>
-                                                {{ $state->StateName }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label>code postal <span class="">*</span></label>
-                                    <input type="text" name="postal_code" required>
-                                </div>
+
+                            <div class="form-field">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="same_quote_request" value="1">
+                                    <p class="checkbox-text">Répétez-vous une commande personnalisée ou un numéro de devis précédent?</p>
+                                </label>
                             </div>
 
-                            <h2 class="form-section-title">Détails du projet</h2>
-                            <div class="form-field full-width">
-                                <label><strong>Veuillez saisir les spécifications de vos produits
-                                        ci-dessous:</strong></label>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="upload-option-btn" name="has_quote_form">
-                                        <span class="checkbox-text">J'ai mon propre formulaire de soumission de devis à
-                                            télécharger</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label>Type de produit (cartes postales, livrets)</label>
-                                    <select name="product_type">
-                                        <option value="Top Sellers">Meilleures ventes</option>
-                                        <option value="Large Format">Grand format</option>
-                                        <option value="Print Products">Produits d'impression</option>
-                                        <option value="Holiday Printing">Impression de vacances</option>
-                                        <option value="Stationery">Papeterie</option>
-                                        <option value="Labels / Stickers">Étiquettes / autocollants</option>
-                                        <option value="Direct Mail">Courrier direct</option>
-                                        <option value="Promotional">Promotionnel</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label></label>
-                                    <select name="product_name">
-                                        <option value="Business Cards">Cartes de visite</option>
-                                        <option value="Postcards">Cartes postales</option>
-                                        <option value="Flyers">Flyers</option>
-                                        <option value="Brochures">Brochures</option>
-                                        <option value="Bookmarks">Favoris</option>
-                                        <option value="Presentation Folders">Dossiers de présentation</option>
-                                        <option value="Booklets">Livrets</option>
-                                        <option value="Magnets">Aimants</option>
-                                        <option value="Greeting Cards">Cartes de voeux</option>
-                                        <option value="Numbered Tickets">Billets numérotés</option>
-                                        <option value="Wall Calendars">Billets numérotés</option>
-                                        <option value="Variable Printing">Impression variable</option>
-                                    </select>
-                                </div>
-                                <div class="form-field">
-                                    <label>Avez-vous déjà demandé le même devis?</label>
-                                    <select name="same_quote_request">
-                                        <option value="0">Non</option>
-                                        <option value="1">Oui</option>
-                                    </select>
-                                </div>
+                            <label>Type de produit (ex: cartes postales, livrets)</label>
+                            <div class="form-field" style="margin-bottom: 1.5rem;">
+                                <select name="product_name">
+                                    <option value="">Sélectionnez un produit...</option>
+                                    <option value="Top Sellers">Meilleures ventes</option>
+                                    <option value="Large Format">Grand format</option>
+                                    <option value="Print Products">Produits d'impression</option>
+                                    <option value="Holiday Printing">Impression de vacances</option>
+                                    <option value="Stationery">Papeterie</option>
+                                    <option value="Labels / Stickers">Étiquettes / autocollants</option>
+                                    <option value="Direct Mail">Courrier direct</option>
+                                    <option value="Promotional">Promotionnel</option>
+                                    <option value="Business Cards">Cartes de visite</option>
+                                    <option value="Postcards">Cartes postales</option>
+                                    <option value="Flyers">Flyers</option>
+                                    <option value="Brochures">Brochures</option>
+                                    <option value="Bookmarks">Favoris</option>
+                                    <option value="Presentation Folders">Dossiers de présentation</option>
+                                    <option value="Booklets">Livrets</option>
+                                    <option value="Magnets">Aimants</option>
+                                    <option value="Greeting Cards">Cartes de voeux</option>
+                                    <option value="Numbered Tickets">Billets numérotés</option>
+                                    <option value="Wall Calendars">Calendriers muraux</option>
+                                    <option value="Variable Printing">Impression variable</option>
+                                </select>
                             </div>
 
-                            <h2 class="form-section-title">Finition</h2>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label>Qté1</label>
-                                    <input type="text" name="qty_1">
-                                </div>
-                                <div class="form-field">
-                                    <label>Qté2</label>
-                                    <input type="text" name="qty_2">
-                                </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label>Qté3</label>
-                                    <input type="text" name="qty_3">
-                                </div>
-                                <div class="form-field">
-                                    <label>Plus de quantité:</label>
-                                    <input type="text" name="more_qty">
-                                </div>
-                            </div>
                             <div class="form-grid">
                                 <div class="form-field">
                                     <label>Taille à plat (pouces) <span class="">*</span></label>
                                     <input type="text" name="flat_size" required>
-                                    <span class="helper-text">Format plat: la taille du travail lorsqu'il n'est pas
-                                        plié.</span>
+                                    <span class="helper-text">Format plat: la taille du travail lorsqu'il n'est pas plié.</span>
                                 </div>
-                            </div>
-                            <div class="form-grid">
                                 <div class="form-field">
                                     <label>Taille finie (pouces) <span class="">*</span></label>
                                     <input type="text" name="finish_size" required>
-                                    <span class="helper-text">Taille finie: la taille du travail une fois qu'il est
-                                        complètement plié.</span>
+                                    <span class="helper-text">Taille finie: la taille du travail une fois qu'il est complètement plié.</span>
                                 </div>
                             </div>
                             <div class="form-grid">
@@ -845,45 +746,63 @@
                                         <option value="Vinyl Matte">Vinyl Matte</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <label>Nombre de côtés</label>
-                                    <div class="radio-group">
-                                        <label class="radio-option">
-                                            <input name="no_of_sides" value="1" type="radio" checked="">
-                                            <span class="radio-custom"></span>
-                                            <span>1 face (pouces)</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input name="no_of_sides" value="2" type="radio">
-                                            <span class="radio-custom"></span>
-                                            <span>Format plat (2 faces)</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-grid">
                                 <div class="form-field">
                                     <label>Pliant</label>
                                     <select name="folding">
-                                        <option value="No Fold">No Fold</option>
-                                        <option value="Half Fold">Half Fold</option>
-                                        <option value="3 Pannel Z Fold">3 Pannel Z Fold</option>
-                                        <option value="3 Pannel Roll Fold">3 Pannel Roll Fold</option>
-                                        <option value="Double Parallel Fold">Double Parallel Fold</option>
-                                        <option value="Gate Fold">Gate Fold</option>
-                                        <option value="Double Gate Fold">Double Gate Fold</option>
-                                        <option value="Four Pannel Accordian Fold">Four Pannel Accordian Fold</option>
-                                        <option value="8 Pg Fold">8 Pg Fold</option>
-                                        <option value="12 Pg Fold">12 Pg Fold</option>
-                                        <option value="Other">Other</option>
+                                        <option value="No Fold">Sans pli</option>
+                                        <option value="Half Fold">Pli simple</option>
+                                        <option value="3 Pannel Z Fold">Pli Z 3 volets</option>
+                                        <option value="3 Pannel Roll Fold">Pli roulé 3 volets</option>
+                                        <option value="Double Parallel Fold">Pli parallèle double</option>
+                                        <option value="Gate Fold">Pli portail</option>
+                                        <option value="Double Gate Fold">Pli portail double</option>
+                                        <option value="Four Pannel Accordian Fold">Pli accordéon 4 volets</option>
+                                        <option value="8 Pg Fold">Pli 8 pages</option>
+                                        <option value="12 Pg Fold">Pli 12 pages</option>
+                                        <option value="Other">Autre</option>
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-field">
+                                <label>Nombre de côtés</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input name="no_of_sides" value="1" type="radio" checked="">
+                                        <span class="radio-custom"></span>
+                                        <p>1 face (pouces)</p>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input name="no_of_sides" value="2" type="radio">
+                                        <span class="radio-custom"></span>
+                                        <p>Format plat (2 faces)</p>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-field full-width">
+                                <label>
+                                    <font color="red">*</font>Entrez la demande / Notes supplémentaires
+                                </label>
+                                <font color="red">Veuillez vous assurer que vous demandez des devis pour un seul type de produit à la fois</font>
+                                <textarea
+                                    name="notes"
+                                    placeholder="Veuillez vous assurer que votre devis contient toutes les informations requises. Ex. Taille finale, format à plat, matériau, côtés imprimés, exigences de finition, quantité requise, variations, etc."
+                                    style="height: 150px;"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <label>Quantité requise:</label>
+                            <div class="quantity-container" id="quantity-container">
+                                <div class="quantity-field">
+                                    <input type="text" name="qty_1" placeholder="Quantité">
+                                </div>
+                            <button type="button" class="add-qty-btn" id="add-qty-btn">+ Ajouter une autre quantité</button>
+                            </div>
+
                             <div class="form-grid">
                                 <div class="form-field">
-                                    <label>Combien de versions souhaitez-vous? <span class="required">*</span></label>
+                                    <label>Combien de versions voulez-vous?<span class="required">*</span></label>
                                     <select name="total_versions" required>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -894,12 +813,8 @@
                                         <option value="7">7</option>
                                         <option value="8">8</option>
                                     </select>
-                                    <span class="helper-text">Combien de versions souhaitez-vous? Nombre de fichiers
-                                        graphiques différents à soumettre. Par exemple, si vous avez 2 cartes postales
-                                        différentes à commander, sélectionnez «2»</span>
+                                    <span class="helper-text">Combien de versions souhaitez-vous? Nombre de fichiers graphiques différents à soumettre. Par exemple, si vous avez 2 cartes postales différentes à commander, sélectionnez "2"</span>
                                 </div>
-                            </div>
-                            <div class="form-grid">
                                 <div class="form-field">
                                     <label>Méthode d'expédition</label>
                                     <select name="shipping_methods">
@@ -908,19 +823,67 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-field full-width">
-                                <label>
-                                    <font color="red">*</font>Entrez la demande / Notes supplémentaires
-                                </label>
-                                <font color="red">Veuillez vous assurer que vous demandez des devis pour un seul type de
-                                    produit à la fois</font>
-                                <textarea name="notes"
-                                    placeholder="Veuillez vous assurer que votre devis contient toutes les informations requises. Ex. Taille finale, format à plat, matériau, côtés imprimés, exigences de finition, quantité requise, variations, etc."
-                                    required></textarea>
+
+                            <label>Adresse de facturation:</label>
+                            <div class="form-grid">
+                                <div class="form-field">
+                                    <label>Rue <span class="">*</span></label>
+                                    <input type="text" name="street" required>
+                                </div>
+                                <div class="form-field">
+                                    <label>Ville <span class="">*</span></label>
+                                    <input type="text" name="city" required>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-field">
+                                    <label>Pays <span class="">*</span></label>
+                                    <select name="country" onchange="getState($(this).val())" required>
+                                        <option value="">-- Sélectionnez le pays --</option>
+                                        @foreach ($countries as $country)
+                                            @php
+                                                $selected = '';
+                                                $post_country = $postData['country'] ?? '';
+                                                if ($country->id == $post_country) {
+                                                    $selected = 'selected="selected"';
+                                                }
+                                            @endphp
+                                            <option value="{{ $country->id }}" {{ $selected }}>{{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label>État</label>
+                                    <select name="province" id="stateiD">
+                                        <option value="">-- Sélectionnez l'état --</option>
+                                        @foreach ($states as $state)
+                                            @php
+                                                $selected = '';
+                                                $post_state = $postData['state'] ?? '';
+                                                if ($state->StateID == $post_state) {
+                                                    $selected = 'selected="selected"';
+                                                }
+                                            @endphp
+                                            <option value="{{ $state->StateID }}" {{ $selected }}>
+                                                {{ $state->StateName }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-field">
+                                    <label>Téléphone</label>
+                                    <input type="tel" name="telephone">
+                                </div>
+                                <div class="form-field">
+                                    <label>Code postal <span class="">*</span></label>
+                                    <input type="text" name="postal_code" required>
+                                </div>
                             </div>
 
                             <div class="captcha-section">
-                                <label>Entrez le mot que vous voyez ci-dessous :</label>
+                                <label>Entrez le mot que vous voyez ci-dessous:</label>
                                 <div class="captcha-row">
                                     <div class="captcha-image">
                                         {!! $cap->image ?? '' !!}
@@ -986,9 +949,10 @@
                                 </label>
                             </div> --}}
                             <label>Product Type ( i.e. Postcards, Booklets )</label>
-                            <div class="form-grid">
-                                <div class="form-field">
-                                    <select name="product_name">
+                            <div class="form-field" style="margin-bottom: 1.5rem;">
+                                <select name="product_name">
+                                    <option value="">Select a product...</option>
+                                    {{-- <optgroup label="Categories"> --}}
                                         <option value="Top Sellers">Top Sellers</option>
                                         <option value="Large Format">Large Format</option>
                                         <option value="Print Products">Print Products</option>
@@ -997,11 +961,8 @@
                                         <option value="Labels / Stickers">Labels / Stickers</option>
                                         <option value="Direct Mail">Direct Mail</option>
                                         <option value="Promotional">Promotional</option>
-                                    </select>
-                                </div>
-                                <div class="form-field">
-                                    {{-- <label></label> --}}
-                                    <select name="product_name">
+                                    {{-- </optgroup>
+                                    <optgroup label="Specific Products"> --}}
                                         <option value="Business Cards">Business Cards</option>
                                         <option value="Postcards">Postcards</option>
                                         <option value="Flyers">Flyers</option>
@@ -1014,8 +975,8 @@
                                         <option value="Numbered Tickets">Numbered Tickets</option>
                                         <option value="Wall Calendars">Wall Calendars</option>
                                         <option value="Variable Printing">Variable Printing</option>
-                                    </select>
-                                </div>
+                                    {{-- </optgroup> --}}
+                                </select>
                             </div>
 
                             <div class="form-grid">
@@ -1128,8 +1089,8 @@
                                     {{-- <label>Qty</label> --}}
                                     <input type="text" name="qty_1" placeholder="Qty">
                                 </div>
-                            </div>
                             <button type="button" class="add-qty-btn" id="add-qty-btn">+ Add another Qty</button>
+                            </div>
                             
                             {{-- </div> --}}
 

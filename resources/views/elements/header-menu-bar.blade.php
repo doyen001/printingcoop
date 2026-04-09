@@ -302,12 +302,17 @@
                 </a>
             </li>
             <li>
-                <a href="https://pod.printing.coop">
+                <a href="{{ site_url('Pages/estimate') }}">
+                    {{ $language_name == 'french' ? 'Demande de Devis' : 'Quote Request' }}
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="confirmRedirectToPOD(event)">
                     {{ $language_name == 'french' ? 'Cadeaux&Décoration' : 'Gifts&Décor' }}
                 </a>
             </li>
             <li>
-                <a href="https://store.printing.coop">
+                <a href="#" onclick="confirmRedirectToStore(event)">
                     {{ $language_name == 'french' ? 'Vêtements' : 'Apparel' }}
                 </a>
             </li>
@@ -356,12 +361,17 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://printondemand.printing.coop">
+                    <a href="{{ site_url('Pages/estimate') }}">
+                        {{ $language_name == 'french' ? 'Demande de Devis' : 'Quote Request' }}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="confirmRedirectToPOD(event)">
                         {{ $language_name == 'french' ? 'Cadeaux&Décoration' : 'Gifts&Décor' }}
                     </a>
                 </li>
                 <li>
-                    <a href="https://store.printing.coop">
+                    <a href="#" onclick="confirmRedirectToStore(event)">
                         {{ $language_name == 'french' ? 'Vêtements' : 'Apparel' }}
                     </a>
                 </li>
@@ -369,3 +379,159 @@
         </div>
     </div>
 </div>
+
+<script>
+// Function to show confirmation modal for POD redirect
+function confirmRedirectToPOD(event) {
+    event.preventDefault();
+    
+    const message = '{{ $language_name == "french" ? "Êtes-vous sûr de vouloir visiter notre boutique POD pour des produits personnalisés?" : "Are you sure you want to visit our POD store for custom products?" }}';
+    
+    // Create modal HTML
+    const modalHtml = `
+        <div id="pod-confirm-modal" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        ">
+            <div style="
+                background: white;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 400px;
+                text-align: center;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            ">
+                <h3 style="margin: 0 0 15px 0; color: #333;">{{ $language_name == "french" ? "Confirmation" : "Confirmation" }}</h3>
+                <p style="margin: 0 0 25px 0; color: #666; line-height: 1.5;">${message}</p>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button id="pod-yes-btn" style="
+                        background: #f28738;
+                        color: white;
+                        border: none;
+                        padding: 10px 25px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 500;
+                    ">{{ $language_name == "french" ? "Oui" : "Yes" }}</button>
+                    <button id="pod-no-btn" style="
+                        background: #6c757d;
+                        color: white;
+                        border: none;
+                        padding: 10px 25px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 500;
+                    ">{{ $language_name == "french" ? "Non" : "No" }}</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Add event listeners
+    document.getElementById('pod-yes-btn').addEventListener('click', function() {
+        window.open('https://pod.printing.coop/', '_blank');
+        document.getElementById('pod-confirm-modal').remove();
+    });
+    
+    document.getElementById('pod-no-btn').addEventListener('click', function() {
+        document.getElementById('pod-confirm-modal').remove();
+    });
+    
+    // Close modal when clicking outside
+    document.getElementById('pod-confirm-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.remove();
+        }
+    });
+}
+
+// Function to show confirmation modal for Store redirect
+function confirmRedirectToStore(event) {
+    event.preventDefault();
+    
+    const message = '{{ $language_name == "french" ? "Êtes-vous sûr de vouloir visiter notre boutique pour des articles personnalisés?" : "Are you sure you want to visit our store for custom items?" }}';
+    
+    // Create modal HTML
+    const modalHtml = `
+        <div id="store-confirm-modal" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        ">
+            <div style="
+                background: white;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 400px;
+                text-align: center;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            ">
+                <h3 style="margin: 0 0 15px 0; color: #333;">{{ $language_name == "french" ? "Confirmation" : "Confirmation" }}</h3>
+                <p style="margin: 0 0 25px 0; color: #666; line-height: 1.5;">${message}</p>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button id="store-yes-btn" style="
+                        background: #f28738;
+                        color: white;
+                        border: none;
+                        padding: 10px 25px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 500;
+                    ">{{ $language_name == "french" ? "Oui" : "Yes" }}</button>
+                    <button id="store-no-btn" style="
+                        background: #6c757d;
+                        color: white;
+                        border: none;
+                        padding: 10px 25px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 500;
+                    ">{{ $language_name == "french" ? "Non" : "No" }}</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Add event listeners
+    document.getElementById('store-yes-btn').addEventListener('click', function() {
+        window.open('https://store.printing.coop/', '_blank');
+        document.getElementById('store-confirm-modal').remove();
+    });
+    
+    document.getElementById('store-no-btn').addEventListener('click', function() {
+        document.getElementById('store-confirm-modal').remove();
+    });
+    
+    // Close modal when clicking outside
+    document.getElementById('store-confirm-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.remove();
+        }
+    });
+}
+</script>

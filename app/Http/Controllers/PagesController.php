@@ -135,6 +135,21 @@ class PagesController extends Controller
             $meta_keywords_content = $pageData->meta_keywords_content_french ?? '';
         }
         
+        // Create captcha
+        $cap = $this->create_capcha();
+        session(['captcha_filename' => $cap['filename']]);
+        
+        $user_ip = request()->ip();
+        if ($user_ip == '::1') {
+            $user_ip = '127.0.0.1';
+        }
+        
+        DB::table('captcha')->insert([
+            'captcha_time' => $cap['time'],
+            'ip_address' => $user_ip,
+            'word' => $cap['word']
+        ]);
+        
         $data = [
             'page_title' => $page_title,
             'meta_page_title' => $meta_page_title,
@@ -146,6 +161,7 @@ class PagesController extends Controller
             'states' => $states,
             'postData' => (object)[],
             'language_name' => $language_name,
+            'cap' => (object)$cap,
         ];
         
         return view('pages.preffered_customer', $data);

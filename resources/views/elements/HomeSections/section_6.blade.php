@@ -192,14 +192,14 @@
                         <i class="fas fa-hand-pointer"></i>
                     </div>
                     <h3 class="service-title">
-                        @if ($language_name == 'French')
+                        @if ($language_name == 'french')
                             VOTRE IMPRIMERIE EN LIGNE ET POUR DES MATÉRIAUX IMPRIMÉS PROFESSIONNELLEMENT
                         @else
                             YOUR ONLINE PRINT SHOP & FOR PROFESSIONALLY PRINTED MATERIALS
                         @endif
                     </h3>
                     <p class="service-description">
-                        @if ($language_name == 'French')
+                        @if ($language_name == 'french')
                             Pour chaque commande, nous nous assurons que vos modèles sont adaptés à l'impression gratuitement. Si des modifications doivent être apportées, nous vous en informons par e-mail. & collectez dans l'un de nos 3 magasins GRATUITEMENT.
                         @else
                             For every order, we make sure your templates are suitable for printing free of charge. If any alterations need to be made, we inform you by email. & collect from any one of our 3 stores FREE.
@@ -213,14 +213,14 @@
                         <i class="fas fa-box"></i>
                     </div>
                     <h3 class="service-title">
-                        @if ($language_name == 'French')
+                        @if ($language_name == 'french')
                             DÉLAIS RAPIDES
                         @else
                             QUICK TURNAROUNDS
                         @endif
                     </h3>
                     <p class="service-description">
-                        @if ($language_name == 'French')
+                        @if ($language_name == 'french')
                             Nous savons que la rapidité de mise sur le marché est essentielle, c'est pourquoi nous proposons des délais d'exécution ultra-rapides sur la plupart des produits. Dans de nombreux endroits, la livraison le jour même peut également être disponible. Pas de soucis.
                         @else
                             We know speed-to-market is essential, which is why we offer ultra-fast turnaround times on most products. In many locations, Same Day Delivery may also be available. No worries.
@@ -234,14 +234,14 @@
                         <i class="fas fa-shopping-cart"></i>
                     </div>
                     <h3 class="service-title">
-                        @if ($language_name == 'French')
+                        @if ($language_name == 'french')
                             PRIX COMPÉTITIFS
                         @else
                             COMPETITIVE PRICES
                         @endif
                     </h3>
                     <p class="service-description">
-                        @if ($language_name == 'French')
+                        @if ($language_name == 'french')
                             Nous utilisons une technologie moderne pour rendre l'impression rentable et meilleure que jamais. Nous offrons de la valeur et grâce à notre calculateur de prix, vous pouvez modifier les options pour trouver ce qui convient le mieux à votre budget.
                         @else
                             We use modern technology to make print cost-effective and better than ever before. We deliver value, and thanks to our pricing calculator, you can change options to find something best for your budget.

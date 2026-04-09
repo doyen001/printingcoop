@@ -375,15 +375,18 @@
                                 @php
                                     $imageurl = url('uploads/products/' . $posterAndPlansProduct->product_image);
                                     $productUrl = url('Products/view/' . base64_encode($posterAndPlansProduct->id));
+                                    $productName = $language_name == 'french'
+                                        ? ($posterAndPlansProduct->name_french ?? $posterAndPlansProduct->name ?? '')
+                                        : ($posterAndPlansProduct->name ?? '');
                                 @endphp
                                 <div class="product-card">
                                     <a href="{{ $productUrl }}" class="product-image">
-                                        <img src="{{ $imageurl }}" alt="{{ $posterAndPlansProduct->name }}" loading="lazy">
+                                        <img src="{{ $imageurl }}" alt="{{ $productName }}" loading="lazy">
                                     </a>
                                     <div class="product-info">
                                         {{-- <div class="product-category">{{ $posterAndPlansProduct->category_name }}</div> --}}
                                         <h3 class="product-title">
-                                            <a href="{{ $productUrl }}">{{ $posterAndPlansProduct->name }}</a>
+                                            <a href="{{ $productUrl }}">{{ $productName }}</a>
                                         </h3>
                                         <div class="product-starting-price">
                                             {{ $product_price_currency_symbol ?? '$' }}{{ number_format($posterAndPlansProduct->{$product_price_currency ?? 'price_cad'}, 2) }}
