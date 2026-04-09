@@ -276,33 +276,68 @@ class ProductsController extends Controller
                 $postData['brochure'] = $request->input('brochure', 0);
                 $postData['is_printed_product'] = $request->input('is_printed_product', 0);
                 $postData['is_bestdeal'] = $request->input('is_bestdeal', 0);
+                $postData['use_custom_size'] = $request->input('use_custom_size', 0);
                 $postData['add_length_width'] = $request->input('add_length_width', 0);
-                $postData['length_width_pages_type'] = $request->input('length_width_pages_type', 'dropdown');
+                $postData['min_length'] = $request->input('min_length', 0);
+                $postData['max_length'] = $request->input('max_length', 0);
+                $postData['min_width'] = $request->input('min_width', 0);
+                $postData['max_width'] = $request->input('max_width', 0);
+                $postData['min_length_min_width_price'] = $request->input('min_length_min_width_price', 0);
+                $postData['length_width_unit_price_black'] = $request->input('length_width_unit_price_black', 0);
+                $postData['length_width_price_color'] = $request->input('length_width_price_color', 0);
+                $postData['length_width_color_show'] = $request->input('length_width_color_show', 0);
+                $postData['length_width_pages_type'] = $request->input('length_width_pages_type', 'input');
+                $postData['length_width_quantity_show'] = $request->input('length_width_quantity_show', 0);
                 $postData['length_width_min_quantity'] = $request->input('length_width_min_quantity', 25);
                 $postData['length_width_max_quantity'] = $request->input('length_width_max_quantity', 5000);
-                $postData['length_width_quantity_show'] = $request->input('length_width_quantity_show', 1);
-                $postData['length_width_color_show'] = $request->input('length_width_color_show', 0);
+                
+                $postData['page_add_length_width'] = $request->input('page_add_length_width', 0);
+                $postData['page_min_length'] = $request->input('page_min_length', 0);
+                $postData['page_max_length'] = $request->input('page_max_length', 0);
+                $postData['page_min_width'] = $request->input('page_min_width', 0);
+                $postData['page_max_width'] = $request->input('page_max_width', 0);
+                $postData['page_min_length_min_width_price'] = $request->input('page_min_length_min_width_price', 0);
+                $postData['page_length_width_price_color'] = $request->input('page_length_width_price_color', 0);
+                $postData['page_length_width_price_black'] = $request->input('page_length_width_price_black', 0);
+                $postData['page_length_width_color_show'] = $request->input('page_length_width_color_show', 0);
+                $postData['page_length_width_pages_type'] = $request->input('page_length_width_pages_type', 'dropdown');
+                $postData['page_length_width_pages_show'] = $request->input('page_length_width_pages_show', 0);
+                $postData['page_length_width_sheets_type'] = $request->input('page_length_width_sheets_type', 'dropdown');
+                $postData['page_length_width_sheets_show'] = $request->input('page_length_width_sheets_show', 0);
+                $postData['page_length_width_quantity_type'] = $request->input('page_length_width_quantity_type', 'input');
+                $postData['page_length_width_quantity_show'] = $request->input('page_length_width_quantity_show', 0);
+                $postData['page_length_width_min_quantity'] = $request->input('page_length_width_min_quantity', 25);
+                $postData['page_length_width_max_quantity'] = $request->input('page_length_width_max_quantity', 5000);
+                
                 $postData['votre_text'] = $request->input('votre_text', 0);
                 $postData['recto_verso'] = $request->input('recto_verso', 0);
                 $postData['recto_verso_price'] = $request->input('recto_verso_price', 0);
-                $postData['page_add_length_width'] = $request->input('page_add_length_width', 0);
-                $postData['page_length_width_pages_type'] = $request->input('page_length_width_pages_type', 'dropdown');
-                $postData['page_length_width_pages_show'] = $request->input('page_length_width_pages_show', 1);
-                $postData['page_length_width_sheets_type'] = $request->input('page_length_width_sheets_type', 'dropdown');
-                $postData['page_length_width_quantity_type'] = $request->input('page_length_width_quantity_type', 'input');
-                $postData['page_length_width_sheets_show'] = $request->input('page_length_width_sheets_show', 0);
-                $postData['page_length_width_color_show'] = $request->input('page_length_width_color_show', 0);
-                $postData['page_length_width_min_quantity'] = $request->input('page_length_width_min_quantity', 25);
-                $postData['page_length_width_max_quantity'] = $request->input('page_length_width_max_quantity', 5000);
-                $postData['page_length_width_quantity_show'] = $request->input('page_length_width_quantity_show', 1);
+                
                 $postData['call'] = $request->input('call', 0);
+                $postData['phone_number'] = $request->input('phone_number', '');
+                
+                // Shipping Box Size Setting (CI equivalent)
+                $postData['shipping_box_length'] = $request->input('shipping_box_length', '0');
+                $postData['shipping_box_width'] = $request->input('shipping_box_width', '0');
+                $postData['shipping_box_height'] = $request->input('shipping_box_height', '0');
+                $postData['shipping_box_weight'] = $request->input('shipping_box_weight', '0');
+                
+                // Depth fields (CI equivalent)
                 $postData['depth_add_length_width'] = $request->input('depth_add_length_width', 0);
+                $postData['min_depth'] = $request->input('min_depth', 0);
+                $postData['max_depth'] = $request->input('max_depth', 0);
+                $postData['depth_min_length'] = $request->input('depth_min_length', 0);
+                $postData['depth_max_length'] = $request->input('depth_max_length', 0);
+                $postData['depth_min_width'] = $request->input('depth_min_width', 0);
+                $postData['depth_max_width'] = $request->input('depth_max_width', 0);
+                $postData['depth_width_length_price'] = $request->input('depth_width_length_price', 0);
+                $postData['depth_unit_price_black'] = $request->input('depth_unit_price_black', 0);
+                $postData['depth_price_color'] = $request->input('depth_price_color', 0);
+                $postData['depth_color_show'] = $request->input('depth_color_show', 0);
                 $postData['depth_width_length_type'] = $request->input('depth_width_length_type', 'input');
-                $postData['depth_width_length_quantity_show'] = $request->input('depth_width_length_quantity_show', '1');
+                $postData['depth_width_length_quantity_show'] = $request->input('depth_width_length_quantity_show', 0);
                 $postData['depth_min_quantity'] = $request->input('depth_min_quantity', 25);
                 $postData['depth_max_quantity'] = $request->input('depth_max_quantity', 5000);
-                $postData['depth_color_show'] = $request->input('depth_color_show', 0);
-                $postData['use_custom_size'] = $request->input('use_custom_size', 0);
                 
                 // Generate slug like CI
                 $postData['product_slug'] = $this->createSlug($postData['name'], 'products', 'product_slug', $id);
@@ -477,7 +512,7 @@ class ProductsController extends Controller
                     'menu_id', 'category_id', 'sub_category_id', 'is_featured', 'is_bestseller',
                     'is_special', 'is_stock', 'poster_plans', 'banners_frames', 'cards_invites',
                     'photo_gifts', 'cart_name', 'catalog', 'brochure', 'is_printed_product',
-                    'total_stock', 'discount', 'product_image', 'code', 'code_french', 'brand',
+                    'total_stock', 'discount', 'product_image', 'code', 'code_french', 'model', 'model_french', 'brand',
                     'reviews', 'rating', 'total_visited', 'delivery_charge', 'is_bestdeal',
                     'product_type', 'min_order_quantity', 'discount_id', 'free_shipping',
                     'store_id', 'product_tag', 'add_length_width', 'min_length', 'max_length',
@@ -534,8 +569,8 @@ class ProductsController extends Controller
             
             Log::info('Product saved, continuing with related data', ['product_id' => $product_id]);
             
-            // Handle image uploads with validation
-            if (request()->hasFile('product_images')) {
+            // Handle image uploads (CI: files[] input)
+            if (request()->hasFile('files')) {
                 Log::info('Processing image uploads');
                 $this->handleImageUploads(request(), $product_id);
             }
@@ -574,61 +609,84 @@ class ProductsController extends Controller
     }
 
     /**
-     * Handle image uploads with comprehensive validation and error handling
+     * Handle image uploads - replicates CI Products->addEdit() image handling
+     * CI: lines 359-428
      */
     protected function handleImageUploads(Request $request, $product_id)
     {
         try {
-            $imageRequest = new ProductImageRequest();
-            $validatedData = $imageRequest->validated();
+            $uploadData = [];
+            $files = $request->file('files');
+            $basePath = public_path('uploads/products/');
             
-            $uploadedImages = [];
-            
-            if (isset($validatedData['product_images'])) {
-                $files = $request->file('product_images');
-                
-                foreach ($files as $key => $file) {
-                    if ($file->isValid()) {
-                        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                        
-                        // Store file using Laravel Storage (CI equivalent)
-                        $path = $file->storeAs('products', $filename, 'public');
-                        
-                        // Create different sizes (CI equivalent)
-                        $this->resizeImage($filename, 'small');
-                        $this->resizeImage($filename, 'medium');
-                        $this->resizeImage($filename, 'large');
-                        
-                        $uploadedImages[] = [
-                            'image' => $filename,
-                            'created' => now(),
-                            'updated' => now(),
-                            'product_id' => $product_id
-                        ];
-                        
-                        Log::info('Image uploaded successfully', [
-                            'product_id' => $product_id,
-                            'filename' => $filename,
-                            'path' => $path
-                        ]);
-                    }
+            // Ensure upload directories exist
+            foreach (['', 'small/', 'medium/', 'large/'] as $dir) {
+                if (!file_exists($basePath . $dir)) {
+                    mkdir($basePath . $dir, 0777, true);
                 }
             }
             
-            // Save images to database (CI equivalent)
-            if (!empty($uploadedImages)) {
-                DB::table('product_images')->insert($uploadedImages);
+            foreach ($files as $key => $file) {
+                if ($file && $file->isValid()) {
+                    $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                    if (!in_array($file->getMimeType(), $allowedTypes)) {
+                        continue;
+                    }
+                    
+                    // Generate filename like CI: time() + original name
+                    $filename = time() . $file->getClientOriginalName();
+                    
+                    // Move file to public/uploads/products/ (CI: PRODUCT_IMAGE_BASE_PATH)
+                    $file->move($basePath, $filename);
+                    
+                    // Create resized versions (CI: resizeImage)
+                    $this->resizeImage($filename, 'small');
+                    $this->resizeImage($filename, 'medium');
+                    $this->resizeImage($filename, 'large');
+                    
+                    $uploadData[] = $filename;
+                    
+                    Log::info('Image uploaded successfully', [
+                        'product_id' => $product_id,
+                        'filename' => $filename,
+                    ]);
+                }
+            }
+            
+            // CI: merge old_image with new uploads, then save all to product_images table
+            $old_image = $request->input('old_image', []);
+            $uploadDataNew = array_merge($old_image, $uploadData);
+            
+            // Only re-save images if new ones were uploaded
+            if (!empty($uploadData)) {
+                // Delete existing product_images and re-insert all (CI: saveProductImage)
+                DB::table('product_images')->where('product_id', $product_id)->delete();
                 
-                // Set first image as main product image (CI equivalent)
-                $mainImage = $uploadedImages[0]['image'];
-                DB::table('products')->where('id', $product_id)->update([
-                    'product_image' => $mainImage
-                ]);
+                $data = [];
+                foreach ($uploadDataNew as $k => $v) {
+                    $data[] = [
+                        'image' => $v,
+                        'created' => date('Y-m-d H:i:s'),
+                        'updated' => date('Y-m-d H:i:s'),
+                        'product_id' => $product_id,
+                    ];
+                }
                 
-                Log::info('Product main image updated', [
-                    'product_id' => $product_id,
-                    'main_image' => $mainImage
-                ]);
+                if (!empty($data)) {
+                    DB::table('product_images')->insert($data);
+                    
+                    // Set first image as main product image (CI equivalent)
+                    $mainImage = $data[0]['image'];
+                    DB::table('products')->where('id', $product_id)->update([
+                        'product_image' => $mainImage
+                    ]);
+                    
+                    Log::info('Product images saved', [
+                        'product_id' => $product_id,
+                        'count' => count($data),
+                        'main_image' => $mainImage
+                    ]);
+                }
             }
             
         } catch (Exception $e) {
@@ -636,7 +694,7 @@ class ProductsController extends Controller
                 'product_id' => $product_id
             ]);
             
-            throw $e; // Re-throw to be caught by calling method
+            throw $e;
         }
     }
 
@@ -646,18 +704,32 @@ class ProductsController extends Controller
 public function uploadImage(Request $request)
 {
     try {
-        $imageRequest = new ProductImageRequest();
-        $validatedData = $imageRequest->validated();
-        
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             
             if ($file->isValid()) {
+                $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                if (!in_array($file->getMimeType(), $allowedTypes)) {
+                    return response()->json([
+                        'status' => 0,
+                        'msg' => 'Only JPEG, PNG, and GIF images are allowed.'
+                    ]);
+                }
+                
+                $basePath = public_path('uploads/products/');
+                
+                // Ensure upload directories exist
+                foreach (['', 'small/', 'medium/', 'large/'] as $dir) {
+                    if (!file_exists($basePath . $dir)) {
+                        mkdir($basePath . $dir, 0777, true);
+                    }
+                }
+                
                 // Generate unique filename (CI equivalent)
                 $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
                 
-                // Store file using Laravel Storage (CI equivalent)
-                $path = $file->storeAs('products', $filename, 'public');
+                // Move file to public/uploads/products/
+                $file->move($basePath, $filename);
                 
                 // Create different sizes (CI equivalent)
                 $this->resizeImage($filename, 'small');
@@ -673,22 +745,20 @@ public function uploadImage(Request $request)
                 ]);
                 
                 // Update main product image if not set
-                $product = Product::find($request->product_id);
-                if ($product && !$product->product_image) {
-                    Product::where('id', $request->product_id)->update(['product_image' => $filename]);
+                $product = DB::table('products')->where('id', $request->product_id)->first();
+                if ($product && empty($product->product_image)) {
+                    DB::table('products')->where('id', $request->product_id)->update(['product_image' => $filename]);
                 }
                 
                 Log::info('Single image uploaded successfully', [
                     'product_id' => $request->product_id,
                     'filename' => $filename,
-                    'path' => $path
                 ]);
                 
                 return response()->json([
                     'status' => 1,
                     'msg' => 'Image uploaded successfully',
                     'filename' => $filename,
-                    'path' => $path
                 ]);
             }
         }
@@ -4882,22 +4952,123 @@ public function copy($id)
     }
     
     /**
-     * Resize image to different sizes (CI equivalent)
+     * Resize image to different sizes using GD2
+     * CI: Products->resizeImage() lines 1382-1425
      */
-    protected function resizeImage($filename, $size)
+    protected function resizeImage($filename, $type = 'small', $widthlarge = 800, $heightlarge = 800, $section = 'product')
     {
         try {
-            // For now, just log the resize request
-            // In a real implementation, you would use Intervention Image or similar
-            Log::info('Image resize requested', ['filename' => $filename, 'size' => $size]);
+            $basePath = public_path('uploads/products/');
+            $source_path = $basePath . $filename;
+            $target_path = $basePath . $type . '/' . $filename;
             
-            // TODO: Implement actual image resizing using Intervention Image
-            // This would typically create different sized versions of the image
+            if ($section == 'banner') {
+                $basePath = public_path('uploads/banners/');
+                $source_path = $basePath . $filename;
+                $target_path = $basePath . $type . '/' . $filename;
+            } elseif ($section == 'brand') {
+                $basePath = public_path('uploads/brands/');
+                $source_path = $basePath . $filename;
+                $target_path = $basePath . $type . '/' . $filename;
+            }
+            
+            // Determine target dimensions (CI equivalent)
+            if ($type == 'medium') {
+                $width = 400;
+                $height = 390;
+            } elseif ($type == 'large') {
+                $width = $widthlarge;
+                $height = $heightlarge;
+            } else {
+                $width = 200;
+                $height = 200;
+            }
+            
+            if (!file_exists($source_path)) {
+                Log::warning('Source image not found for resize', ['path' => $source_path]);
+                return;
+            }
+            
+            // Ensure target directory exists
+            $targetDir = dirname($target_path);
+            if (!file_exists($targetDir)) {
+                mkdir($targetDir, 0777, true);
+            }
+            
+            // Get source image info
+            $imageInfo = getimagesize($source_path);
+            if (!$imageInfo) {
+                Log::warning('Could not get image info', ['path' => $source_path]);
+                return;
+            }
+            
+            $mime = $imageInfo['mime'];
+            
+            // Create source image based on type
+            switch ($mime) {
+                case 'image/jpeg':
+                case 'image/jpg':
+                    $sourceImage = imagecreatefromjpeg($source_path);
+                    break;
+                case 'image/png':
+                    $sourceImage = imagecreatefrompng($source_path);
+                    break;
+                case 'image/gif':
+                    $sourceImage = imagecreatefromgif($source_path);
+                    break;
+                default:
+                    Log::warning('Unsupported image type for resize', ['mime' => $mime]);
+                    return;
+            }
+            
+            if (!$sourceImage) {
+                Log::warning('Could not create source image', ['path' => $source_path]);
+                return;
+            }
+            
+            // Create resized image (CI uses maintain_ratio=false)
+            $resizedImage = imagecreatetruecolor($width, $height);
+            
+            // Preserve transparency for PNG
+            if ($mime == 'image/png') {
+                imagealphablending($resizedImage, false);
+                imagesavealpha($resizedImage, true);
+                $transparent = imagecolorallocatealpha($resizedImage, 255, 255, 255, 127);
+                imagefilledrectangle($resizedImage, 0, 0, $width, $height, $transparent);
+            }
+            
+            $srcWidth = imagesx($sourceImage);
+            $srcHeight = imagesy($sourceImage);
+            
+            imagecopyresampled($resizedImage, $sourceImage, 0, 0, 0, 0, $width, $height, $srcWidth, $srcHeight);
+            
+            // Save resized image
+            switch ($mime) {
+                case 'image/jpeg':
+                case 'image/jpg':
+                    imagejpeg($resizedImage, $target_path, 90);
+                    break;
+                case 'image/png':
+                    imagepng($resizedImage, $target_path);
+                    break;
+                case 'image/gif':
+                    imagegif($resizedImage, $target_path);
+                    break;
+            }
+            
+            imagedestroy($sourceImage);
+            imagedestroy($resizedImage);
+            
+            Log::info('Image resized successfully', [
+                'filename' => $filename,
+                'type' => $type,
+                'dimensions' => $width . 'x' . $height
+            ]);
             
         } catch (Exception $e) {
             Log::error('Error resizing image: ' . $e->getMessage(), [
                 'filename' => $filename,
-                'size' => $size
+                'size' => $type
             ]);
         }
     }

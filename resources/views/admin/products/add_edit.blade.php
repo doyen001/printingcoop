@@ -1072,7 +1072,7 @@ $('#menu_id').on('change', function(e) {
   $.ajax({
     type: 'GET',
     dataType: 'html',
-    url: '{{ url('admin/ajax/getCategoryDropDownListByAjax') }}/' + menu_id,
+    url: '{{ url('admin/Ajax/getCategoryDropDownListByAjax') }}/' + menu_id,
     cache: false,
     contentType: false,
     processData: false,
@@ -1091,7 +1091,7 @@ $('#category_id').on('change', function(e) {
   $.ajax({
     type: 'GET',
     dataType: 'html',
-    url: '{{ url('admin/ajax/getSubCategoryDropDownListByAjax') }}/' + category_id,
+    url: '{{ url('admin/Ajax/getSubCategoryDropDownListByAjax') }}/' + category_id,
     cache: false,
     contentType: false,
     processData: false,
@@ -1149,7 +1149,7 @@ function remove_image(id, image_name) {
   $.ajax({
     type: 'POST',
     dataType: 'html',
-    url: '{{ url('admin/ajax/removeProductImage') }}',
+    url: '{{ url('admin/Ajax/removeProductImage') }}',
     data: {
       '_token': '{{ csrf_token() }}',
       'product_id': product_id,
@@ -1187,9 +1187,9 @@ function isNumber(evt) {
 
 function addActiveClass(id) {
   if ($('#attribute_id_' + id).prop('checked') == true) {
-    $('#attribute_id_' + id).parents('.attribute').find('.attribute-inner').addClass('active');
+    $('#attribute_id_div_' + id).addClass('active');
   } else {
-    $('#attribute_id_' + id).parents('.attribute').find('.attribute-inner').removeClass('active');
+    $('#attribute_id_div_' + id).removeClass('active');
   }
 }
 </script>
@@ -1243,7 +1243,7 @@ $(document).on('click', '.dbtn-add', function(e) {
     height: 300,
     filebrowserUploadUrl: "{{ url('upload.php') }}",
     allowedContent: true,
-    extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
+    extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
   });
   CKEDITOR.dtd.$removeEmpty.i = 0;
 
@@ -1251,7 +1251,7 @@ $(document).on('click', '.dbtn-add', function(e) {
     height: 300,
     filebrowserUploadUrl: "{{ url('upload.php') }}",
     allowedContent: true,
-    extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
+    extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
   });
   CKEDITOR.dtd.$removeEmpty.i = 0;
 
@@ -1347,30 +1347,11 @@ $(document).on('click', '.tdtn-add', function(e) {
   return false;
 });
 
-function isNumber(evt) {
-  var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-  if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-    return false;
-
-  return true;
-}
-
-function addActiveClass(id) {
-  if ($('#attribute_id_' + id).prop('checked') == true) {
-    $('#attribute_id_' + id).parents('.attribute').find('.attribute-inner').addClass('active');
-  } else {
-    $('#attribute_id_' + id).parents('.attribute').find('.attribute-inner').removeClass('active');
-  }
-}
-
-// Temporarily disabled category validation for testing
 $('form.form-horizontal').submit(function(e) {
   var numberOfChecked = $('.Category-Ids:checked').length;
   if (numberOfChecked == 0) {
     alert('Please selected at least one product category');
     return false;
-  } else {
-    $('#PagePhoneSection').hide();
   }
 });
 
@@ -1383,7 +1364,7 @@ function pageShowCall(id) {
 }
 
 function showWidthAndLength(id) {
-  if ($('#' + id).prop('checked') == true) {
+  if ($(id).prop('checked') == true) {
     $('#WidthAndLengthSection').show();
   } else {
     $('#WidthAndLengthSection').hide();
@@ -1391,7 +1372,7 @@ function showWidthAndLength(id) {
 }
 
 function showDepthWidthAndLength(id) {
-  if ($('#' + id).prop('checked') == true) {
+  if ($(id).prop('checked') == true) {
     $('#DepthWidthAndLengthSection').show();
   } else {
     $('#DepthWidthAndLengthSection').hide();
@@ -1399,7 +1380,7 @@ function showDepthWidthAndLength(id) {
 }
 
 function pageShowWidthAndLength(id) {
-  if ($('#' + id).prop('checked') == true) {
+  if ($(id).prop('checked') == true) {
     $('#PageWidthAndLengthSection').show();
   } else {
     $('#PageWidthAndLengthSection').hide();
@@ -1415,7 +1396,7 @@ function setAttributesetItemId(id) {
 }
 
 function RectoVersoSection(id) {
-  if ($('#' + id).prop('checked') == true) {
+  if ($(id).prop('checked') == true) {
     $('#RectoVersoSection').show();
   } else {
     $('#RectoVersoSection').hide();
@@ -1434,7 +1415,7 @@ CKEDITOR.replace('content', {
   height: 300,
   filebrowserUploadUrl: "{{ url('upload.php') }}",
   allowedContent: true,
-  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
+  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
 });
 CKEDITOR.dtd.$removeEmpty.i = 0;
 
@@ -1442,7 +1423,7 @@ CKEDITOR.replace('content1', {
   height: 300,
   filebrowserUploadUrl: "{{ url('upload.php') }}",
   allowedContent: true,
-  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
+  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
 });
 CKEDITOR.dtd.$removeEmpty.i = 0;
 
@@ -1453,7 +1434,6 @@ CKEDITOR.replace('editor{{ $i }}', {
   height: 300,
   filebrowserUploadUrl: "{{ url('upload.php') }}",
   allowedContent: true,
-  extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*]',
   extraAllowedContent: 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}',
 });
 CKEDITOR.dtd.$removeEmpty.i = 0;
