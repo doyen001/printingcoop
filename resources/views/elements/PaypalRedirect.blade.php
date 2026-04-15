@@ -16,7 +16,7 @@
         $url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
     }
     $store_name = $MainStoreData['name'] ?? '';
-    $store_url = $MainStoreData['url'] ?? url('/');
+    $store_url = rtrim($MainStoreData['url'] ?? url('/'), '/') . '/';
 @endphp
 <html>
 <head>
@@ -34,11 +34,11 @@
             <input type="hidden" name="item_total" value="{{ $ProductOrder['total_items'] }}">
             <input type="hidden" name="amount" value="{{ $ProductOrder['total_amount'] }}">
             <input type="hidden" name="first_name" value="{{ $ProductOrder['shipping_name'] }}">
-            <input type="hidden" name="return" value="{{ $store_url }}Checkouts/PayPalSuccessResponse/{{ $ProductOrder['id'] }}">
-            <input type="hidden" name="cancel_return" value="{{ $store_url }}Checkouts/PayPalCancelResponse/{{ $ProductOrder['id'] }}">
+            <input type="hidden" name="return" value="{{ url('Payments/paypal_success/' . base64_encode($ProductOrder['id'])) }}">
+            <input type="hidden" name="cancel_return" value="{{ url('Payments/paypal_cancel/' . base64_encode($ProductOrder['id'])) }}">
             <input type="hidden" name="email" value="{{ $ProductOrder['email'] }}" >
             <input type="hidden" name="currency_code" value="CAD">
-            <input type="hidden" name="notify_url" value="{{ $store_url }}Checkouts/PayPalIPNResponse/{{ $ProductOrder['id'] }}">
+            <input type="hidden" name="notify_url" value="{{ url('Payments/paypal_ipn/' . $ProductOrder['id']) }}">
             <input type="hidden" name="cbt" value="Return to Merchant">
             <input type="hidden" name="rm" value="2">
         </tbody>

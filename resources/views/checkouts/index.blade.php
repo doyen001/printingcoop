@@ -388,7 +388,6 @@
                                             <form action="{{ url('Checkouts/saveShipping') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="order_id" value="{{ $order_id }}">
-                                                @csrf
                                                 @php
                                                     $shipping_method_formate = $ProductOrder['shipping_method_formate'] ?? '';
                                                     $upsServiceCode = upsServiceCode();
@@ -548,7 +547,7 @@
                                             <div class="payment-sections">
                                                 <div id="accordion1">
                                                     <div class="card">
-                                                        <div  id="headingPay3" data-toggle="collapse" data-target="#collapsePay3" aria-expanded="false" aria-controls="collapsePay3">
+                                                        <div class="card-header" id="headingPay3" data-toggle="collapse" data-target="#collapsePay3" aria-expanded="false" aria-controls="collapsePay3">
                                                             <label class="main-input" for="3payment">
                                                                 <input name="payment_type" value="paypal" type="radio" id="3payment" checked>
                                                                 {{ ($language_name == 'french') ? 'Pay Pal' : 'Paypal' }}</label>
@@ -563,7 +562,7 @@
                                                     </div>
                                                     <!-- POS CHECKOUT -->
                                                     <div class="card pos">
-                                                        <div s id="headingPay4" data-toggle="collapse" data-target="#collapsePay4" aria-expanded="false" aria-controls="collapsePay4">
+                                                        <div class="card-header" id="headingPay4" data-toggle="collapse" data-target="#collapsePay4" aria-expanded="false" aria-controls="collapsePay4">
                                                             <label class="main-input" for="4payment">
                                                                 <input name="payment_type" value="pos" type="radio" id="4payment">
                                                                 {{ ($language_name == 'french') ? 'POS' : 'POS' }}</label>

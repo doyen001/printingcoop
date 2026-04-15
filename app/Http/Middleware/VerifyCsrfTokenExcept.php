@@ -23,6 +23,8 @@ class VerifyCsrfTokenExcept extends Middleware
         'admin/Products/attributeItemCreateMap',
         'admin/Products/attributeItemUpdateMap',
         'admin/Products/attributeItemDeleteMap',
+        'Payments/paypal_ipn/*',
+        'Payments/paypal_success/*',
     ];
     
     /**

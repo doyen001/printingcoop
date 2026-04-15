@@ -106,6 +106,7 @@ Route::prefix('Payments')->group(function () {
     Route::get('/paypal_success/{order_id}', [\App\Http\Controllers\PaymentsController::class, 'paypalSuccess']);
     Route::post('/paypal_success/{order_id}', [\App\Http\Controllers\PaymentsController::class, 'paypalSuccess']);
     Route::get('/paypal_cancel/{order_id}', [\App\Http\Controllers\PaymentsController::class, 'paypalCancel']);
+    Route::any('/paypal_ipn/{order_id}', [\App\Http\Controllers\PaymentsController::class, 'paypalIPN']);
     Route::post('/stripe', [\App\Http\Controllers\PaymentsController::class, 'processStripe']);
 });
 

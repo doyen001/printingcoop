@@ -71,29 +71,25 @@ class PaymentsController extends Controller
     {
         $language_name = config('store.language_name', 'english');
         
-        // Update order status
-        // CI uses integer status / payment_status columns via OrderStatus / PaymentStatus
-        // Here we mirror that convention: status=2 (confirmed), payment_status=2 (completed).
+        // CI: UpdateOrderStatus handles stock update, cart clear, emails
         $orderData = [
             'status' => 2,
             'payment_status' => 2,
             'payment_method' => 'COD',
-            'updated' => now(),
         ];
         
-        DB::table('product_orders')->where('id', $order_id)->update($orderData);
-        
-        // Clear cart
-        $cart = new CartService();
-        $cart->destroy();
-        
-        // Send order confirmation email
-        $this->sendOrderConfirmationEmail($order_id);
-        
-        return redirect('MyOrders/view/' . base64_encode($order_id))
-            ->with('message_success', $language_name == 'french' 
-                ? 'Votre commande a été passée avec succès' 
-                : 'Your order has been placed successfully');
+        if ($this->updateOrderStatus($orderData, $order_id)) {
+            $msg = $language_name == 'french'
+                ? 'Votre commande a été passée avec succès'
+                : 'Your order has been placed successfully';
+            return redirect('MyOrders/view/' . base64_encode($order_id))
+                ->with('message_success', $msg);
+        } else {
+            return redirect()->back()
+                ->with('message_error', $language_name == 'french'
+                    ? 'Votre commande a échoué'
+                    : 'Your order has been placed unsuccessfully');
+        }
     }
     
     /**
@@ -103,10 +99,12 @@ class PaymentsController extends Controller
     {
         $language_name = config('store.language_name', 'english');
         
-        // CI-style PayPal redirect: use legacy HTML form redirect to PayPal
-        // based on store main_store_data and currency configuration,
-        // matching Checkouts::SubmitOrder() -> elements/PaypalRedirect.
-        $mainStoreData = config('store.main_store_data', []);
+        // CI-style PayPal redirect: read store data from DB like CI
+        $mainStoreObj = DB::table('stores')->where('main_store', 1)->first();
+        if (!$mainStoreObj) {
+            $mainStoreObj = DB::table('stores')->first();
+        }
+        $mainStoreData = $mainStoreObj ? (array) $mainStoreObj : [];
         
         // Build currency list as in CI $CurrencyList (table `currency`)
         $currencyTable = \Schema::hasTable('currencies') ? 'currencies' : 'currency';
@@ -156,8 +154,15 @@ class PaymentsController extends Controller
             ],
         ];
         
+        // Get main store data from DB like CI
+        $mainStoreObj = DB::table('stores')->where('main_store', 1)->first();
+        if (!$mainStoreObj) {
+            $mainStoreObj = DB::table('stores')->first();
+        }
+        $mainStoreData = $mainStoreObj ? (array) $mainStoreObj : [];
+        
         // Get card token
-        $cardToken = $this->getCloverCardToken($cardData);
+        $cardToken = $this->getCloverCardToken($cardData, $mainStoreData);
         
         if (!$cardToken['token']) {
             return redirect()->back()->with('message_error', $cardToken['msg']);
@@ -179,40 +184,33 @@ class PaymentsController extends Controller
             'ecomind' => 'ecom',
         ];
         
-        $response = $this->processCloverPayment($paymentData);
+        $response = $this->processCloverPayment($paymentData, $mainStoreData);
         
         if ($response['status']) {
-            // Payment successful
+            // Payment successful - use updateOrderStatus like CI
             $paymentRes = json_decode($response['paymentData']);
             
-            DB::table('product_orders')->where('id', $order_id)->update([
+            $orderData = [
                 'status' => 2,
                 'payment_status' => 2,
-                'payment_method' => 'Credit Card',
+                'payment_method' => 'POS',
                 'transition_id' => $paymentRes->id ?? '',
                 'transition_remark' => 'payment success',
                 'paypal_responce' => $response['paymentData'],
-                'updated' => now(),
-            ]);
-            
-            // Clear cart
-            $cart = new CartService();
-            $cart->destroy();
-            
-            // Send confirmation email
-            $this->sendOrderConfirmationEmail($order_id);
+            ];
+            $this->updateOrderStatus($orderData, $order_id);
             
             return redirect('MyOrders/view/' . base64_encode($order_id))
                 ->with('message_success', $response['msg']);
         } else {
-            // Payment failed
+            // Payment failed - CI saves payment_status=3 and redirects to MyOrders
             DB::table('product_orders')->where('id', $order_id)->update([
                 'payment_status' => 3,
-                'transition_remark' => 'payment failed',
-                'updated' => now(),
+                'transition_remark' => 'payment Failed',
             ]);
             
-            return redirect()->back()->with('message_error', $response['msg']);
+            return redirect('MyOrders/view/' . base64_encode($order_id))
+                ->with('message_error', $response['msg']);
         }
     }
     
@@ -220,16 +218,17 @@ class PaymentsController extends Controller
      * Get Clover card token
      * CI: Checkouts->cardPaymentRequest() lines 664-701
      */
-    protected function getCloverCardToken($cardData)
+    protected function getCloverCardToken($cardData, $mainStoreData = [])
     {
-        $clover_mode = config('payment.clover_mode', 'sandbox');
-        $url = $clover_mode == 'live' 
+        // CI reads clover_mode (1=live) from stores table
+        $clover_mode = $mainStoreData['clover_mode'] ?? 0;
+        $url = $clover_mode == 1 
             ? 'https://token.clover.com/v1/' 
             : 'https://token-sandbox.dev.clover.com/v1/';
         
-        $apiKey = $clover_mode == 'live' 
-            ? config('payment.clover_api_key') 
-            : config('payment.clover_sandbox_api_key');
+        $apiKey = $clover_mode == 1 
+            ? ($mainStoreData['clover_api_key'] ?? '') 
+            : ($mainStoreData['clover_sandbox_api_key'] ?? '');
         
         $res = ['token' => false, 'msg' => 'Invalid Card Credentials'];
         
@@ -274,16 +273,17 @@ class PaymentsController extends Controller
      * Process Clover payment
      * CI: Checkouts->paymentRequest() lines 703-743
      */
-    protected function processCloverPayment($paymentData)
+    protected function processCloverPayment($paymentData, $mainStoreData = [])
     {
-        $clover_mode = config('payment.clover_mode', 'sandbox');
-        $url = $clover_mode == 'live' 
+        // CI reads clover_mode (1=live) from stores table
+        $clover_mode = $mainStoreData['clover_mode'] ?? 0;
+        $url = $clover_mode == 1 
             ? 'https://scl.clover.com/v1/' 
             : 'https://scl-sandbox.dev.clover.com/v1/';
         
-        $token = $clover_mode == 'live' 
-            ? config('payment.clover_secret') 
-            : config('payment.clover_sandbox_secret');
+        $token = $clover_mode == 1 
+            ? ($mainStoreData['clover_secret'] ?? '') 
+            : ($mainStoreData['clover_sandbox_secret'] ?? '');
         
         $res = ['status' => false, 'paymentData' => false, 'msg' => "Your Order's Payment Failed"];
         
@@ -344,37 +344,39 @@ class PaymentsController extends Controller
         
         $orderData = [
             'status' => 2,
-            'payment_method' => 'PayPal',
+            'payment_method' => 'paypal',
             'transition_id' => $txn_id,
         ];
         
+        // Save full PayPal response like CI
+        if (!empty($request->all())) {
+            $orderData['paypal_responce'] = json_encode($request->all());
+        }
+        
         if ($payment_status == 'Completed' || $payment_status == 'completed') {
-            $orderData['payment_status'] = 2; // Convert 'completed' to integer (CI compatibility)
+            $orderData['payment_status'] = 2;
             $orderData['transition_remark'] = 'payment success';
             
-            // Clear cart
-            $cart = new CartService();
-            $cart->destroy();
+            $this->updateOrderStatus($orderData, $order_id);
             
-            // Send confirmation email
-            $this->sendOrderConfirmationEmail($order_id);
         } elseif ($payment_status == 'Pending' || $payment_status == 'pending') {
-            $orderData['payment_status'] = 1; // Convert 'pending' to integer (CI compatibility)
-            $orderData['transition_remark'] = 'payment pending';
+            $orderData['payment_status'] = 1;
+            $orderData['transition_remark'] = 'payment Pending';
+            DB::table('product_orders')->where('id', $order_id)->update($orderData);
         } else {
-            $orderData['payment_status'] = 3; // Convert 'failed' to integer (CI compatibility)
-            $orderData['transition_remark'] = 'payment failed';
+            $orderData['payment_status'] = 3;
+            $orderData['transition_remark'] = 'payment Failed';
             
             if (!empty($PayerID)) {
-                $orderData['payment_status'] = 2; // Convert 'completed' to integer (CI compatibility)
+                $orderData['payment_status'] = 2;
                 $orderData['transition_remark'] = 'payment success';
                 if (empty($txn_id)) {
                     $orderData['transition_id'] = $PayerID;
                 }
             }
+            
+            DB::table('product_orders')->where('id', $order_id)->update($orderData);
         }
-        
-        DB::table('product_orders')->where('id', $order_id)->update($orderData);
         
         return redirect('MyOrders/view/' . base64_encode($order_id))
             ->with('message_success', 'Your order payment has been successfully processed');
@@ -388,16 +390,177 @@ class PaymentsController extends Controller
         if (!empty($order_id)) {
             $order_id = base64_decode($order_id);
             
-            DB::table('product_orders')->where('id', $order_id)->update([
-                // Treat cancelled as failed for integer status column
+            // CI uses status=7 for cancelled, payment_status=3 for failed
+            $orderData = [
+                'status' => 7,
                 'payment_status' => 3,
-                'transition_remark' => 'payment cancelled by user',
-                'updated' => now(),
-            ]);
+            ];
+            $this->updateOrderStatus($orderData, $order_id);
+            
+            return redirect('MyOrders/view/' . base64_encode($order_id))
+                ->with('message_error', 'Your order payment has been failed');
         }
         
-        return redirect('Checkouts/index/' . base64_encode(4) . '/' . base64_encode($order_id))
-            ->with('message_error', 'Payment was cancelled');
+        return redirect('/');
+    }
+    
+    /**
+     * PayPal IPN callback
+     * CI: Checkouts->PayPalIPNResponse() lines 799-936
+     */
+    public function paypalIPN(Request $request, $order_id = null)
+    {
+        if (empty($order_id)) {
+            exit();
+        }
+        
+        $PostOrderData = DB::table('product_orders')->where('id', $order_id)->first();
+        if (!$PostOrderData) {
+            exit();
+        }
+        $PostOrderData = (array) $PostOrderData;
+        
+        $store_id = $PostOrderData['store_id'];
+        $postStoreData = DB::table('stores')->where('id', $store_id)->first();
+        $postStoreData = $postStoreData ? (array) $postStoreData : [];
+        $paypal_payment_mode = $postStoreData['paypal_payment_mode'] ?? 'live';
+        
+        $url = 'https://www.paypal.com/cgi-bin/webscr';
+        if ($paypal_payment_mode == 'sandbox') {
+            $url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+        }
+        
+        $txn_id = $payment_status = '';
+        $sendMail = false;
+        
+        // Read raw POST data
+        $raw_post_data = file_get_contents('php://input');
+        $raw_post_array = explode('&', $raw_post_data);
+        $myPost = [];
+        foreach ($raw_post_array as $keyval) {
+            $keyval = explode('=', $keyval);
+            if (count($keyval) == 2) {
+                $myPost[$keyval[0]] = urldecode($keyval[1]);
+            }
+        }
+        
+        // Prepend cmd=_notify-validate
+        $req = 'cmd=_notify-validate';
+        foreach ($myPost as $key => $value) {
+            $value = urlencode($value);
+            $req .= "&$key=$value";
+        }
+        
+        // POST IPN data back to PayPal to validate
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Connection: Close']);
+        
+        if (!($res = curl_exec($ch))) {
+            curl_close($ch);
+            exit;
+        }
+        curl_close($ch);
+        
+        // Inspect IPN validation result
+        if (strcmp($res, 'VERIFIED') == 0) {
+            $txn_id = $myPost['txn_id'] ?? '';
+            $payment_status = $myPost['payment_status'] ?? '';
+            if ($PostOrderData['transition_id'] != $txn_id) {
+                $sendMail = true;
+            }
+        }
+        
+        // Log IPN
+        Log::info('PayPal IPN Response', [
+            'order_id' => $order_id,
+            'raw_post_data' => $raw_post_data,
+            'ipn_result' => $res,
+            'txn_id' => $txn_id,
+            'payment_status' => $payment_status,
+        ]);
+        
+        $orderData = [
+            'payment_method' => 'paypal',
+            'payment_status' => 2,
+            'transition_id' => $txn_id,
+        ];
+        
+        if (!empty($raw_post_data)) {
+            $orderData['paypal_responce'] = $raw_post_data;
+        }
+        
+        if (!empty($order_id)) {
+            $orderData['status'] = 2;
+            if ($payment_status == 'Completed' || $payment_status == 'completed') {
+                $orderData['payment_status'] = 2;
+                $orderData['transition_remark'] = 'payment success';
+            } elseif ($payment_status == 'Pending' || $payment_status == 'pending') {
+                $orderData['payment_status'] = 1;
+                $orderData['transition_remark'] = 'payment Pending';
+            } else {
+                $orderData['payment_status'] = 3;
+                $orderData['transition_remark'] = 'payment Failed';
+            }
+            
+            $this->updateOrderStatus($orderData, $order_id, $sendMail);
+        }
+        
+        exit();
+    }
+    
+    /**
+     * Update order status and handle post-order actions (emails, cart clear, stock update)
+     * CI: Checkouts->UpdateOrderStatus() lines 957-1151
+     */
+    protected function updateOrderStatus(array $orderData, $order_id, $sendMail = true)
+    {
+        try {
+            DB::table('product_orders')->where('id', $order_id)->update($orderData);
+            
+            $order = DB::table('product_orders')->where('id', $order_id)->first();
+            if (!$order) {
+                return false;
+            }
+            
+            // Status 2 = New/Confirmed order
+            if ($order->status == 2 && ($orderData['payment_status'] ?? 0) == 2) {
+                // Update product stock (CI: subtract quantity from total_stock)
+                $orderItems = DB::table('product_order_items')->where('order_id', $order_id)->get();
+                foreach ($orderItems as $item) {
+                    $product = DB::table('products')->where('id', $item->product_id)->first();
+                    if ($product) {
+                        $total_stock = max(0, $product->total_stock - $item->quantity);
+                        DB::table('products')->where('id', $product->id)->update(['total_stock' => $total_stock]);
+                    }
+                }
+                
+                // Clear cart
+                $cart = new CartService();
+                $cart->destroy();
+                
+                // Send confirmation email
+                if ($sendMail) {
+                    $this->sendOrderConfirmationEmail($order_id);
+                }
+            }
+            
+            // Status 7 = Payment failed - send failure email
+            if ($order->status == 7 && $sendMail) {
+                $this->sendOrderConfirmationEmail($order_id);
+            }
+            
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error updating order status: ' . $e->getMessage());
+            return false;
+        }
     }
     
     /**
