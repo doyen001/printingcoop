@@ -373,9 +373,10 @@ class PaymentsController extends Controller
                 if (empty($txn_id)) {
                     $orderData['transition_id'] = $PayerID;
                 }
+                $this->updateOrderStatus($orderData, $order_id);
+            } else {
+                DB::table('product_orders')->where('id', $order_id)->update($orderData);
             }
-            
-            DB::table('product_orders')->where('id', $order_id)->update($orderData);
         }
         
         return redirect('MyOrders/view/' . base64_encode($order_id))

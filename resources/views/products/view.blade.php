@@ -1141,12 +1141,12 @@
             }
 
             $('#smd-' + skey).prop('disabled', true);
-            $('#smd-' + skey).html('<img src="assets/images/loder.gif" width=20>');
+            $('#smd-' + skey).html('<img src="{{ asset('assets/images/loder.gif') }}" width=20>');
             $('#loader-img').show();
             $.ajax({
                 type: 'POST',
                 dataType: 'html',
-                url: "{{ url('ShoppingCarts/deleteImage') }}",
+                url: "{{ url('Products/deleteImage') }}",
                 data: ({
                     'location': location,
                     'product_id': product_id,

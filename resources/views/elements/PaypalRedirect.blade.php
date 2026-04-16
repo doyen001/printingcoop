@@ -5,6 +5,11 @@
         $currency_id = 1;
     }
     $OrderCurrencyData = $CurrencyList[$currency_id] ?? null;
+    // Use config as fallback if MainStoreData from controller is missing keys
+    $storeConfig = config('store.main_store_data', []);
+    if (empty($MainStoreData) || !isset($MainStoreData['paypal_payment_mode'])) {
+        $MainStoreData = is_array($storeConfig) ? $storeConfig : (array) $storeConfig;
+    }
     $paypal_payment_mode = $MainStoreData['paypal_payment_mode'] ?? 'live';
     $paypal_business_email = $MainStoreData['paypal_business_email'] ?? '';
     $paypal_sandbox_business_email = $MainStoreData['paypal_sandbox_business_email'] ?? '';
@@ -40,27 +45,12 @@
             <input type="hidden" name="currency_code" value="CAD">
             <input type="hidden" name="notify_url" value="{{ url('Payments/paypal_ipn/' . $ProductOrder['id']) }}">
             <input type="hidden" name="cbt" value="Return to Merchant">
-            <input type="hidden" name="rm" value="2">
+            <input type="hidden" name="rm" value="1">
         </tbody>
     </table>
     <script type="text/javascript">
         document.f1.submit();
     </script>
 </form>
-
-<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="business" value="sb-ks2ro721209@business.example.com">
-    <input type="hidden" name="cmd" value="_xclick">
-    <input type="hidden" name="item_name" value="Hot Sauce-12oz. Bottle">
-    <input type="hidden" name="amount" value="5.95">
-    <input type="hidden" name="currency_code" value="USD">
-
-    <!-- Display the payment button. -->
-    <input type="image" name="submit" border="0"
-        src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif"
-        alt="Buy Now">
-    <img alt="" border="0" width="1" height="1"
-        src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
-    </form>
 </body>
 </html>

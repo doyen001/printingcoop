@@ -23,6 +23,24 @@ return Application::configure(basePath: dirname(__DIR__))
             // \App\Http\Middleware\IpBlocker::class, // Temporarily disabled
         ]);
         
+        // Exclude PayPal callback routes from CSRF verification
+        $middleware->validateCsrfTokens(except: [
+            'Payments/paypal_ipn/*',
+            'Payments/paypal_success/*',
+            'Payments/paypal_cancel/*',
+            'admin/Products/searchProduct',
+            'admin/*/searchProduct',
+            '*/searchProduct',
+            'admin/Products/AttributesMap',
+            'admin/Products/AttributeItemsMap/*',
+            'admin/Products/attributeUpdate',
+            'admin/Products/attributeDeletePost',
+            'admin/Products/attributeCreateMap',
+            'admin/Products/attributeItemCreateMap',
+            'admin/Products/attributeItemUpdateMap',
+            'admin/Products/attributeItemDeleteMap',
+        ]);
+        
         // Route-specific middleware aliases
         $middleware->alias([
             'public.auth' => \App\Http\Middleware\PublicAuth::class,
