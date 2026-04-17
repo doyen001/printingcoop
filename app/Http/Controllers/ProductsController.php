@@ -257,7 +257,10 @@ class ProductsController extends Controller
                 ->whereRaw("FIND_IN_SET(?, product_tag)", [$tag_id])
                 ->where('products.status', 1);
         } else {
-            $query = DB::table('products')->where('status', 1);
+            // All categories page - exclude Ink, Toner Cartridges & Drum (category_id 13)
+            $query = DB::table('products')
+                ->where('status', 1)
+                ->where('category_id', '!=', 13);
         }
         
         if (!empty($printer_brand)) {
@@ -306,7 +309,10 @@ class ProductsController extends Controller
                 ->where('products.status', 1)
                 ->select('products.*', 'categories.name as category_name');
         } else {
-            $query = DB::table('products')->where('status', 1);
+            // All categories page - exclude Ink, Toner Cartridges & Drum (category_id 13)
+            $query = DB::table('products')
+                ->where('status', 1)
+                ->where('category_id', '!=', 13);
         }
         
         if (!empty($printer_brand)) {

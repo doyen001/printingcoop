@@ -42,6 +42,7 @@
                                             <th>Url</th>
                                             <th>Address</th>
                                             <th>Langue</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -72,18 +73,33 @@
                                                         {{ ucfirst($language[$blog['langue_id']] ?? 'Unknown') }}
                                                     </td>
                                                     <td>
+                                                        @if($blog['status'] == 1)
+                                                            <span class="badge badge-success">Active</span>
+                                                        @else
+                                                            <span class="badge badge-danger">Inactive</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
                                                         <div class="action-btns">
                                                            <a href="{{ url('admin/Stores/addEdit/' . $blog['id']) }}" style="color:green;padding: 5px;" title="edit">
                                                                 <i class="fa far fa-edit fa-lg"></i>
                                                            </a>
-
+                                                           @if($blog['status'] == 1)
+                                                               <a href="{{ url('admin/Stores/activeInactive/' . $blog['id'] . '/0') }}" style="color:red;padding: 5px;" title="deactivate" onclick="return confirm('Are you sure you want to deactivate this store?');">
+                                                                    <i class="fa far fa-times-circle fa-lg"></i>
+                                                               </a>
+                                                           @else
+                                                               <a href="{{ url('admin/Stores/activeInactive/' . $blog['id'] . '/1') }}" style="color:green;padding: 5px;" title="activate" onclick="return confirm('Are you sure you want to activate this store?');">
+                                                                    <i class="fa far fa-check-circle fa-lg"></i>
+                                                               </a>
+                                                           @endif
                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         @else
                                             <tr>
-                                            <td colspan="10" class="text-center">List Empty.</td>
+                                            <td colspan="11" class="text-center">List Empty.</td>
                                             </tr>
                                         @endif
                                     </tbody>

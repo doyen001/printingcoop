@@ -13,83 +13,181 @@
         }
     }
 
-    .banner-image {
-        width: 100%;
+    .carousel {
+        height: 100%;
+    }
+
+    .carousel-inner {
+        height: 100%;
+    }
+
+    .carousel-item {
         height: 100%;
         position: relative;
         overflow: hidden;
     }
 
-    .banner-image img {
+    .carousel-item img {
         width: 100%;
         height: 340px;
         max-height: 100vh;
-        /* object-fit: contain; */
+        object-fit: contain;
         object-position: center;
-        display: block;
+        transform: scale(1.2);
+        transition: transform 4s ease-out;
     }
 
-    /* Banner Button Overlays */
-    .banner-buttons {
+    @media (max-width: 768px) {
+        .carousel-item img {
+            min-height: 400px;
+            object-fit: cover;
+        }
+    }
+
+    .carousel-item.active img {
+        transform: scale(1.1);
+    }
+
+    .carousel-item::after {
+        content: '';
         position: absolute;
-        bottom: 4%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.3) 0%,
+            rgba(0, 0, 0, 0.2) 40%,
+            rgba(0, 0, 0, 0.1) 60%,
+            rgba(0, 0, 0, 0.4) 100%
+        );
+        z-index: 1;
+    }
+
+    /* Indicators */
+    .carousel-indicators {
+        position: absolute;
+        bottom: 30px;
         left: 50%;
         transform: translateX(-50%);
+        z-index: 15;
         display: flex;
-        align-items: center;
-        z-index: 10;
-        background: linear-gradient(135deg, rgb(233 230 223) 0%, rgb(246 244 231) 100%);
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: 30px;
-        padding: 4px 28px;
-        backdrop-filter: blur(4px);
-        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        list-style: none;
     }
 
-    .banner-btn {
-        font-size: 15px;
-        font-weight: 400;
-        text-decoration: none;
-        color: #2c2c2c;
-        cursor: pointer;
+    .carousel-indicators li {
+        width: 50px;
+        height: 4px;
+        margin: 0 5px;
         border: none;
-        background: transparent;
-        font-family: roboto;
-        white-space: nowrap;
-        transition: color 0.2s ease;
+        border-radius: 2px;
+        background-color: rgba(255, 255, 255, 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
 
-    .banner-btn:hover {
-        color: #000000;
+    .carousel-indicators li::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 0;
+        background-color: #ffffff;
     }
 
-    .banner-divider {
-        width: 1px;
-        height: 18px;
-        background: #555;
-        margin: 0 16px;
+    .carousel-indicators li.active {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .carousel-indicators li.active::after {
+        width: 100%;
+        transition: width 5s linear;
+    }
+
+    /* Navigation Arrows */
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        margin: 0 30px;
+    }
+
+    .main-slider:hover .carousel-control-prev,
+    .main-slider:hover .carousel-control-next {
+        opacity: 1;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-control-prev i,
+    .carousel-control-next i {
+        font-size: 24px;
+        line-height: 1;
+        color: #ffffff;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     /* Mobile Optimization */
     @media (max-width: 768px) {
-        .banner-image img {
-            min-height: 400px;
-            object-fit: cover;
-        }
-
-        .banner-buttons {
-            bottom: 5%;
-            padding: 8px 20px;
-        }
-
-        .banner-btn {
-            font-size: 13px;
-        }
-
-        .banner-divider {
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
             margin: 0 10px;
-            height: 14px;
         }
+
+        .carousel-indicators {
+            bottom: 20px;
+        }
+
+        .carousel-indicators li {
+            width: 30px;
+            height: 3px;
+            margin: 0 3px;
+        }
+    }
+
+    /* Touch Swipe Hint */
+    .swipe-hint {
+        position: absolute;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #ffffff;
+        font-size: 14px;
+        opacity: 0.8;
+        z-index: 2;
+        pointer-events: none;
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .swipe-hint {
+            display: block;
+            animation: fadeOut 3s forwards 2s;
+        }
+    }
+
+    @keyframes fadeOut {
+        to { opacity: 0; }
     }
 
     /* Tab Navigation Section - Using Section 2 Product Card Styles */
@@ -183,61 +281,157 @@
 </style>
 
 <section class="main-slider">
-    @if(!empty($Branrers))
-        @php
-            $firstBanner = $Branrers[0];
-            
-            // Get the image property with proper fallback
-            $bannerImage = null;
-            if (isset($firstBanner->image) && !empty($firstBanner->image)) {
-                $bannerImage = $firstBanner->image;
-            } elseif (isset($firstBanner->banner_image) && !empty($firstBanner->banner_image)) {
-                $bannerImage = $firstBanner->banner_image;
-            }
-            
-            // Get the French image property with proper fallback
-            $bannerImageFrench = null;
-            if (isset($firstBanner->image_french) && !empty($firstBanner->image_french)) {
-                $bannerImageFrench = $firstBanner->image_french;
-            } elseif (isset($firstBanner->banner_image_french) && !empty($firstBanner->banner_image_french)) {
-                $bannerImageFrench = $firstBanner->banner_image_french;
-            }
-            
-            // Determine which image to use
-            if ($language_name == 'french') {
-                $imageUrl = !empty($bannerImageFrench) ? url('uploads/banners/large/' . $bannerImageFrench) : 
-                           (!empty($bannerImage) ? url('uploads/banners/large/' . $bannerImage) : BANNER_DEFAULT_IMAGE_URL);
-                $filename = !empty($bannerImageFrench) ? $bannerImageFrench : 
-                           (!empty($bannerImage) ? $bannerImage : 'default-banner');
-            } else {
-                $imageUrl = !empty($bannerImage) ? url('uploads/banners/large/' . $bannerImage) : BANNER_DEFAULT_IMAGE_URL;
-                $filename = !empty($bannerImage) ? $bannerImage : 'default-banner';
-            }
+    <div id="mainCarousel" class="carousel slide" data-ride="carousel">
+        @if(!empty($Branrers))
+            <!-- Indicators -->
+            @if(count($Branrers) > 1)
+                <ol class="carousel-indicators">
+                    @foreach($Branrers as $key => $banner)
+                        <li data-target="#mainCarousel"
+                            data-slide-to="{{ $key }}"
+                            class="{{ $key === 0 ? 'active' : '' }}">
+                        </li>
+                    @endforeach
+                </ol>
+            @endif
 
-            $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
-        @endphp
-        <div class="banner-image">
-            <img src="{{ $imageUrl }}"
-                 alt="{{ $filenameWithoutExtension }}"
-                 loading="eager">
-            <div class="banner-buttons">
-                <a href="{{ site_url('Pages/estimate') }}" class="banner-btn">{{ $language_name == 'french' ? 'Demander un devis' : 'Request a Quote' }}</a>
-                <span class="banner-divider"></span>
-                <a href="{{ site_url('Products') }}" class="banner-btn">{{ $language_name == 'french' ? 'Explorer les services' : 'Explore Services' }}</a>
+            <!-- Slides -->
+            <div class="carousel-inner">
+                @foreach($Branrers as $key => $banner)
+                    @php
+                        // Get the image property with proper fallback
+                        $bannerImage = null;
+                        if (isset($banner->banner_image) && !empty($banner->banner_image)) {
+                            $bannerImage = $banner->banner_image;
+                        } elseif (isset($banner->image) && !empty($banner->image)) {
+                            $bannerImage = $banner->image;
+                        }
+
+                        // Get the French image property with proper fallback
+                        $bannerImageFrench = null;
+                        if (isset($banner->banner_image_french) && !empty($banner->banner_image_french)) {
+                            $bannerImageFrench = $banner->banner_image_french;
+                        } elseif (isset($banner->image_french) && !empty($banner->image_french)) {
+                            $bannerImageFrench = $banner->image_french;
+                        }
+
+                        // Determine which image to use
+                        if ($language_name == 'french') {
+                            $imageUrl = !empty($bannerImageFrench) ? url('uploads/banners/large/' . $bannerImageFrench) :
+                                       (!empty($bannerImage) ? url('uploads/banners/large/' . $bannerImage) : BANNER_DEFAULT_IMAGE_URL);
+                            $filename = !empty($bannerImageFrench) ? $bannerImageFrench :
+                                       (!empty($bannerImage) ? $bannerImage : 'default-banner');
+                        } else {
+                            $imageUrl = !empty($bannerImage) ? url('uploads/banners/large/' . $bannerImage) : BANNER_DEFAULT_IMAGE_URL;
+                            $filename = !empty($bannerImage) ? $bannerImage : 'default-banner';
+                        }
+
+                        $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
+                    @endphp
+                    <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                        <img src="{{ $imageUrl }}"
+                             alt="{{ $filenameWithoutExtension }}"
+                             loading="{{ $key === 0 ? 'eager' : 'lazy' }}">
+                    </div>
+                @endforeach
             </div>
-        </div>
-    @else
-        <!-- Default Banner -->
-        <div class="banner-image">
-            <img src="{{ BANNER_DEFAULT_IMAGE_URL }}" alt="{{ __('Default Banner') }}">
-            <div class="banner-buttons">
-                <a href="{{ site_url('Pages/estimate') }}" class="banner-btn">{{ $language_name == 'french' ? 'Demander un devis' : 'Request a Quote' }}</a>
-                <span class="banner-divider"></span>
-                <a href="{{ site_url('Products') }}" class="banner-btn">{{ $language_name == 'french' ? 'Explorer les services' : 'Explore Services' }}</a>
+
+            <!-- Navigation Arrows -->
+            @if(count($Branrers) > 1)
+                <a class="carousel-control-prev" href="#mainCarousel" role="button" data-slide="prev">
+                    <i class="las la-angle-left" aria-hidden="true"></i>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#mainCarousel" role="button" data-slide="next">
+                    <i class="las la-angle-right" aria-hidden="true"></i>
+                    <span class="sr-only">Next</span>
+                </a>
+                <!-- Mobile Swipe Hint -->
+                <div class="swipe-hint">
+                    {{ $language_name == 'french' ? 'Glissez pour naviguer' : 'Swipe to navigate' }}
+                </div>
+            @endif
+        @else
+            <!-- Default Slide -->
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{{ BANNER_DEFAULT_IMAGE_URL }}" alt="Default Banner">
+                </div>
             </div>
-        </div>
-    @endif
+        @endif
+    </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = $('#mainCarousel');
+
+    // Initialize carousel with custom options
+    carousel.carousel({
+        interval: 5000,  // 5 seconds per slide
+        pause: 'hover',  // Pause on hover
+        keyboard: true,  // Allow keyboard navigation
+        touch: true      // Enable touch swipe on mobile
+    });
+
+    // Reset indicator animation on slide
+    carousel.on('slid.bs.carousel', function() {
+        $('.carousel-indicators li.active').css('width', '0');
+        setTimeout(function() {
+            $('.carousel-indicators li.active').css('width', '100%');
+        }, 50);
+    });
+
+    // Initial indicator animation
+    $('.carousel-indicators li.active').css('width', '100%');
+
+    // Preload next image
+    function preloadNextImage() {
+        const activeItem = carousel.find('.carousel-item.active');
+        const nextItem = activeItem.next('.carousel-item').length ?
+                        activeItem.next('.carousel-item') :
+                        carousel.find('.carousel-item:first');
+
+        if (nextItem.length) {
+            const img = nextItem.find('img');
+            if (img.attr('loading') === 'lazy') {
+                img.attr('loading', 'eager');
+            }
+        }
+    }
+
+    // Preload next image on slide
+    carousel.on('slide.bs.carousel', function() {
+        preloadNextImage();
+    });
+
+    // Handle touch events for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carousel.on('touchstart', function(e) {
+        touchStartX = e.originalEvent.touches[0].clientX;
+    });
+
+    carousel.on('touchend', function(e) {
+        touchEndX = e.originalEvent.changedTouches[0].clientX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const swipeLength = touchEndX - touchStartX;
+
+        if (Math.abs(swipeLength) > swipeThreshold) {
+            if (swipeLength > 0) {
+                carousel.carousel('prev');
+            } else {
+                carousel.carousel('next');
+            }
+        }
+    }
+});
+</script>
 
 {{-- Tab Navigation Section --}}
 @if(isset($proudly_display_your_brand_tags) && isset($montreal_book_printing_tags))
