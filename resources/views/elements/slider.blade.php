@@ -1,193 +1,133 @@
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 <style>
     .main-slider {
         position: relative;
         width: 100%;
-        height: auto;
         overflow: hidden;
-        background: var(--secondary-color);
+        /* background: linear-gradient(135deg, #dde3ff 0%, #ffefe3 100%); */
+        background: #fff;
+        padding: 15px 0 10px;
     }
 
-    @media (max-width: 768px) {
-        .main-slider {
-            min-height: 400px;
-        }
-    }
-
-    .carousel {
-        height: 100%;
-    }
-
-    .carousel-inner {
-        height: 100%;
-    }
-
-    .carousel-item {
-        height: 100%;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .carousel-item img {
+    .main-slider .swiper {
         width: 100%;
-        height: 340px;
-        max-height: 100vh;
-        object-fit: contain;
-        object-position: center;
-        transform: scale(1.2);
-        transition: transform 4s ease-out;
+        padding: 10px 0 5px;
+        overflow: hidden;
     }
 
-    @media (max-width: 768px) {
-        .carousel-item img {
-            min-height: 400px;
-            object-fit: cover;
+    .main-slider .swiper-wrapper {
+        align-items: center;
+    }
+
+    .main-slider .swiper-slide {
+        width: 320px;
+        height: 300px;
+        border-radius: 14px;
+        overflow: hidden;
+        position: relative;
+        cursor: grab;
+        transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .main-slider .swiper-slide:active {
+        cursor: grabbing;
+    }
+
+    .main-slider .swiper-slide-active {
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        animation: slideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* @keyframes slideIn {
+        0% {
+            opacity: 0.5;
+            transform: scale(0.9) translateY(20px);
         }
+        100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    } */
+
+    .main-slider .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        border-radius: 14px;
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .carousel-item.active img {
-        transform: scale(1.1);
+    .main-slider .swiper-slide-active img {
+        animation: zoomIn 0.8s ease-out;
     }
 
-    .carousel-item::after {
-        content: '';
+    /* @keyframes zoomIn {
+        0% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    } */
+
+    .main-slider .swiper-slide .banner-card-name {
         position: absolute;
-        top: 0;
+        bottom: 0;
         left: 0;
         right: 0;
-        bottom: 0;
-        background: linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.3) 0%,
-            rgba(0, 0, 0, 0.2) 40%,
-            rgba(0, 0, 0, 0.1) 60%,
-            rgba(0, 0, 0, 0.4) 100%
-        );
-        z-index: 1;
-    }
-
-    /* Indicators */
-    .carousel-indicators {
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 15;
-        display: flex;
-        justify-content: center;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .carousel-indicators li {
-        width: 50px;
-        height: 4px;
-        margin: 0 5px;
-        border: none;
-        border-radius: 2px;
-        background-color: rgba(255, 255, 255, 0.4);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .carousel-indicators li::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 0;
-        background-color: #ffffff;
-    }
-
-    .carousel-indicators li.active {
-        background-color: rgba(255, 255, 255, 0.8);
-    }
-
-    .carousel-indicators li.active::after {
-        width: 100%;
-        transition: width 5s linear;
-    }
-
-    /* Navigation Arrows */
-    .carousel-control-prev,
-    .carousel-control-next {
-        width: 60px;
-        height: 60px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 0;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        margin: 0 30px;
-    }
-
-    .main-slider:hover .carousel-control-prev,
-    .main-slider:hover .carousel-control-next {
-        opacity: 1;
-    }
-
-    .carousel-control-prev:hover,
-    .carousel-control-next:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-50%) scale(1.1);
-    }
-
-    .carousel-control-prev i,
-    .carousel-control-next i {
-        font-size: 24px;
-        line-height: 1;
-        color: #ffffff;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Mobile Optimization */
-    @media (max-width: 768px) {
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            margin: 0 10px;
-        }
-
-        .carousel-indicators {
-            bottom: 20px;
-        }
-
-        .carousel-indicators li {
-            width: 30px;
-            height: 3px;
-            margin: 0 3px;
-        }
-    }
-
-    /* Touch Swipe Hint */
-    .swipe-hint {
-        position: absolute;
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: #ffffff;
-        font-size: 14px;
-        opacity: 0.8;
+        padding: 20px 15px 15px;
+        background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+        text-align: center;
         z-index: 2;
-        pointer-events: none;
-        display: none;
+        border-radius: 0 0 14px 14px;
     }
 
+    /* Swiper Pagination */
+    .main-slider .swiper-pagination {
+        position: relative;
+        margin-top: 15px;
+    }
+
+    .main-slider .swiper-pagination-bullet {
+        width: 30px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.3);
+        opacity: 1;
+        transition: all 0.3s ease;
+    }
+
+    .main-slider .swiper-pagination-bullet-active {
+        width: 50px;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-        .swipe-hint {
-            display: block;
-            animation: fadeOut 3s forwards 2s;
+        .main-slider {
+            padding: 10px 0 8px;
+        }
+
+        .main-slider .swiper-slide {
+            width: 220px;
+            height: 180px;
         }
     }
 
-    @keyframes fadeOut {
-        to { opacity: 0; }
+    @media (min-width: 1200px) {
+        .main-slider .swiper-slide {
+            width: 240px;
+            height: 300px;
+        }
     }
 
     /* Tab Navigation Section - Using Section 2 Product Card Styles */
@@ -281,22 +221,9 @@
 </style>
 
 <section class="main-slider">
-    <div id="mainCarousel" class="carousel slide" data-ride="carousel">
-        @if(!empty($Branrers))
-            <!-- Indicators -->
-            @if(count($Branrers) > 1)
-                <ol class="carousel-indicators">
-                    @foreach($Branrers as $key => $banner)
-                        <li data-target="#mainCarousel"
-                            data-slide-to="{{ $key }}"
-                            class="{{ $key === 0 ? 'active' : '' }}">
-                        </li>
-                    @endforeach
-                </ol>
-            @endif
-
-            <!-- Slides -->
-            <div class="carousel-inner">
+    @if(!empty($Branrers))
+        <div class="swiper bannerSwiper">
+            <div class="swiper-wrapper">
                 @foreach($Branrers as $key => $banner)
                     @php
                         // Get the image property with proper fallback
@@ -321,115 +248,69 @@
                                        (!empty($bannerImage) ? url('uploads/banners/large/' . $bannerImage) : BANNER_DEFAULT_IMAGE_URL);
                             $filename = !empty($bannerImageFrench) ? $bannerImageFrench :
                                        (!empty($bannerImage) ? $bannerImage : 'default-banner');
+                            $bannerName = $banner->name_french ?? $banner->name ?? '';
                         } else {
                             $imageUrl = !empty($bannerImage) ? url('uploads/banners/large/' . $bannerImage) : BANNER_DEFAULT_IMAGE_URL;
                             $filename = !empty($bannerImage) ? $bannerImage : 'default-banner';
+                            $bannerName = $banner->name ?? '';
                         }
 
                         $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
                     @endphp
-                    <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                    <div class="swiper-slide">
                         <img src="{{ $imageUrl }}"
                              alt="{{ $filenameWithoutExtension }}"
-                             loading="{{ $key === 0 ? 'eager' : 'lazy' }}">
+                             loading="{{ $key === 0 ? 'eager' : 'lazy' }}"
+                             {{-- style="transform: none" --}}
+                             >
                     </div>
                 @endforeach
             </div>
-
-            <!-- Navigation Arrows -->
-            @if(count($Branrers) > 1)
-                <a class="carousel-control-prev" href="#mainCarousel" role="button" data-slide="prev">
-                    <i class="las la-angle-left" aria-hidden="true"></i>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#mainCarousel" role="button" data-slide="next">
-                    <i class="las la-angle-right" aria-hidden="true"></i>
-                    <span class="sr-only">Next</span>
-                </a>
-                <!-- Mobile Swipe Hint -->
-                <div class="swipe-hint">
-                    {{ $language_name == 'french' ? 'Glissez pour naviguer' : 'Swipe to navigate' }}
-                </div>
-            @endif
-        @else
-            <!-- Default Slide -->
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="{{ BANNER_DEFAULT_IMAGE_URL }}" alt="Default Banner">
-                </div>
-            </div>
-        @endif
-    </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    @endif
 </section>
 
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const carousel = $('#mainCarousel');
+    const bannerSwiper = new Swiper('.bannerSwiper', {
+        effect: 'coverflow',
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        loop: true,
+        speed: 800,
+        grabCursor: true,
 
-    // Initialize carousel with custom options
-    carousel.carousel({
-        interval: 5000,  // 5 seconds per slide
-        pause: 'hover',  // Pause on hover
-        keyboard: true,  // Allow keyboard navigation
-        touch: true      // Enable touch swipe on mobile
+        coverflowEffect: {
+            rotate: 0,
+            stretch: 50,
+            depth: 100,
+            modifier: 1,
+            slideShadows: false,
+        },
+
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
+
+        mousewheel: {
+            forceToAxis: true,
+            sensitivity: 1,
+        },
+
+        keyboard: {
+            enabled: true,
+        },
+
+        pagination: {
+            el: '.bannerSwiper .swiper-pagination',
+            clickable: true,
+        },
     });
-
-    // Reset indicator animation on slide
-    carousel.on('slid.bs.carousel', function() {
-        $('.carousel-indicators li.active').css('width', '0');
-        setTimeout(function() {
-            $('.carousel-indicators li.active').css('width', '100%');
-        }, 50);
-    });
-
-    // Initial indicator animation
-    $('.carousel-indicators li.active').css('width', '100%');
-
-    // Preload next image
-    function preloadNextImage() {
-        const activeItem = carousel.find('.carousel-item.active');
-        const nextItem = activeItem.next('.carousel-item').length ?
-                        activeItem.next('.carousel-item') :
-                        carousel.find('.carousel-item:first');
-
-        if (nextItem.length) {
-            const img = nextItem.find('img');
-            if (img.attr('loading') === 'lazy') {
-                img.attr('loading', 'eager');
-            }
-        }
-    }
-
-    // Preload next image on slide
-    carousel.on('slide.bs.carousel', function() {
-        preloadNextImage();
-    });
-
-    // Handle touch events for mobile
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    carousel.on('touchstart', function(e) {
-        touchStartX = e.originalEvent.touches[0].clientX;
-    });
-
-    carousel.on('touchend', function(e) {
-        touchEndX = e.originalEvent.changedTouches[0].clientX;
-        handleSwipe();
-    });
-
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const swipeLength = touchEndX - touchStartX;
-
-        if (Math.abs(swipeLength) > swipeThreshold) {
-            if (swipeLength > 0) {
-                carousel.carousel('prev');
-            } else {
-                carousel.carousel('next');
-            }
-        }
-    }
 });
 </script>
 
